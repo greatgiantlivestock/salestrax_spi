@@ -12,7 +12,7 @@
                     $countSales=0;
                     $countSalesupd=0;
 
-                    $cn = mysqli_connect("localhost","gred3696_ms","moha11mmad","gred3696_sales_2021");
+                    $cn = mysqli_connect("localhost","gred3696_ms","moha11mmad","gred3696_salestraxSPI");
 
                     while ($line = fgets($fh)) {
                         if(strlen($line)>170){

@@ -11,7 +11,7 @@
 
                     while ($line = fgets($fh)) {
                         if(strlen($line)>60) {
-                            $cn = mysqli_connect("localhost","gred3696_ms","moha11mmad","gred3696_sales_2021");
+                            $cn = mysqli_connect("localhost","gred3696_ms","moha11mmad","gred3696_salestraxSPI");
                             $kode = substr($line,0,15);
                             $nama = substr($line,15,40);
                             $satuan = substr($line,55,3);
