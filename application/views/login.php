@@ -26,7 +26,7 @@
 						<div style="margin-top:100px;" class="login-container">
 							<div class="center">
 								<h1>
-									<span style="color:#FFF;" id="id-text2"><span class="blue"><b>GGL </b></span><span class="red"><b>SalesTrax</b></span></span>
+									<span style="color:#FFF;" id="id-text2"><span class="blue"><b>SPI </b></span><span class="red"><b>SalesTrax</b></span></span>
 								</h1>
 							</div>
 
