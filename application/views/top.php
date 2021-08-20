@@ -158,9 +158,9 @@
 			<i class="menu-icon  fa fa-users"></i>
 			<span class="menu-text">  </span>
 		</a>
-		<a href="<?php echo base_url(); ?>Cluster">
+		<a href="<?php echo base_url(); ?>Shipping">
 			<i class="menu-icon  fa fa-users"></i>
-			<span class="menu-text"> Cluster </span>
+			<span class="menu-text"> Shipping </span>
 		</a>
 		<a href="<?php echo base_url(); ?>Product">
 			<i class="menu-icon  fa fa-archive"></i>

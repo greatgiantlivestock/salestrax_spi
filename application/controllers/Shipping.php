@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Cluster extends CI_Controller {
+class Shipping extends CI_Controller {
 	public function index() {
 		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4") {
 			$d['master_cluster'] = $this->App_model->get_cluster();
@@ -57,11 +57,11 @@ class Cluster extends CI_Controller {
 			$in['region_desc'] 	= $reg->region_desc;
 			if($error) {
 					$this->session->set_flashdata("error","Data tidak lengkap");
-					redirect("Cluster");	
+					redirect("Shipping");	
 			}else {
 				$this->db->insert("mst_cluster",$in);
 				$this->session->set_flashdata("success","Input Master Cluster Berhasil");
-				redirect("Cluster");
+				redirect("Shipping");
 			}
 		} else {
 			redirect("login");
@@ -82,16 +82,16 @@ class Cluster extends CI_Controller {
 			$kode 	= $this->input->post('kode_customer');
 			if($error) {
 					$this->session->set_flashdata("error","Data inputan tidak lengkap");
-					redirect("Cluster");	
+					redirect("Shipping");	
 			}else {
 				$cCek = $this->db->query("SELECT count(*)as jml FROM mst_customer_cluster WHERE kode_customer='$kode'")->row();
 				if($cCek->jml=="0"){
 					$this->db->insert("mst_customer_cluster",$in);
 					$this->session->set_flashdata("success","Data Customer Berhasil Ditambah");
-					redirect("Cluster");
+					redirect("Shipping");
 				}else{
 					$this->session->set_flashdata("error","Customer Sudah Memiliki Cluster");
-					redirect("Cluster");
+					redirect("Shipping");
 				}
 			}
 		} else {
@@ -112,11 +112,11 @@ class Cluster extends CI_Controller {
 			$in['alias'] 	= $this->input->post('alias');
 			if($error) {
 					$this->session->set_flashdata("error","Data tidak lengkap");
-					redirect("Cluster");	
+					redirect("Shipping");	
 			}else {
 				$this->db->insert("mst_shipping_point",$in);
 				$this->session->set_flashdata("success","Input Master Shipping Point Berhasil");
-				redirect("Cluster");
+				redirect("Shipping");
 			}
 		} else {
 			redirect("login");
@@ -137,11 +137,11 @@ class Cluster extends CI_Controller {
 			$in['alias'] = $this->input->post('alias');
 			if($error) {
 					$this->session->set_flashdata("error","Ubah Data Gagal");
-					redirect("Cluster");	
+					redirect("Shipping");	
 			}else {
 				$this->db->update("mst_shipping_point",$in,$where);
 				$this->session->set_flashdata("success","Ubah Data Shipping Point Berhasil");
-				redirect("Cluster");
+				redirect("Shipping");
 			}
 		} else {
 			redirect("login");
@@ -164,11 +164,11 @@ class Cluster extends CI_Controller {
 			$in['region_desc'] 	= $reg->region_desc;
 			if($error) {
 					$this->session->set_flashdata("error","Ubah Data Gagal");
-					redirect("Cluster");	
+					redirect("Shipping");	
 			}else {
 				$this->db->update("mst_cluster",$in,$where);
 				$this->session->set_flashdata("success","Ubah Data Cluster Berhasil");
-				redirect("Cluster");
+				redirect("Shipping");
 			}
 		} else {
 			redirect("login");
@@ -186,11 +186,11 @@ class Cluster extends CI_Controller {
 			$id = $this->input->post('id_shipping_point');
 			if($error) {
 					$this->session->set_flashdata("error","Gagal Menghapus");
-					redirect("Cluster");	
+					redirect("Shipping");	
 			}else {
 				$this->db->delete("mst_shipping_point",array('id_shipping_point' => $id));
 				$this->session->set_flashdata("success","Hapus Data Shipping Point Berhasil");
-				redirect("Cluster");
+				redirect("Shipping");
 			}
 		} else {
 			redirect("login");
@@ -208,11 +208,11 @@ class Cluster extends CI_Controller {
 			$id = $this->input->post('cluster_id');
 			if($error) {
 					$this->session->set_flashdata("error","Gagal Menghapus");
-					redirect("Cluster");	
+					redirect("Shipping");	
 			}else {
 				$this->db->delete("mst_cluster",array('cluster_id' => $id));
 				$this->session->set_flashdata("success","Hapus Data Cluster Berhasil");
-				redirect("Cluster");
+				redirect("Shipping");
 			}
 		} else {
 			redirect("login");
@@ -222,7 +222,7 @@ class Cluster extends CI_Controller {
 		if($this->session->userdata('id_role') == "4") {
 			$this->db->delete("mst_customer_cluster",array('kode_customer' => $id));				
 			$this->session->set_flashdata("success","Hapus Data Customer Cluster Berhasil");
-			redirect("Cluster");			
+			redirect("Shipping");			
 		} else {
 			redirect("login");
 		}
