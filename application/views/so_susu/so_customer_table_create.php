@@ -263,14 +263,14 @@
 									$q1 = $this->db->query("SELECT count(*) as jml FROM trx_so_detail WHERE delete_id='0' AND id_request='$id_request'")->row();
 									if($q1->jml==0){?>
 										<div>
-										    <?php $q3 = $this->db->query("SELECT kode_trans,nama_transaksi FROM jenis_transaksi GROUP BY kode_trans ORDER BY nama_transaksi ASC"); 
+										    <?php $q3 = $this->db->query("SELECT kode_trans,nama_transaksi FROM jenis_transaksi WHERE id_jenis_transaksi ==1 OR id_jenis_transaksi ==2 GROUP BY kode_trans ORDER BY nama_transaksi ASC"); 
 								            foreach($q3->result_array() as $data1) { ?>
 												<?php $q3a = $this->db->query("SELECT mp.kode_trans,nama_transaksi FROM jenis_transaksi mp JOIN trx_so_header dr ON mp.kode_trans=dr.kode_trans WHERE delete_id='0' AND id_request='$id_request' GROUP BY kode_trans")->row(); ?>
 											    <input type="radio" name="kode_trans" disabled <?php if ($q3a->kode_trans == $data1['kode_trans']) echo "checked";?> value="<?php echo $data1['kode_trans'];?>"> <?php echo $data1['nama_transaksi']?>
 											<?php }?>
 									<?php }else{?>
 										<?php 
-											$q4 = $this->db->query("SELECT kode_trans,nama_transaksi FROM jenis_transaksi GROUP BY kode_trans ORDER BY nama_transaksi ASC");  ?>
+											$q4 = $this->db->query("SELECT kode_trans,nama_transaksi FROM jenis_transaksi WHERE id_jenis_transaksi ==1 OR id_jenis_transaksi ==2 GROUP BY kode_trans ORDER BY nama_transaksi ASC");  ?>
 										<div>
 										    <?php foreach($q4->result_array() as $data1) { ?>
 										        <?php $q2 = $this->db->query("SELECT mp.kode_trans,nama_transaksi FROM jenis_transaksi mp JOIN trx_so_header dr ON mp.kode_trans=dr.kode_trans WHERE delete_id='0' AND id_request='$id_request' GROUP BY kode_trans")->row(); ?>
