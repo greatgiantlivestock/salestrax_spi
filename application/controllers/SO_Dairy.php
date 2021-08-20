@@ -63,14 +63,20 @@ class SO_Dairy extends CI_Controller {
 					$d['color_edit'] = '';
 					$d['btn_batal_edit'] = '';	
 					$d['tipe_detail'] = 'add'	;
-					$mat = $this->db->query("SELECT mp.id_product FROM mst_product mp JOIN trx_so_detail dr ON dr.id_product=mp.id_product WHERE id_request='$id' AND delete_id='0'")->row();
-					if($mat==""){
-						$id_product="";
+					// $mat = $this->db->query("SELECT mp.id_product FROM mst_product mp JOIN trx_so_detail dr ON dr.id_product=mp.id_product WHERE id_request='$id' AND delete_id='0'")->row();
+					// if($mat==""){
+					// 	$id_product="";
+					// }else{
+					// 	$id_product=$mat->id_product;
+					// 	$d['disable1'] = 'disabled';
+					// }
+					$mat = $this->db->query("SELECT division FROM mst_product mp JOIN trx_so_detail td ON mp.id_product=td.id_product WHERE td.id_request='$id' AND delete_id='0'")->row();
+					if($mat->division==""){
+						$division=$this->session->userdata('division');
 					}else{
-						$id_product=$mat->id_product;
-						$d['disable1'] = 'disabled';
+						$division=$mat->division;
 					}
-					$d['combo_product'] = $this->App_model->get_combo_product_matgr($id_product,"");
+					$d['combo_product'] = $this->App_model->get_combo_product_matgr($division,"");
 					$d['combo_shipping_point'] = $this->App_model->get_combo_shipping_point();
 					$d['readonly'] = '';
 					$this->load->view('top',$d);
@@ -144,12 +150,12 @@ class SO_Dairy extends CI_Controller {
 		$this->session->set_userdata($session); 
 	}
 	public function get_product($id) {
-		// $mat = $this->db->query("SELECT division FROM mst_product mp JOIN trx_so_detail td ON mp.id_product=td.id_product WHERE td.id_request='$id' AND delete_id='0'")->row();
-		// if($mat->division==""){
+		$mat = $this->db->query("SELECT division FROM mst_product mp JOIN trx_so_detail td ON mp.id_product=td.id_product WHERE td.id_request='$id' AND delete_id='0'")->row();
+		if($mat->division==""){
 			$division=$this->session->userdata('division');
-		// }else{
-		// 	$division=$mat->division;
-		// }
+		}else{
+			$division=$mat->division;
+		}
 		// $division = $this->session->userdata('division');
 		$d['combo_product'] = $this->App_model->get_combo_product_matgr($division,"");
 		$d['id_request'] = $id;
