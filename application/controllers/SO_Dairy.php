@@ -75,6 +75,7 @@ class SO_Dairy extends CI_Controller {
 						$division=$this->session->userdata('division');
 					}else{
 						$division=$mat->division;
+						$d['disable1'] = 'disabled';
 					}
 					$d['combo_product'] = $this->App_model->get_combo_product_matgr($division,"");
 					$d['combo_shipping_point'] = $this->App_model->get_combo_shipping_point();
