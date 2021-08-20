@@ -247,7 +247,7 @@
 									</td>
 								</tr>
 							<?php } ?>
-									<tr>
+									<!-- <tr>
 										<td style="width:40%;" colspan="2">
 											Sisa Stock Customer Hari ini (Khusus Produk Susu di Modern Market) :
 										</td>
@@ -302,7 +302,7 @@
 												<input <?php echo $color; ?> placeholder="Detail Exp H3" class="form-control " name="r3" value="<?php echo $r3; ?>" >						
 											</div>
 										</td>
-									</tr>	
+									</tr>	 -->
 						</table>
 					</div>
 				</div>
