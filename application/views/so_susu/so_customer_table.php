@@ -188,7 +188,7 @@
 			<h5 class="widget-title"><i class="fa fa-truck"> </i> <?php echo $judul; ?></h5>
 		</div>-->
 		<div class="widget-header">
-		<span class="blinkrainbow"><i class="fa fa-exclamation-triangle"> </i> <?php echo $msg; ?> <i class="fa fa-exclamation-triangle"> </i></span>
+		<!-- <span class="blinkrainbow"><i class="fa fa-exclamation-triangle"> </i> <?php echo $msg; ?> <i class="fa fa-exclamation-triangle"> </i></span> -->
 			<!-- <h5 class="widget-title"> 
 				<span class="blinkrainbow"> 
 					<i class="fa fa-exclamation-triangle"> </i>  
