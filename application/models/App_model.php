@@ -3800,7 +3800,7 @@ public function get_combo_nomor_order($id="") {
 		$id_departemen=$this->session->userdata("id_departemen");
 		if($id_role<=2){
 			$q = $this->db->query("SELECT * FROM trx_so_header JOIN mst_customer ON 
-			mst_customer.id_customer = trx_so_header.id_customer_ship  ORDER BY id_request DESC ");
+			mst_customer.id_customer = trx_so_header.id_customer_ship ORDER BY id_request DESC ");
 			$hasil .= '<option selected="selected" value>Edit data orderan disini</option>';
 			foreach($q->result() as $h) {
 				if($id == $h->id_request) {
@@ -3814,7 +3814,7 @@ public function get_combo_nomor_order($id="") {
                                 JOIN mst_customer ON mst_customer.id_customer = trx_so_header.id_customer_ship 
                                 JOIN mst_user ON trx_so_header.id_user=mst_user.id_user 
 								JOIN trx_so_detail on trx_so_detail.id_request=trx_so_header.id_request
-                                WHERE trx_so_header.delete_id=0 AND id_jenis_transaksi > 2  GROUP BY trx_so_header.id_request 
+                                WHERE trx_so_header.delete_id=0 AND id_jenis_transaksi = 2  GROUP BY trx_so_header.id_request 
                                 ORDER BY trx_so_header.id_request DESC limit 1000");
 			$hasil .= '<option selected="selected" value>Edit Order Disini</option>';
 			foreach($q->result() as $h) {
@@ -3830,7 +3830,7 @@ public function get_combo_nomor_order($id="") {
 			$q = $this->db->query("SELECT trx_so_header.id_request,nama_customer,tanggal_kirim FROM trx_so_header 
                                 JOIN mst_customer ON mst_customer.id_customer = trx_so_header.id_customer_ship 
 								JOIN trx_so_detail on trx_so_detail.id_request=trx_so_header.id_request
-                                WHERE trx_so_header.delete_id=0 AND id_jenis_transaksi > 2 AND id_user='$id_user' GROUP BY id_request ORDER BY id_request DESC LIMIT 1000");
+                                WHERE trx_so_header.delete_id=0 AND id_jenis_transaksi = 2 AND id_user='$id_user' GROUP BY id_request ORDER BY id_request DESC LIMIT 1000");
 			$hasil .= '<option selected="selected" value>Edit Order Disini</option>';
 			foreach($q->result() as $h) {
 				if($id == $h->id_request) {
