@@ -25,7 +25,7 @@
 							<td><?php echo $data['nama_customer']; ?></td>
 							<td><?php echo $data['nama_cluster']; ?></td>
 							<td>
-								<a href="<?php echo base_url().'Cluster/hapus_customer/'.
+								<a href="<?php echo base_url().'Shipping/hapus_customer/'.
 									$data['kode_customer']; ?>" class="label label-danger" 
 									onclick="return confirm('Yakin ingin hapus data ?');"><i class="fa fa-trash"></i>
 								</a>

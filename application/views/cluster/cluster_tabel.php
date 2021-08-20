@@ -19,7 +19,7 @@
             });
         });
         function contoh1(x){
-			var url = '<?php echo base_url('Cluster/get_row/')?>'+x;
+			var url = '<?php echo base_url('Shipping/get_row/')?>'+x;
 			$.ajax({
 					type: 'get',
 					url: url,
@@ -29,7 +29,7 @@
 			});
 		}
         function contoh2(x){
-			var url = '<?php echo base_url('Cluster/get_row1/')?>'+x;
+			var url = '<?php echo base_url('Shipping/get_row1/')?>'+x;
 			$.ajax({
 					type: 'get',
 					url: url,
@@ -159,7 +159,7 @@
 										<h4 class="modal-title" id="myModalLabel">Tambah Cluster</h4>
 								</div>
 								<div class="modal-body">
-										<form  class="form-horizontal"  action="<?php echo base_url(); ?>Cluster/save_cluster" method="post"/>	
+										<form  class="form-horizontal"  action="<?php echo base_url(); ?>Shipping/save_cluster" method="post"/>	
 											<input type="hidden" name="tipe" value="<?php echo $tipe; ?>">
 											<div class="form-group">
 												<label class="col-sm-3 control-label no-padding-right"> Region </label>
@@ -215,7 +215,7 @@
 										<h4 class="modal-title" id="myModalLabel">Hapus Cluster</h4>
 								</div>
 								<div class="modal-body">
-										<form  class="form-horizontal"  action="<?php echo base_url(); ?>Cluster/hapus_cluster" method="post"/>	
+										<form  class="form-horizontal"  action="<?php echo base_url(); ?>Shipping/hapus_cluster" method="post"/>	
 											<input id="cluster_idH" type="hidden" name="cluster_id">
 											<div class="form-group">
 												<label class="col-sm-3 control-label no-padding-right"> Nama Cluster </label>
@@ -248,7 +248,7 @@
 										<h4 class="modal-title" id="myModalLabel">Ubah Cluster</h4>
 								</div>
 								<div class="modal-body">
-										<form  class="form-horizontal"  action="<?php echo base_url(); ?>Cluster/edit_cluster" method="post"/>	
+										<form  class="form-horizontal"  action="<?php echo base_url(); ?>Shipping/edit_cluster" method="post"/>	
 											<input id="cluster_idE" type="hidden" name="cluster_id">
 											<div class="form-group">
 												<label class="col-sm-3 control-label no-padding-right"> Region </label>
@@ -355,7 +355,7 @@
 										<h4 class="modal-title" id="myModalLabel">Tambah Shipping Point</h4>
 								</div>
 								<div class="modal-body">
-										<form  class="form-horizontal"  action="<?php echo base_url(); ?>Cluster/save_shp" method="post"/>	
+										<form  class="form-horizontal"  action="<?php echo base_url(); ?>Shipping/save_shp" method="post"/>	
 											<input type="hidden" name="tipe" value="<?php echo $tipe; ?>">
 											<div class="form-group">
 												<label class="col-sm-4 control-label no-padding-right"> Kode Shipping Point </label>
@@ -400,7 +400,7 @@
 										<h4 class="modal-title" id="myModalLabel">Hapus Shipping Point</h4>
 								</div>
 								<div class="modal-body">
-										<form  class="form-horizontal"  action="<?php echo base_url(); ?>Cluster/hapusShp" method="post">	
+										<form  class="form-horizontal"  action="<?php echo base_url(); ?>Shipping/hapusShp" method="post">	
 											<input id="id_shp" type="hidden" name="id_shipping_point">
 											<div class="form-group">
 												<label class="col-sm-4 control-label no-padding-right"> Kode Shipping Point </label>
@@ -445,7 +445,7 @@
 										<h4 class="modal-title" id="myModalLabel">Ubah Shipping Point</h4>
 								</div>
 								<div class="modal-body">
-										<form  class="form-horizontal"  action="<?php echo base_url(); ?>Cluster/editShp" method="post">	
+										<form  class="form-horizontal"  action="<?php echo base_url(); ?>Shipping/editShp" method="post">	
 											<input id="id_shpE" type="hidden" name="id_shipping_point">
 											<div class="form-group">
 												<label class="col-sm-4 control-label no-padding-right"> Kode Shipping Point </label>

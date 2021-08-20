@@ -3,7 +3,7 @@
 			<div class="widget-main">
 				<div style="border-radius:25px;" class="modal-content">
 								<div class="modal-bodyC">
-										<form  class="form-horizontal"  action="<?php echo base_url(); ?>Cluster/tambah_customer" method="post">	
+										<form  class="form-horizontal"  action="<?php echo base_url(); ?>Shipping/tambah_customer" method="post">	
 											<input value="<?php echo $cluster_id ?>" type="hidden" name="cluster_id">
 											<br>
 											<div  class="form-group">
