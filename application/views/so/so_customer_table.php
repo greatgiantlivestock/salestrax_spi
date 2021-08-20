@@ -478,7 +478,7 @@
 											<?php echo $combo_jenis_transaksi; ?>
 										</select>
 									<?php }else{ ?>
-										<select id="jenis_transaksi" style="width:100%;<?php echo $color_edit; ?>" name="id_jenis_transaksi" <?php echo $disable; ?>>
+										<select id="jenis_transaksi" class="select_customer" style="width:100%;<?php echo $color_edit; ?>" name="id_jenis_transaksi" <?php echo $disable; ?>>
 											<?php echo $combo_jenis_transaksi; ?>
 										</select>
 									<?php }?>
@@ -496,7 +496,7 @@
 											<?php echo $combo_product; ?>
 										</select>
 									<?php }else {?>
-										<select id="product" style="width:100%;<?php echo $color_edit; ?>" name="id_product">
+										<select id="product" class="select_customer1" style="width:100%;<?php echo $color_edit; ?>" name="id_product">
 											<?php echo $combo_product; ?>
 										</select>
 									<?php }?>
@@ -519,7 +519,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right">Dikirim dari</label>
 								<div class="col-sm-6">
-									<select id="shipping_point"  style="width:100%;<?php echo $color_edit; ?>" name="id_shipping_point">
+									<select id="shipping_point" class="select_customer2" style="width:100%;<?php echo $color_edit; ?>" name="id_shipping_point">
 										<?php echo $combo_shipping_point; ?>
 									</select>
 								</div>
