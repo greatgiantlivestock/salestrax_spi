@@ -567,6 +567,12 @@
 								</div>
 							</div>
 							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right">Satuan </label>
+								<div class="col-sm-6">
+									<input id="satuan1" readonly class="form-control " type="text" name="satuan" <?php echo $color; ?>/>
+								</div>
+							</div>
+							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right"> Keterangan </label>
 								<div class="col-sm-6">
 									<input id="keterangan1" <?php echo $color; ?> class="form-control " type="text" name="keterangan" <?php echo $disable; ?>>

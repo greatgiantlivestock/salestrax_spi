@@ -26,6 +26,12 @@
 				</div>
 			</div>
 			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right">Satuan </label>
+				<div class="col-sm-6">
+					<input id="satuan" class="form-control " readonly type="text" name="satuan" />
+				</div>
+			</div>
+			<div class="form-group">
 				<label class="col-sm-3 control-label no-padding-right"> Keterangan </label>
 				<div class="col-sm-6">
 					<input id="keterangan" class="form-control " type="text" name="keterangan" >
@@ -36,3 +42,23 @@
 			</div>				
 	</form>	
 </div>
+<script type="text/javascript">
+	$(function(){
+		$.ajaxSetup({
+			type:"POST",
+			url: "<?php echo base_url('SO_Dairy/ambil_data') ?>",
+			cache: false,
+		});
+		$("#product").change(function(){
+			var value=$(this).val();
+			if(value !=""){
+				$.ajax({
+					data:{modul:'pilih_satuan',id_product:value},
+					success: function(respond){
+						$("#satuan").val(respond);
+					}
+				})	
+			}
+		});
+	})
+</script>

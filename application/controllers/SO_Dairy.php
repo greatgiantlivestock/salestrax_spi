@@ -161,7 +161,7 @@ class SO_Dairy extends CI_Controller {
 		$d['combo_product'] = $this->App_model->get_combo_product_matgr($division,"");
 		$d['id_request'] = $id;
 		$this->load->view('so_susu/detail_sales.php',$d);
-		$this->load->view('bottom');
+		$this->load->view('bottom1');
 	}
 	function get_autocomplete(){
 		if (isset($_POST['term'])) {
