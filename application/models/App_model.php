@@ -3032,7 +3032,7 @@ class App_model extends CI_Model {
 	}
 	public function get_combo_product($id="") {
 		$hasil = "";
-		$q = $this->db->query("SELECT * FROM mst_product JOIN satuan ON mst_product.id_satuan=satuan.id_satuan WHERE tampilkan='1' ORDER BY nama_product ASC");
+		$q = $this->db->query("SELECT * FROM mst_product WHERE tampilkan='1' ORDER BY nama_product ASC");
 		$hasil .= '<option selected="selected" value>Pilih Product</option>';
 		foreach($q->result() as $h) {
 			if($id == $h->id_product) {
