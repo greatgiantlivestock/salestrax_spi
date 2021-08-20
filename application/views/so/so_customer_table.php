@@ -560,23 +560,23 @@
 										url: "<?php echo base_url('SO_customer/ambil_data') ?>",
 										cache: false,
 									});
-									$("#product1").change(function(){
-										var value=$(this).val();
-										if(value !=""){
-											$.ajax({
-												data:{modul:'pilih_satuan',id_product:value},
-												success: function(respond){
-													$("#satuan").val(respond);
-												}
-											})
-											$.ajax({
-												data:{modul:'plant_group',id_product:value},
-												success: function(respond){
-													$("#id_shipping_point").html(respond);
-												}
-											})
-										}
-									});
+									// $("#product1").change(function(){
+									// 	var value=$(this).val();
+									// 	if(value !=""){
+									// 		$.ajax({
+									// 			data:{modul:'pilih_satuan',id_product:value},
+									// 			success: function(respond){
+									// 				$("#satuan").val(respond);
+									// 			}
+									// 		})
+									// 		$.ajax({
+									// 			data:{modul:'plant_group',id_product:value},
+									// 			success: function(respond){
+									// 				$("#id_shipping_point").html(respond);
+									// 			}
+									// 		})
+									// 	}
+									// });
 								})
 							</script>
 							
