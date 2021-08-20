@@ -255,7 +255,7 @@
 							</tr> -->
 							<tr>
 								<td style="width:40%;" colspan="2">
-								    <?php $q1 = $this->db->query("SELECT kode_trans,nama_transaksi FROM jenis_transaksi WHERE id_jenis_transaksi ==1 OR id_jenis_transaksi ==2 ORDER BY nama_transaksi ASC"); 
+								    <?php $q1 = $this->db->query("SELECT kode_trans,nama_transaksi FROM jenis_transaksi WHERE id_jenis_transaksi =1 OR id_jenis_transaksi =2 ORDER BY nama_transaksi ASC"); 
 								     foreach($q1->result_array() as $dataTrn) { ?>
 									    <input required type="radio" name="kode_trans" value="<?php echo $dataTrn['kode_trans']; ?>"> <?php echo $dataTrn['nama_transaksi']; ?>
 									<?php } ?>

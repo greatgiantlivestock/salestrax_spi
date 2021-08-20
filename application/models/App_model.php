@@ -3569,7 +3569,7 @@ class App_model extends CI_Model {
 	}
 	public function get_combo_jenis_transaksi($id="") {
 		$hasil = "";
-		$q = $this->db->query("SELECT * FROM jenis_transaksi where id_jenis_transaksi ==2");
+		$q = $this->db->query("SELECT * FROM jenis_transaksi where id_jenis_transaksi =2");
 		$hasil .= '<option selected="selected" value>Jenis transaksi</option>';
 		foreach($q->result() as $h) {
 			if($id == $h->id_jenis_transaksi) {
