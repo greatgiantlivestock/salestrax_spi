@@ -502,7 +502,7 @@
 									<?php }?>
 								</div>
 							</div>
-							<div class="form-group" style="display: none">
+							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right"> Satuan </label>
 								<div class="col-sm-6">
 									<input id="satuan" <?php echo $color; ?> style="text-transform:uppercase" class="form-control "  
