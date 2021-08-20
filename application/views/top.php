@@ -359,13 +359,13 @@
 		<!--	<i class="menu-icon  fa fa-plus"></i>-->
 		<!--	<span class="menu-text"> Kunjungan </span>-->
 		<!--</a> -->
-		<a href="<?php echo base_url(); ?>SO_Dairy">
-			<i class="menu-icon  fa fa-pencil-square"></i>
-			<span class="menu-text"> SO </span>
-		</a>
 		<a href="<?php echo base_url(); ?>SO_customer">
 			<i class="menu-icon  fa fa-shopping-cart"></i>
 			<span class="menu-text"> Non SO </span>
+		</a>
+		<a href="<?php echo base_url(); ?>SO_Dairy">
+			<i class="menu-icon  fa fa-pencil-square"></i>
+			<span class="menu-text"> SO </span>
 		</a>
 		<!-- <a href="<?php echo base_url(); ?>SO_Meat">
 			<i class="menu-icon  fa fa-pencil-square-o"></i>
@@ -494,13 +494,13 @@
 			<i class="menu-icon  fa fa-plus"></i>
 			<span class="menu-text"> Kunjungan </span>
 		</a> -->
-		<a href="<?php echo base_url(); ?>SO_Dairy">
-			<i class="menu-icon  fa fa-pencil-square"></i>
-			<span class="menu-text"> SO </span>
-		</a>
 		<a href="<?php echo base_url(); ?>SO_customer">
 			<i class="menu-icon  fa fa-shopping-cart"></i>
 			<span class="menu-text"> Non SO </span>
+		</a>
+		<a href="<?php echo base_url(); ?>SO_Dairy">
+			<i class="menu-icon  fa fa-pencil-square"></i>
+			<span class="menu-text"> SO </span>
 		</a>
 		<!-- <a href="<?php echo base_url(); ?>SO_Meat">
 			<i class="menu-icon  fa fa-pencil-square-o"></i>
