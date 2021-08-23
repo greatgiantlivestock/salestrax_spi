@@ -24,10 +24,12 @@ class SO_customer extends CI_Controller {
 						$d['request_detail'] = $this->App_model->get_request_detail($id);
 						$d['combo_ship'] = $this->App_model->get_combo_ship_kode($data->id_customer_ship);
 						$d['combo_sold'] = $this->App_model->get_combo_sold_kode($data->id_customer_sold);
+						$d['combo_jenis_transaksi_kode'] = $this->App_model->get_combo_jenis_transaksi_kode($data->kode_trans);
 						$d['combo_nomor_order'] = $this->App_model->get_combo_nomor_order($id);
 						$d['id_customer_ship'] = $data->cst_ship;
 						$d['id_customer'] = $data->id_customer_ship;
 						$d['id_customer_sold'] = $data->cst_sold;
+						$d['combo_order_reason'] = $this->App_model->get_combo_order_reason_non($data->order_reason);
 						//$d['combo_alamat_kirim'] = $this->App_model->get_combo_alamat_kirim($data->id_alamat_kirim);
 						//$d['alamat'] = $data->alamat;
 						$d['tanggal_request'] = $data->tanggal_request;
@@ -101,6 +103,8 @@ class SO_customer extends CI_Controller {
 				$d['combo_ship'] = $this->App_model->get_combo_ship_kode();
 				$d['combo_sold'] = $this->App_model->get_combo_sold_kode();
 				$d['combo_nomor_order'] = $this->App_model->get_combo_nomor_order();
+				$d['combo_jenis_transaksi_kode'] = $this->App_model->get_combo_jenis_transaksi_kode();
+				$d['combo_order_reason'] = $this->App_model->get_combo_order_reason_non();
 				//$d['combo_alamat_kirim'] = '';
 				$d['tanggal_request'] = date('Y-m-d H-i-s');
 				$d['tanggal_kirim'] = '';
@@ -165,18 +169,17 @@ class SO_customer extends CI_Controller {
 		$modul=$this->input->post('modul');
 		$id_product=$this->input->post('id_product');
 		$id_customer=$this->input->post('id_customer');
-		$q_plant_group=$this->db->query("SELECT * FROM mst_product WHERE id_product='$id_product'")->row();
-		$id_plant_group=$q_plant_group->id_plant_group;
+		// $q_plant_group=$this->db->query("SELECT * FROM mst_product WHERE id_product='$id_product'")->row();
+		// $id_plant_group=$q_plant_group->id_plant_group;
 		// if($modul=="plant_group"){
 		// 	echo $this->App_model->plant_group($id_plant_group);
 		// }
-		if($modul=="plant_group"){
-			echo $this->App_model->get_plant_group($id_plant_group,$id_customer);
-		}
+		// if($modul=="plant_group"){
+		// 	echo $this->App_model->get_plant_group($id_plant_group,$id_customer);
+		// }
 		if($modul=="pilih_satuan"){
-			$get=$this->db->query("SELECT * FROM mst_product JOIN satuan ON mst_product.id_satuan=satuan.id_satuan 
-									WHERE id_product = '$id_product'")->row();
-			$satuan=$get->nama_satuan;
+			$get=$this->db->query("SELECT satuan FROM mst_product WHERE id_product = '$id_product'")->row();
+			$satuan=$get->satuan;
 			echo strval($satuan);
 		}
 	}
@@ -202,7 +205,7 @@ class SO_customer extends CI_Controller {
 	}
 	public function save() {
 		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "5" || $this->session->userdata('id_role') == "6") {
-			$required = array('tanggal_kirim','id_customer_ship');
+			$required = array('tanggal_kirim','id_customer_ship','order_reason','kode_trans');
 			$error = false;
 			foreach($required as $field) {
 				if(empty($_POST[$field])) {
@@ -240,6 +243,8 @@ class SO_customer extends CI_Controller {
 							redirect("SO_customer"); 
 						}else{
 							$id_customer_ship = $this->input->post("id_customer_ship");
+							$order_reason=$this->input->post('order_reason');
+							$kode_trans=$this->input->post('kode_trans');
 							$id_customer_sold = $this->input->post("id_customer_ship");
 							$qship = $this->db->query("SELECT id_customer,nama_customer FROM mst_customer WHERE nama_customer='$id_customer_ship'")->row();
 							$qsold = $this->db->query("SELECT id_customer,nama_customer FROM mst_customer WHERE nama_customer='$id_customer_sold'")->row();
@@ -263,6 +268,8 @@ class SO_customer extends CI_Controller {
 									$in['tanggal_request'] 	= date('Y-m-d H-i-s');
 									$in['id_customer_ship'] 	= $qship->id_customer;
 									$in['id_customer_sold'] 	= $qsold->id_customer;
+									$in['order_reason'] 	= $order_reason;
+									$in['kode_trans'] 	= $kode_trans;
 									$in['status_request'] 	= 1;
 									$in['tanggal_kirim'] 	= $this->input->post('tanggal_kirim');
 									$in['catatan'] 	= strtoupper($this->input->post('catatan'));
@@ -292,38 +299,6 @@ class SO_customer extends CI_Controller {
 									$last_id = $this->db->insert_id();
 									$this->session->set_flashdata("success","Input Request Order Berhasil");
 									redirect("SO_customer/index/".$last_id);
-									// Buka Komen mulai dari sini 
-									// $hari_order = longdate_indo($tanggal_kirim);
-									// $id_cst = $qship->id_customer;
-									// $nama_customer1 = $qship->nama_customer;
-									// $q11 =  $this->db->query("SELECT hari_kirim,hari_kirim2,hari_kirim3 FROM mst_customer WHERE id_customer='$id_cst'")->row();
-									// if($q11->hari_kirim == null){
-									// 	$this->db->insert("trx_so_header",$in);
-									// 	$last_id = $this->db->insert_id();
-									// 	$this->session->set_flashdata("success","Input Request Order Berhasil");
-									// 	redirect("SO_customer/index/".$last_id);
-									// }else{
-									// 	if($q11->hari_kirim == $hari_order){
-									// 		$this->db->insert("trx_so_header",$in);
-									// 		$last_id = $this->db->insert_id();
-									// 		$this->session->set_flashdata("success","Input Request Order Berhasil");
-									// 		redirect("SO_customer/index/".$last_id);
-									// 	}else if($q11->hari_kirim2 == $hari_order){
-									// 		$this->db->insert("trx_so_header",$in);
-									// 		$last_id = $this->db->insert_id();	
-									// 		$this->session->set_flashdata("success","Input Request Order Berhasil");
-									// 		redirect("SO_customer/index/".$last_id);
-									// 	}else if($q11->hari_kirim3 == $hari_order){
-									// 		$this->db->insert("trx_so_header",$in);
-									// 		$last_id = $this->db->insert_id();
-									// 		$this->session->set_flashdata("success","Input Request Order Berhasil");
-									// 		redirect("SO_customer/index/".$last_id);
-									// 	}else{
-									// 		$this->session->set_flashdata("error","Input gagal, Pengiriman ke ".$nama_customer1." hanya bisa di hari ".$q11->hari_kirim." "
-									// 		.$q11->hari_kirim2." ".$q11->hari_kirim3." anda menginput hari ".$hari_order.", silahkan hubungi admin sales jika ada pengiriman diluar jadwal");
-									// 		redirect("SO_customer");
-									// 	}
-									// }
 								} else if(!$this->upload->do_upload("file_upload")) {
 									$get_id = $this->db->query("SELECT trx_so_header.no_request FROM (SELECT MAX(id_request) AS id_request FROM trx_so_header) AS proses_lama
 																JOIN trx_so_header ON proses_lama.id_request=trx_so_header.id_request")->row();
@@ -338,6 +313,8 @@ class SO_customer extends CI_Controller {
 									$in['tanggal_request'] 	= date('Y-m-d H-i-s');
 									$in['id_customer_ship'] 	= $qship->id_customer;
 									$in['id_customer_sold'] 	= $qsold->id_customer;
+									$in['order_reason'] 	= $order_reason;
+									$in['kode_trans'] 	= $kode_trans;
 									$in['status_request'] 	= 1;
 									$in['tanggal_kirim'] 	= $this->input->post('tanggal_kirim');
 									$in['catatan'] 	= strtoupper($this->input->post('catatan'));
@@ -352,37 +329,6 @@ class SO_customer extends CI_Controller {
 									$last_id = $this->db->insert_id();
 									$this->session->set_flashdata("success","Input Request Order Berhasil");
 									redirect("SO_customer/index/".$last_id);
-									// $hari_order = longdate_indo($tanggal_kirim);
-									// $id_cst = $qship->id_customer;
-									// $nama_customer1 = $qship->nama_customer;
-									// $q11 =  $this->db->query("SELECT hari_kirim,hari_kirim2,hari_kirim3 FROM mst_customer WHERE id_customer='$id_cst'")->row();
-									// if($q11->hari_kirim == null){
-									// 	$this->db->insert("trx_so_header",$in);
-									// 	$last_id = $this->db->insert_id();
-									// 	$this->session->set_flashdata("success","Input Request Order Berhasil");
-									// 	redirect("SO_customer/index/".$last_id);
-									// }else{
-									// 	if($q11->hari_kirim == $hari_order){
-									// 		$this->db->insert("trx_so_header",$in);
-									// 		$last_id = $this->db->insert_id();
-									// 		$this->session->set_flashdata("success","Input Request Order Berhasil");
-									// 		redirect("SO_customer/index/".$last_id);
-									// 	}else if($q11->hari_kirim2 == $hari_order){
-									// 		$this->db->insert("trx_so_header",$in);
-									// 		$last_id = $this->db->insert_id();
-									// 		$this->session->set_flashdata("success","Input Request Order Berhasil");
-									// 		redirect("SO_customer/index/".$last_id);
-									// 	}else if($q11->hari_kirim3 == $hari_order){
-									// 		$this->db->insert("trx_so_header",$in);
-									// 		$last_id = $this->db->insert_id();
-									// 		$this->session->set_flashdata("success","Input Request Order Berhasil");
-									// 		redirect("SO_customer/index/".$last_id);
-									// 	}else{
-									// 		$this->session->set_flashdata("error","Input gagal, Pengiriman ke ".$nama_customer1." hanya bisa di hari ".$q11->hari_kirim." "
-									// 		.$q11->hari_kirim2." ".$q11->hari_kirim3." anda menginput hari ".$hari_order.", silahkan hubungi admin sales jika ada pengiriman diluar jadwal");
-									// 		redirect("SO_customer");
-									// 	}
-									// }
 								}else{
 									$this->session->set_flashdata("error",$this->upload->display_errors());
 									redirect("SO_customer");
@@ -397,6 +343,8 @@ class SO_customer extends CI_Controller {
 							}else{
 								$id_customer_ship = $this->input->post("id_customer_ship");
 								$id_customer_sold = $this->input->post("id_customer_ship");
+								$order_reason=$this->input->post('order_reason');
+								$kode_trans=$this->input->post('kode_trans');
 								$qship = $this->db->query("SELECT id_customer,nama_customer FROM mst_customer WHERE nama_customer='$id_customer_ship'")->row();
 								$qsold = $this->db->query("SELECT id_customer,nama_customer FROM mst_customer WHERE nama_customer='$id_customer_sold'")->row();
 								if($qship == '' || $qsold ==''){
@@ -419,6 +367,8 @@ class SO_customer extends CI_Controller {
 										$in['tanggal_request'] 	= date('Y-m-d H-i-s');
 										$in['id_customer_ship'] 	= $qship->id_customer;
 										$in['id_customer_sold'] 	= $qsold->id_customer;
+										$in['order_reason'] 	= $order_reason;
+										$in['kode_trans'] 	= $kode_trans;
 										$in['status_request'] 	= 1;
 										$in['tanggal_kirim'] 	= $this->input->post('tanggal_kirim');
 										$in['catatan'] 	= strtoupper($this->input->post('catatan'));
@@ -448,37 +398,6 @@ class SO_customer extends CI_Controller {
 										$last_id = $this->db->insert_id();
 										$this->session->set_flashdata("success","Input Request Order Berhasil");
 										redirect("SO_customer/index/".$last_id);
-										// $hari_order = longdate_indo($tanggal_kirim);
-										// $id_cst = $qship->id_customer;
-										// $nama_customer1 = $qship->nama_customer;
-										// $q11 =  $this->db->query("SELECT hari_kirim,hari_kirim2,hari_kirim3 FROM mst_customer WHERE id_customer='$id_cst'")->row();
-										// if($q11->hari_kirim == null){
-										// 	$this->db->insert("trx_so_header",$in);
-										// 	$last_id = $this->db->insert_id();
-										// 	$this->session->set_flashdata("success","Input Request Order Berhasil");
-										// 	redirect("SO_customer/index/".$last_id);
-										// }else{
-										// 	if($q11->hari_kirim == $hari_order){
-										// 		$this->db->insert("trx_so_header",$in);
-										// 		$last_id = $this->db->insert_id();
-										// 		$this->session->set_flashdata("success","Input Request Order Berhasil");
-										// 		redirect("SO_customer/index/".$last_id);
-										// 	}else if($q11->hari_kirim2 == $hari_order){
-										// 		$this->db->insert("trx_so_header",$in);
-										// 		$last_id = $this->db->insert_id();	
-										// 		$this->session->set_flashdata("success","Input Request Order Berhasil");
-										// 		redirect("SO_customer/index/".$last_id);
-										// 	}else if($q11->hari_kirim3 == $hari_order){
-										// 		$this->db->insert("trx_so_header",$in);
-										// 		$last_id = $this->db->insert_id();
-										// 		$this->session->set_flashdata("success","Input Request Order Berhasil");
-										// 		redirect("SO_customer/index/".$last_id);
-										// 	}else{
-										// 		$this->session->set_flashdata("error","Input gagal, Pengiriman ke ".$nama_customer1." hanya bisa di hari ".$q11->hari_kirim." "
-										// 		.$q11->hari_kirim2." ".$q11->hari_kirim3." anda menginput hari ".$hari_order.", silahkan hubungi admin sales jika ada pengiriman diluar jadwal");
-										// 		redirect("SO_customer");
-										// 	}
-										// }
 									} else if(!$this->upload->do_upload("file_upload")) {
 										$get_id = $this->db->query("SELECT trx_so_header.no_request FROM (SELECT MAX(id_request) AS id_request FROM trx_so_header) AS proses_lama
 																	JOIN trx_so_header ON proses_lama.id_request=trx_so_header.id_request")->row();
@@ -493,6 +412,8 @@ class SO_customer extends CI_Controller {
 										$in['tanggal_request'] 	= date('Y-m-d H-i-s');
 										$in['id_customer_ship'] 	= $qship->id_customer;
 										$in['id_customer_sold'] 	= $qsold->id_customer;
+										$in['order_reason'] 	= $order_reason;
+										$in['kode_trans'] 	= $kode_trans;
 										$in['status_request'] 	= 1;
 										$in['tanggal_kirim'] 	= $this->input->post('tanggal_kirim');
 										$in['catatan'] 	= strtoupper($this->input->post('catatan'));
@@ -507,37 +428,6 @@ class SO_customer extends CI_Controller {
 										$last_id = $this->db->insert_id();
 										$this->session->set_flashdata("success","Input Request Order Berhasil");
 										redirect("SO_customer/index/".$last_id);
-										// $hari_order = longdate_indo($tanggal_kirim);
-										// $id_cst = $qship->id_customer;
-										// $nama_customer1 = $qship->nama_customer;
-										// $q11 =  $this->db->query("SELECT hari_kirim,hari_kirim2,hari_kirim3 FROM mst_customer WHERE id_customer='$id_cst'")->row();
-										// if($q11->hari_kirim == null){
-										// 	$this->db->insert("trx_so_header",$in);
-										// 	$last_id = $this->db->insert_id();
-										// 	$this->session->set_flashdata("success","Input Request Order Berhasil");
-										// 	redirect("SO_customer/index/".$last_id);
-										// }else{
-										// 	if($q11->hari_kirim == $hari_order){
-										// 		$this->db->insert("trx_so_header",$in);
-										// 		$last_id = $this->db->insert_id();
-										// 		$this->session->set_flashdata("success","Input Request Order Berhasil");
-										// 		redirect("SO_customer/index/".$last_id);
-										// 	}else if($q11->hari_kirim2 == $hari_order){
-										// 		$this->db->insert("trx_so_header",$in);
-										// 		$last_id = $this->db->insert_id();	
-										// 		$this->session->set_flashdata("success","Input Request Order Berhasil");
-										// 		redirect("SO_customer/index/".$last_id);
-										// 	}else if($q11->hari_kirim3 == $hari_order){
-										// 		$this->db->insert("trx_so_header",$in);
-										// 		$last_id = $this->db->insert_id();
-										// 		$this->session->set_flashdata("success","Input Request Order Berhasil");
-										// 		redirect("SO_customer/index/".$last_id);
-										// 	}else{
-										// 		$this->session->set_flashdata("error","Input gagal, Pengiriman ke ".$nama_customer1." hanya bisa di hari ".$q11->hari_kirim." "
-										// 		.$q11->hari_kirim2." ".$q11->hari_kirim3." anda menginput hari ".$hari_order.", silahkan hubungi admin sales jika ada pengiriman diluar jadwal");
-										// 		redirect("SO_customer");
-										// 	}	
-										// }
 									}else{
 										$this->session->set_flashdata("error",$this->upload->display_errors());
 										redirect("SO_customer");
@@ -568,6 +458,8 @@ class SO_customer extends CI_Controller {
 					}else{
 						$id_customer_ship = $this->input->post("id_customer_ship");
 						$id_customer_sold = $this->input->post("id_customer_ship");
+						$order_reason=$this->input->post('order_reason');
+						$kode_trans=$this->input->post('kode_trans');
 						$qship = $this->db->query("SELECT id_customer FROM mst_customer WHERE nama_customer='$id_customer_ship'")->row();
 						$qsold = $this->db->query("SELECT id_customer FROM mst_customer WHERE nama_customer='$id_customer_sold'")->row();
 						if($qship == '' || $qsold ==''){
@@ -585,6 +477,8 @@ class SO_customer extends CI_Controller {
 								$in1['r1'] 	= $this->input->post('r1');
 								$in1['r2'] 	= $this->input->post('r2');
 								$in1['r3'] 	= $this->input->post('r3');
+								$in1['order_reason'] 	= $order_reason;
+								$in1['kode_trans'] 	= $kode_trans;
 								$in1['no_po'] 	= strtoupper($this->input->post('no_po'));
 								$in['id_customer_ship'] 	= $qship->id_customer;
 								$in['id_customer_sold'] 	= $qsold->id_customer;
@@ -602,6 +496,8 @@ class SO_customer extends CI_Controller {
 								$in1['r1'] 	= $this->input->post('r1');
 								$in1['r2'] 	= $this->input->post('r2');
 								$in1['r3'] 	= $this->input->post('r3');
+								$in1['order_reason'] 	= $order_reason;
+								$in1['kode_trans'] 	= $kode_trans;
 								$in1['no_po'] 	= strtoupper($this->input->post('no_po'));
 								$in['id_customer_ship'] 	= $qship->id_customer;
 								$in['id_customer_sold'] 	= $qsold->id_customer;		
@@ -649,6 +545,8 @@ class SO_customer extends CI_Controller {
 								$inCopy['id_customer_ship'] 	= $qValidate->id_customer_ship;
 								$inCopy['id_customer_sold'] 	= $qValidate->id_customer_sold;
 								$inCopy['status_request'] 	= 1;
+								$inCopy['order_reason'] 	= $qValidate->order_reason;
+								$inCopy['kode_trans'] 	= $qValidate->kode_trans;
 								$inCopy['tanggal_kirim'] 	= $tanggal_kirim;
 								$inCopy['catatan'] 	= strtoupper($this->input->post('keteranganCopy'));
 								$inCopy['no_po'] 	= strtoupper($this->input->post('no_poCopy'))."                              ";
@@ -692,7 +590,7 @@ class SO_customer extends CI_Controller {
 							$inShipping['id_request'] = $qdetReq->id_request;
 							$inShipping['id_detail_request'] = $qdetReq->id_detail_request;
 							$inShipping['id_status_kirim'] = 1;
-							$this->db->insert("shipping",$inShipping);
+							$this->db->insert("trx_shipping",$inShipping);
 					}else{
 						$in['id_jenis_transaksi'] 	= $dataCopy['id_jenis_transaksi'];
 						$in['id_product'] 	= $dataCopy['id_product'];
@@ -709,7 +607,7 @@ class SO_customer extends CI_Controller {
 						$inShipping['id_request'] = $qdetReq->id_request;
 						$inShipping['id_detail_request'] = $qdetReq->id_detail_request;
 						$inShipping['id_status_kirim'] = 1;
-						$this->db->insert("shipping",$inShipping);
+						$this->db->insert("trx_shipping",$inShipping);
 					}
 				}
 				$this->session->set_flashdata("success","Data order telah tersalin..");
@@ -741,6 +639,8 @@ class SO_customer extends CI_Controller {
 								$inCopy['tanggal_request'] 	= date('Y-m-d H-i-s');
 								$inCopy['id_customer_ship'] 	= $qValidate->id_customer_ship;
 								$inCopy['id_customer_sold'] 	= $qValidate->id_customer_sold;
+								$inCopy['order_reason'] 	= $qValidate->order_reason;
+								$inCopy['kode_trans'] 	= $qValidate->kode_trans;
 								$inCopy['status_request'] 	= 1;
 								$inCopy['tanggal_kirim'] 	= $dateNew;
 								$this->db->insert("trx_so_header",$inCopy);
@@ -784,7 +684,7 @@ class SO_customer extends CI_Controller {
 							$inShipping['id_request'] = $qdetReq->id_request;
 							$inShipping['id_detail_request'] = $qdetReq->id_detail_request;
 							$inShipping['id_status_kirim'] = 1;
-							$this->db->insert("shipping",$inShipping);
+							$this->db->insert("trx_shipping",$inShipping);
 					}else{
 						$in['id_jenis_transaksi'] 	= $dataCopy['id_jenis_transaksi'];
 						$in['id_product'] 	= $dataCopy['id_product'];
@@ -802,7 +702,7 @@ class SO_customer extends CI_Controller {
 						$inShipping['id_request'] = $qdetReq->id_request;
 						$inShipping['id_detail_request'] = $qdetReq->id_detail_request;
 						$inShipping['id_status_kirim'] = 1;
-						$this->db->insert("shipping",$inShipping);
+						$this->db->insert("trx_shipping",$inShipping);
 					}
 				}
 			}
@@ -814,7 +714,7 @@ class SO_customer extends CI_Controller {
 	}
 	public function save_detail() {
 		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "5" || $this->session->userdata('id_role') == "6") {
-			$required = array('id_request','id_jenis_transaksi','id_product','qty','satuan','tipe');
+			$required = array('id_request','id_product','qty','satuan','tipe');
 			$qtyVal= $this->input->post('qty');
 			$error = false;
 			foreach($required as $field) {
@@ -824,6 +724,9 @@ class SO_customer extends CI_Controller {
 			}
 			$tipe = $this->input->post("tipe");	
 			$where['id_detail_request'] = $this->input->post('id_detail_request');
+			$id_request = $this->input->post('id_request');
+			$qHeader = $this->db->query("SELECT * FROM trx_so_header ts JOIN jenis_transaksi jt ON ts.kode_trans=jt.kode_trans WHERE id_request='$id_request'")->row();
+			$id_jenis_transaksi=$qHeader->id_jenis_transaksi;
 			if($tipe == "add") {
 				if($error) {			
 					$this->session->set_flashdata("error","Data detail order belum lengkap atau Format inputan tidak sesuai");
@@ -832,8 +735,8 @@ class SO_customer extends CI_Controller {
 					$whereUp['id_request'] = $this->input->post('id_request');
 					$inUp['tanggal_request'] = date('Y-m-d H:i:s');
 					$this->db->update("trx_so_header",$inUp,$whereUp);
-					if($this->input->post('id_jenis_transaksi')==2){
-						$id_request = $this->input->post('id_request');
+					if($id_jenis_transaksi==2){
+						// $id_request = $this->input->post('id_request');
 						$id_product = $this->input->post('id_product');
 						$qty = $this->input->post('qty');
 						$qcustomer = $this->db->query("SELECT id_customer_ship FROM trx_so_header WHERE id_request='$id_request'")->row();
@@ -854,7 +757,7 @@ class SO_customer extends CI_Controller {
 							$this->db->insert("stock_customer",$inStock);
 							$nama_satuan=$this->input->post('satuan');
 							$qsatuan=$this->db->query("SELECT id_satuan FROM satuan WHERE nama_satuan='$nama_satuan'")->row();
-							$in['id_jenis_transaksi'] 	= $this->input->post('id_jenis_transaksi');
+							$in['id_jenis_transaksi'] 	= $id_jenis_transaksi;
 							$in['id_product'] 	= strtoupper($this->input->post('id_product'));
 							$in['qty'] 	= $this->input->post('qty');
 							$in['satuan'] 	= $this->input->post('satuan');
@@ -868,14 +771,14 @@ class SO_customer extends CI_Controller {
 							$inShipping['id_request'] = $qdetReq->id_request;
 							$inShipping['id_detail_request'] = $last_id;
 							$inShipping['id_status_kirim'] = 1;
-							$this->db->insert("shipping",$inShipping);
+							$this->db->insert("trx_shipping",$inShipping);
 							$this->session->set_flashdata("success","Input Request Detail Berhasil");
 							redirect("SO_customer/index/".$this->input->post('id_request'));
 						// }
 					}else{
 						$nama_satuan=$this->input->post('satuan');
 						$qsatuan=$this->db->query("SELECT id_satuan FROM satuan WHERE nama_satuan='$nama_satuan'")->row();
-						$in['id_jenis_transaksi'] 	= $this->input->post('id_jenis_transaksi');
+						$in['id_jenis_transaksi'] 	= $id_jenis_transaksi;
 						$in['id_product'] 	= strtoupper($this->input->post('id_product'));
 						$in['qty'] 	= $this->input->post('qty');
 						$in['satuan'] 	= $this->input->post('satuan');
@@ -889,7 +792,7 @@ class SO_customer extends CI_Controller {
 						$inShipping['id_request'] = $qdetReq->id_request;
 						$inShipping['id_detail_request'] = $last_id;
 						$inShipping['id_status_kirim'] = 1;
-						$this->db->insert("shipping",$inShipping);
+						$this->db->insert("trx_shipping",$inShipping);
 						$this->session->set_flashdata("success","Input Request Detail Berhasil");
 						redirect("SO_customer/index/".$this->input->post('id_request'));
 					}
@@ -907,7 +810,7 @@ class SO_customer extends CI_Controller {
 					$this->db->update("trx_so_header",$inUp,$whereUp);
 				    $nama_satuan=$this->input->post('satuan');
         			$qsatuan=$this->db->query("SELECT id_satuan FROM satuan WHERE nama_satuan='$nama_satuan'")->row();
-					$in1['id_jenis_transaksi'] 	= $this->input->post('id_jenis_transaksi');
+					$in1['id_jenis_transaksi'] 	= $id_jenis_transaksi;
 					$in1['id_product'] 	= strtoupper($this->input->post('id_product'));
 					$in1['qty'] 	= $this->input->post('qty');
 					$in1['satuan'] 	= $this->input->post('satuan');
@@ -930,10 +833,10 @@ class SO_customer extends CI_Controller {
 		if($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 6 && $id != null) {
 			$qid_detail=$this->db->query("SELECT id_detail_request FROM trx_so_detail WHERE id_request='$id'");
 			foreach($qid_detail->result_array() as $data) {  
-				// $this->db->delete("shipping",array('id_detail_request' => $data['id_detail_request']));
+				// $this->db->delete("trx_shipping",array('id_detail_request' => $data['id_detail_request']));
 				$whereDel['id_detail_request'] = $data['id_detail_request'];
     			$inDel['delete_id'] = 1;
-    			$this->db->update("shipping",$inDel,$whereDel);
+    			$this->db->update("trx_shipping",$inDel,$whereDel);
 			}
 // 			$this->db->delete("trx_so_detail",array('id_request' => $id));
 // 			$this->db->delete("trx_so_header",array('id_request' => $id));		
@@ -952,7 +855,7 @@ class SO_customer extends CI_Controller {
 			$whereDel['id_detail_request'] = $id;
 			$inDel['delete_id'] = 1;
 			$this->db->update("trx_so_detail",$inDel,$whereDel);
-			$this->db->update("shipping",$inDel,$whereDel);
+			$this->db->update("trx_shipping",$inDel,$whereDel);
 			$this->session->set_flashdata("success","Hapus Data Berhasil");
 			redirect("SO_customer/index/".$idm);		
 		} else {

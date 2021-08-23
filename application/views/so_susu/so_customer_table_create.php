@@ -263,18 +263,18 @@
 									$q1 = $this->db->query("SELECT count(*) as jml FROM trx_so_detail WHERE delete_id='0' AND id_request='$id_request'")->row();
 									if($q1->jml==0){?>
 										<div>
-										    <?php $q3 = $this->db->query("SELECT kode_trans,nama_transaksi FROM jenis_transaksi WHERE id_jenis_transaksi =1 OR id_jenis_transaksi =3 GROUP BY kode_trans ORDER BY nama_transaksi ASC"); 
+										    <?php $q3 = $this->db->query("SELECT kode_trans,nama_transaksi FROM jenis_transaksi WHERE jenis_order=1 GROUP BY kode_trans ORDER BY nama_transaksi ASC"); 
 								            foreach($q3->result_array() as $data1) { ?>
 												<?php $q3a = $this->db->query("SELECT mp.kode_trans,nama_transaksi FROM jenis_transaksi mp JOIN trx_so_header dr ON mp.kode_trans=dr.kode_trans WHERE delete_id='0' AND id_request='$id_request' GROUP BY kode_trans")->row(); ?>
-											    <input type="radio" name="kode_trans" disabled <?php if ($q3a->kode_trans == $data1['kode_trans']) echo "checked";?> value="<?php echo $data1['kode_trans'];?>"> <?php echo $data1['nama_transaksi']?>
+											    <input style="margin-left:10px;" type="radio" name="kode_trans" disabled <?php if ($q3a->kode_trans == $data1['kode_trans']) echo "checked";?> value="<?php echo $data1['kode_trans'];?>"> <?php echo $data1['nama_transaksi']?>
 											<?php }?>
 									<?php }else{?>
 										<?php 
-											$q4 = $this->db->query("SELECT kode_trans,nama_transaksi FROM jenis_transaksi WHERE id_jenis_transaksi =1 OR id_jenis_transaksi =3 GROUP BY kode_trans ORDER BY nama_transaksi ASC");  ?>
+											$q4 = $this->db->query("SELECT kode_trans,nama_transaksi FROM jenis_transaksi WHERE jenis_order=1 GROUP BY kode_trans ORDER BY nama_transaksi ASC");  ?>
 										<div>
 										    <?php foreach($q4->result_array() as $data1) { ?>
 										        <?php $q2 = $this->db->query("SELECT mp.kode_trans,nama_transaksi FROM jenis_transaksi mp JOIN trx_so_header dr ON mp.kode_trans=dr.kode_trans WHERE delete_id='0' AND id_request='$id_request' GROUP BY kode_trans")->row(); ?>
-											    <input <?php echo $disable1; ?> type="radio" name="kode_trans" <?php if ($q2->kode_trans==$data1['kode_trans']) echo "checked";?> value="<?php echo $data1['kode_trans']?>"> <?php echo $data1['nama_transaksi'];?>
+											    <input style="margin-left:10px;" <?php echo $disable1; ?> type="radio" name="kode_trans" <?php if ($q2->kode_trans==$data1['kode_trans']) echo "checked";?> value="<?php echo $data1['kode_trans']?>"> <?php echo $data1['nama_transaksi'];?>
 											<?php } ?>
 										</div>
 									<?php } ?>
@@ -282,10 +282,11 @@
 							</tr>
 							<tr>
 								<td>
-									<div class="input-group col-xs-12">
+									<div style="margin-left:10px;" class="input-group col-xs-12">
                                             <?php 
 												$Qre = $this->db->query("SELECT kode_trans FROM trx_so_header WHERE id_request='$id_request'")->row();
 												if($Qre->kode_trans=='ZSML'){?>
+													Order Reason
 													<select class="select_customer3" id='order_reason' style="width:100%;<?php echo $color_edit; ?>" name="order_reason">
 														<?php echo $combo_order_reason; ?>
 													</select>
@@ -301,7 +302,7 @@
 										<div>
 										    <?php $q3 = $this->db->query("SELECT division,division_desc FROM mst_product GROUP BY division ORDER BY division_desc ASC"); 
 								            foreach($q3->result_array() as $data1) { ?>
-											    <input type="radio" name="division" <?php if ($this->session->userdata("division") == $data1['division']) echo "checked";?> value="<?php echo $data1['division'];?>"> <?php echo $data1['division_desc']?>
+											    <input style="margin-left:10px;" type="radio" name="division" <?php if ($this->session->userdata("division") == $data1['division']) echo "checked";?> value="<?php echo $data1['division'];?>"> <?php echo $data1['division_desc']?>
 											<?php }?>
 									<?php }else{?>
 										<?php 
@@ -309,7 +310,7 @@
 										<div>
 										    <?php foreach($q4->result_array() as $data1) { ?>
 										        <?php $q2 = $this->db->query("SELECT division,division_desc FROM mst_product mp JOIN trx_so_detail dr ON mp.id_product=dr.id_product WHERE delete_id='0' AND id_request='$id_request' GROUP BY division")->row(); ?>
-											    <input <?php echo $disable1; ?> type="radio" name="division" <?php if ($q2->division==$data1['division']) echo "checked";?> value="<?php echo $data1['division']?>"> <?php echo $data1['division_desc'];?>
+											    <input style="margin-left:10px;" <?php echo $disable1; ?> type="radio" name="division" <?php if ($q2->division==$data1['division']) echo "checked";?> value="<?php echo $data1['division']?>"> <?php echo $data1['division_desc'];?>
 											<?php } ?>
 										</div>
 									<?php } ?>

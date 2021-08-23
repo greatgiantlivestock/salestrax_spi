@@ -214,6 +214,28 @@
 								</td>
 							</tr>
 							<tr>
+								<td>
+									Jenis Transaksi
+									<div id='order_reason' class="input-group col-xs-12">
+													<select class="select_customer3" style="width:100%;<?php echo $color_edit; ?>" name="kode_trans" >
+														<?php echo $combo_jenis_transaksi_kode; ?>
+													</select>
+    										
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Order Reason
+									<div id='order_reason' class="input-group col-xs-12">
+													<select class="select_customer3" style="width:100%;<?php echo $color_edit; ?>" name="order_reason" >
+														<?php echo $combo_order_reason; ?>
+													</select>
+    										
+									</div>
+								</td>
+							</tr>
+							<tr>
 								<td style="width:40%;" colspan="2">
 									Tanggal Rencana Kirim
 									<input style="width:37%;" <?php echo $color; ?> type="date"  class="form-control " name="tanggal_kirim" value="<?php echo $tanggal_kirim; ?>"required>						
@@ -364,7 +386,7 @@
 												<td><?php echo $data['nama_transaksi']; ?><i class="glyphicon glyphicon-chevron-down"></i></td>
 												<td><?php echo $data['nama_product']; ?></td>
 												<td><?php echo $data['qty']; ?></td>
-												<td><?php echo $data['nama_satuan']; ?></td>
+												<td><?php echo $data['satuan']; ?></td>
 												<td><?php echo $data['description']; ?></td>
 												<td><?php echo $data['keterangan']; ?></td>
 												<td>
@@ -401,8 +423,6 @@
 				</div>
 			</div>
 		</div>
-		
-		<!-- <div class="modal fade" id="ModalInputDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
 		<div class="modal fade" id="ModalInputDetail" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     	<div class="modal-dialog">
         <div style="border-radius:25px;" class="modal-content">
@@ -441,33 +461,33 @@
 									// 		})
 									// 	}
 									// });
-									// $("#product").change(function(){
-									// 	var value=$(this).val();
-									// 	if(value !=""){
-									// 		$.ajax({
-									// 			data:{modul:'pilih_satuan',id_product:value},
-									// 			success: function(respond){
-									// 				$("#satuan").val(respond);
-									// 			}
-									// 		})
-									// 		$.ajax({
-									// 			data:{modul:'plant_group',id_product:value},
-									// 			success: function(respond){
-									// 				$("#shipping_point").html(respond);
-									// 			}
-									// 		})
-									// 		$.ajax({
-									// 			data:{modul:'plant_group',id_product:value,id_customer:id_customer},
-									// 			success: function(respond){
-									// 				$("#shipping_point").html(respond);
-									// 			}
-									// 		})
-									// 	}
-									// });
+									$("#product").change(function(){
+										var value=$(this).val();
+										if(value !=""){
+											$.ajax({
+												data:{modul:'pilih_satuan',id_product:value},
+												success: function(respond){
+													$("#satuan").val(respond);
+												}
+											})
+											// $.ajax({
+											// 	data:{modul:'plant_group',id_product:value},
+											// 	success: function(respond){
+											// 		$("#shipping_point").html(respond);
+											// 	}
+											// })
+											// $.ajax({
+											// 	data:{modul:'plant_group',id_product:value,id_customer:id_customer},
+											// 	success: function(respond){
+											// 		$("#shipping_point").html(respond);
+											// 	}
+											// })
+										}
+									});
 								})
 							</script>
 							
-							<div class="form-group">
+							<!-- <div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right"> Jenis Transaksi </label>
 								<div class="col-sm-6">
 								<?php 
@@ -483,7 +503,7 @@
 										</select>
 									<?php }?>
 								</div>
-							</div>
+							</div> -->
 							
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right">Produk</label>
@@ -539,13 +559,12 @@
         </div>
     </div>
 	</div>
-	<!-- <div class="modal fade" id="ModalEditDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
 	<div class="modal fade" id="ModalEditDetail"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     	<div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Detail Order</h4>
+                <h4 class="modal-title" id="myModalLabel">Edit Detail Order</h4>
             </div>
             <div class="modal-body">
             	 	<form  class="form-horizontal"  action="<?php echo base_url(); ?>SO_customer/save_detail" method="post"/>	
@@ -562,6 +581,7 @@
 									});
 									$("#product1").change(function(){
 										var value=$(this).val();
+										console.log(value);
 										if(value !=""){
 											$.ajax({
 												data:{modul:'pilih_satuan',id_product:value},
@@ -580,33 +600,21 @@
 								})
 							</script>
 							
-							<div class="form-group">
+							<!-- <div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right"> Jenis Transaksi </label>
 								<div class="col-sm-9">
 									<select id="jenis_transaksi1" style="width:100%;<?php echo $color_edit; ?>" name="id_jenis_transaksi" <?php echo $disable; ?>>
 										<?php echo $combo_jenis_transaksi; ?>
 									</select>
 								</div>
-							</div>
+							</div> -->
 							
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right">Produk</label>
 								<div class="col-sm-9">
-									<!-- <select id="product1" class='select_customer' style="width:100%;<?php echo $color_edit; ?>" name="id_product">
+									<select id="product1" class='select_customer' style="width:100%;<?php echo $color_edit; ?>" name="id_product">
 										<?php echo $combo_product; ?>
-									</select> -->
-									<?php 
-										$username = $this->session->userdata("username");
-									
-										if($username == "wulan"){?>
-										<select id="product1" class="select_customer" style="width:100%;<?php echo $color_edit; ?>" name="id_product">
-											<?php echo $combo_product; ?>
-										</select>
-									<?php }else {?>
-										<select id="product1" style="width:100%;<?php echo $color_edit; ?>" name="id_product">
-											<?php echo $combo_product; ?>
-										</select>
-									<?php }?>
+									</select>
 								</div>
 							</div>
 							<div class="form-group" >
@@ -645,7 +653,6 @@
         </div>
 		</div>
 	</div>
-	<!-- <div class="modal fade" id="ModalCopyRencana" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
 	<div class="modal fade" id="ModalCopyRencana" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -683,7 +690,6 @@
 		</div>
 	</div>
 	</div>
-	<!-- <div class="modal fade" id="ModalduplicateRencana"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
 	<div class="modal fade" id="ModalduplicateRencana"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">

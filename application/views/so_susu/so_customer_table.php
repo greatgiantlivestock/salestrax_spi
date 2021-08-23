@@ -47,6 +47,7 @@
 	}
 	#order_reason{
 		display : none;
+		margin-left : 10px;
 	}
 </style>
 <html>
@@ -255,16 +256,17 @@
 							</tr> -->
 							<tr>
 								<td style="width:40%;" colspan="2">
-								    <?php $q1 = $this->db->query("SELECT kode_trans,nama_transaksi FROM jenis_transaksi WHERE id_jenis_transaksi =1 OR id_jenis_transaksi =3 ORDER BY nama_transaksi ASC"); 
+								    <?php $q1 = $this->db->query("SELECT kode_trans,nama_transaksi FROM jenis_transaksi WHERE jenis_order=1 ORDER BY nama_transaksi ASC"); 
 								     foreach($q1->result_array() as $dataTrn) { ?>
-									    <input required type="radio" name="kode_trans" value="<?php echo $dataTrn['kode_trans']; ?>"> <?php echo $dataTrn['nama_transaksi']; ?>
+									    <input style="margin-left:10px;" required type="radio" name="kode_trans" value="<?php echo $dataTrn['kode_trans']; ?>"> <?php echo $dataTrn['nama_transaksi']; ?>
 									<?php } ?>
 								</td>
 							</tr>
 							<tr>
 								<td>
 									<div id='order_reason' class="input-group col-xs-12">
-													<select class="select_customer3" style="width:100%;<?php echo $color_edit; ?>" name="order_reason" >
+										Order Reason
+													<select class="select_customer3" style="width:100%;margin-left:10px;<?php echo $color_edit; ?>" name="order_reason" >
 														<?php echo $combo_order_reason; ?>
 													</select>
     										
@@ -275,7 +277,7 @@
 								<td style="width:80%;" colspan="2">
 								    <?php $q2 = $this->db->query("SELECT division,division_desc FROM mst_product GROUP BY division ORDER BY division_desc ASC"); 
 								     foreach($q2->result_array() as $data1) { ?>
-									    <input required type="radio" name="division" value="<?php echo $data1['division']; ?>"> <?php echo $data1['division_desc']; ?>
+									    <input style="margin-left:10px;" required type="radio" name="division" value="<?php echo $data1['division']; ?>"> <?php echo $data1['division_desc']; ?>
 									<?php } ?>
 								</td>
 							</tr>

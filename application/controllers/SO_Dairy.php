@@ -71,7 +71,7 @@ class SO_Dairy extends CI_Controller {
 					// 	$d['disable1'] = 'disabled';
 					// }
 					$mat = $this->db->query("SELECT division FROM mst_product mp JOIN trx_so_detail td ON mp.id_product=td.id_product WHERE td.id_request='$id' AND delete_id='0'")->row();
-					if($mat->division==""){
+					if($mat==""){
 						$division=$this->session->userdata('division');
 					}else{
 						$division=$mat->division;
@@ -152,7 +152,7 @@ class SO_Dairy extends CI_Controller {
 	}
 	public function get_product($id) {
 		$mat = $this->db->query("SELECT division FROM mst_product mp JOIN trx_so_detail td ON mp.id_product=td.id_product WHERE td.id_request='$id' AND delete_id='0'")->row();
-		if($mat->division==""){
+		if($mat==""){
 			$division=$this->session->userdata('division');
 		}else{
 			$division=$mat->division;
@@ -187,9 +187,8 @@ class SO_Dairy extends CI_Controller {
 			echo $this->App_model->get_plant_group($id_plant_group,$id_customer);
 		}
 		if($modul=="pilih_satuan"){
-			$get=$this->db->query("SELECT * FROM mst_product JOIN satuan ON mst_product.id_satuan=satuan.id_satuan 
-									WHERE id_product = '$id_product'")->row();
-			$satuan=$get->nama_satuan;
+			$get=$this->db->query("SELECT satuan FROM mst_product WHERE id_product = '$id_product'")->row();
+			$satuan=$get->satuan;
 			echo strval($satuan);
 		}
 	}
