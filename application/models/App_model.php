@@ -996,7 +996,7 @@ class App_model extends CI_Model {
 					$q_tarik_data = $this->db->query("SELECT data1.*,nama_cluster,cluster_id FROM(SELECT rs.id_request,rs.tanggal_po,rs.tanggal_kirim,
 							rs.catatan,rs.no_po,rs.order_reason,dr.qty,rs.kode_trans,cluster_description,
 							dr.satuan,dr.id_shipping_point,mu.nama,mp.nama_product,mp.kode_product,mp.division,msp.kode_shipping_point,msp.description,
-							jt.nama_transaksi,mc.id_customer,mc.kode_customer,nama_customer AS cust_sold,mc.sales_office FROM trx_so_header rs 
+							jt.nama_transaksi,jt.jenis_order,mc.id_customer,mc.kode_customer,nama_customer AS cust_sold,mc.sales_office FROM trx_so_header rs 
 							JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
 							JOIN mst_user mu ON mu.id_user = rs.id_user
 							JOIN mst_shipping_point_customer mscp ON mscp.id_customer=rs.id_customer_ship
@@ -1006,7 +1006,7 @@ class App_model extends CI_Model {
 							JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  
 							LEFT JOIN mst_customer_cluster mcc ON mcc.kode_customer=mc.kode_customer
 							LEFT JOIN mst_cluster cls ON cls.cluster_id=mcc.cluster_id
-							WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0'
+							WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0' and jenis_order=1 
 							GROUP BY rs.id_customer_ship,rs.kode_trans) AS data1 LEFT JOIN mst_customer_cluster mcc ON data1.id_customer=mcc.id_customer");				
 				}else{
 				    if($username=='ichbal'){
