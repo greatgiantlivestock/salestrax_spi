@@ -630,14 +630,14 @@
 									<input id="qty1" class="form-control " type="text" name="qty" <?php echo $color; ?>/>
 								</div>
 							</div>
-							<div class="form-group">
+							<!-- <div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right">Dikirim dari</label>
 								<div class="col-sm-6">
 									<select id="id_shipping_point" style="width:100%;<?php echo $color_edit; ?>" name="id_shipping_point">
 										<?php echo $combo_shipping_point; ?>
 									</select>
 								</div>
-							</div>
+							</div> -->
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right"> Keterangan </label>
 								<div class="col-sm-9">

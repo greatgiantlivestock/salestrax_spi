@@ -757,13 +757,19 @@ class SO_customer extends CI_Controller {
 							$this->db->insert("stock_customer",$inStock);
 							$nama_satuan=$this->input->post('satuan');
 							$qsatuan=$this->db->query("SELECT id_satuan FROM satuan WHERE nama_satuan='$nama_satuan'")->row();
+							$qshipping_p=$this->db->query("SELECT mspc.id_shipping_point FROM trx_so_header rs JOIN mst_shipping_point_customer mspc ON mspc.id_customer=rs.id_customer_ship WHERE id_request='$id_request'")->row();
+							
+							if($qshipping_p==''){
+								$in['id_shipping_point'] = 0;
+							}else{
+								$in['id_shipping_point'] = $qshipping_p->id_shipping_point;
+							}
 							$in['id_jenis_transaksi'] 	= $id_jenis_transaksi;
 							$in['id_product'] 	= strtoupper($this->input->post('id_product'));
 							$in['qty'] 	= $this->input->post('qty');
 							$in['satuan'] 	= $this->input->post('satuan');
 							$in['id_satuan'] 	= $qsatuan->id_satuan;
 							$in['keterangan'] = $this->input->post('keterangan');
-							$in['id_shipping_point'] = $this->input->post('id_shipping_point');
 							$in['id_request'] 	= $this->input->post('id_request');				
 							$this->db->insert("trx_so_detail",$in);					
 							$last_id = $this->db->insert_id();
@@ -778,13 +784,19 @@ class SO_customer extends CI_Controller {
 					}else{
 						$nama_satuan=$this->input->post('satuan');
 						$qsatuan=$this->db->query("SELECT id_satuan FROM satuan WHERE nama_satuan='$nama_satuan'")->row();
+						$qshipping_p=$this->db->query("SELECT mspc.id_shipping_point FROM trx_so_header rs JOIN mst_shipping_point_customer mspc ON mspc.id_customer=rs.id_customer_ship WHERE id_request='$id_request'")->row();
+						
+						if($qshipping_p==''){
+							$in['id_shipping_point'] = 0;
+						}else{
+							$in['id_shipping_point'] = $qshipping_p->id_shipping_point;
+						}
 						$in['id_jenis_transaksi'] 	= $id_jenis_transaksi;
 						$in['id_product'] 	= strtoupper($this->input->post('id_product'));
 						$in['qty'] 	= $this->input->post('qty');
 						$in['satuan'] 	= $this->input->post('satuan');
 						$in['id_satuan'] 	= $qsatuan->id_satuan;
 						$in['keterangan'] = $this->input->post('keterangan');
-						$in['id_shipping_point'] = $this->input->post('id_shipping_point');
 						$in['id_request'] 	= $this->input->post('id_request');				
 						$this->db->insert("trx_so_detail",$in);					
 						$last_id = $this->db->insert_id();
@@ -810,13 +822,19 @@ class SO_customer extends CI_Controller {
 					$this->db->update("trx_so_header",$inUp,$whereUp);
 				    $nama_satuan=$this->input->post('satuan');
         			$qsatuan=$this->db->query("SELECT id_satuan FROM satuan WHERE nama_satuan='$nama_satuan'")->row();
+					$qshipping_p=$this->db->query("SELECT mspc.id_shipping_point FROM trx_so_header rs JOIN mst_shipping_point_customer mspc ON mspc.id_customer=rs.id_customer_ship WHERE id_request='$id_request'")->row();
+
+					if($qshipping_p==''){
+						$in1['id_shipping_point'] = 0;
+					}else{
+						$in1['id_shipping_point'] = $qshipping_p->id_shipping_point;
+					}
 					$in1['id_jenis_transaksi'] 	= $id_jenis_transaksi;
 					$in1['id_product'] 	= strtoupper($this->input->post('id_product'));
 					$in1['qty'] 	= $this->input->post('qty');
 					$in1['satuan'] 	= $this->input->post('satuan');
 					$in1['id_satuan'] 	= $qsatuan->id_satuan;
 					$in1['keterangan'] = $this->input->post('keterangan');
-					$in1['id_shipping_point'] = $this->input->post('id_shipping_point');
 					$this->db->update("trx_so_detail",$in1,$where);
 					$this->session->set_flashdata("success","Edit Request Detail Berhasil");
 					redirect("SO_customer/index/".$this->input->post('id_request'));			
