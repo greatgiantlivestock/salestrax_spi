@@ -1,3 +1,25 @@
+	<style>
+		
+		/* For mobile phones: */
+		[class*="col-"] {
+		width: 100%;
+		}
+
+		@media only screen and (min-width: 600px) {
+		/* For tablets: */
+		.col-s-1 {width: 100%;}
+		.col-s-2 {width: 100%;}
+		}
+		[class*="col-"] {
+			float: left;
+			padding: 15px;
+		}
+		@media only screen and (min-width: 768px) {
+		/* For desktop: */
+		.col-1 {width: 60%;}
+		.col-2 {width: 40%;}
+		}
+	</style>
 	<script> window.setTimeout(function() { $(".alert-success").fadeTo(500, 0).slideUp(500, function(){ $(this).remove(); }); }, 2000); </script> 
 	<!--<script> window.setTimeout(function() { $(".alert-danger").fadeTo(500, 0).slideUp(500, function(){ $(this).remove(); }); }, 2000); </script> -->
 	<script src="<?php echo base_url('vendor/datatables/js/jquery.dataTables.min.js')?>"></script>
@@ -7,13 +29,22 @@
         $(document).ready(function() {
             $('#dataTables-example').DataTable({
                 responsive: true,
+				bLengthChange: false,
 				iDisplayLength:20,
                 "order": [[ 0, "desc" ]]
             });
         });
         $(document).ready(function() {
-            $('#myTable').DataTable({
+            $('#myTableCL').DataTable({
                 responsive: true,
+				columns: [
+					{ "width": "10%" },
+					{ "width": "10%" },
+					{ "width": "10%" },
+					{ "width": "100%" },
+					{ "width": "100%" }
+				],
+				bLengthChange: false,
 				iDisplayLength:20,
                 "order": [[ 0, "desc" ]]
             });
@@ -42,13 +73,7 @@
 		// 		$( "#cluster_modal" ).load(window.location.href + " #cluster_modal" );
 		// 	}
     </script>
-<div id="widget-box-12"   >
-		<!-- <div class="widget-header">
-			<h5 class="widget-title">
-				<i class="fa fa-truck"></i>
-				<?php echo $judul; ?>
-			</h5>
-		</div> -->
+<div>
 				<?php if($this->session->flashdata('success')) { ?>
                     <div class="alert alert-success alert-dismissible fade in" role="alert">
                       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -65,37 +90,31 @@
 							<?php echo $this->session->flashdata('error'); ?>
 							</div> 
 				<?php } ?>
-		<div class="col-xs-7">
+		<div class="col-1 col-s-1">
 				<a id="openModalAddDetail" style="border-radius:10px; margin-top: 10px; margin-bottom: 10px;" 
 					href="#" class="btn btn-xs btn-primary" href="#"  
 					href="#" data-toggle="modal" 
 					data-target="#ModalInputDetail"><i class="fa fa-plus"> </i> Tambah Cluster
 				</a>
-				<div class="input-group col-xs-3 pull-right" style="margin-bottom:5px;margin-top:5px;">
-							<!-- <input placeholder="Cari cluster.." id="myInput" onkeyup="myFunction()" style="width:100%;" class="form-control " type="text">	 -->
-							<!-- <span class="input-group-addon">
-								<i class="fa fa-search"></i>
-							</span>					 -->
-						</div> 
-				<table id="myTable" class="table table-striped table-bordered table-hover">
+				<table id="myTableCL" class="table table-striped table-bordered table-hover">
 					<thead>
 						<tr>
-							<th width="60px" style="background: #22313F;color:#fff;">Id Cluster</th>
+							<th style="background: #22313F;color:#fff;">Id Cluster</th>
 							<th style="background: #22313F;color:#fff;">Nama Cluster</th>
 							<th style="background: #22313F;color:#fff;">Region</th>
-							<th style="background: #22313F;color:#fff;">Jumlah Customer</th>
-							<th style="width:170px;background: #22313F;color:#fff;">Action</th>
+							<th style="background: #22313F;color:#fff;">Customer</th>
+							<th style="background: #22313F;color:#fff;">Action</th>
 						</tr>
 					</thead>
 					<tbody>
-<?php
-		$no = 1;
-		foreach($master_cluster->result_array() as $data) { ?>
+					<?php
+					$no = 1;
+					foreach($master_cluster->result_array() as $data) { ?>
 						<tr>
 							<td><?php echo $data['cluster_id']; ?> </td>
 							<td><?php echo $data['cluster_description']; ?></td>
 							<td><?php echo $data['region_desc']; ?></td>
-							<td style="text-align:center;width:90px;">
+							<td>
 								<?php 	if($data['jml1']==null){ 
 									echo "Belum ada";?>
 									<?php 
@@ -115,16 +134,7 @@
 												} ?>
 									<?php }?>
 							</td>
-							<td style="text-align:center;width:300px;">
-								<!-- <a style="border-radius:10px" id="openModalEditCCluster"
-									href="#" class="label label-success"
-									data-id="<?php echo $data['cluster_id']?>"
-									data-desc="<?php echo $data['cluster_description']?>"
-									data-region="<?php echo $data['region']?>"
-									data-tipe="<?php echo "edit"?>"
-									data-toggle="modal"
-									data-target="#ModalEditDetail"><i class="fa fa-plus"> </i> Tambah Customer
-								</a> -->
+							<td style="text-align:center;">
 								<a onclick="contoh2(<?php echo $data['cluster_id'];?>);" style="border-radius: 25px;background:rgba(0,0,0,0.2);"  
 									href="#" class="label btn-success" data-toggle="modal" data-tipe="add"
 									data-target="#ModalEditDetail"><i class="fa fa-plus"> </i> Tambah Customer
@@ -294,14 +304,14 @@
 					</div>
 			</div>	
 		</div>
-		<div class="col-xs-5">
+		<div class="col-2 col-s-2">
 				<a style="border-radius:10px; margin-top: 10px; margin-bottom: 10px;" 
 					href="#" class="btn btn-xs btn-primary" href="#"  
 					href="#" data-toggle="modal" 
 					data-target="#ModalInputshp"><i class="fa fa-plus"> </i> Tambah Shipping Point
 				</a>
 
-			<table id="dataTables-example" width="100%"  class="table table-striped table-bordered table-hover">
+			<table id="dataTables-example"  class="table table-striped table-bordered table-hover">
 			<thead>
 				<tr>
 					<th style="background: #22313F;color:#fff;">Kode Shipping Point </th>

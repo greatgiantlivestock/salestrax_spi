@@ -942,7 +942,7 @@ class App_model extends CI_Model {
 											dr.id_jenis_transaksi,dr.satuan,dr.id_shipping_point,mu.nama,mu.username,
 											mu.no_hp,mu.id_wilayah,mu.id_karyawan,mu.id_departemen,mu.id_role, 
 											s.nama_satuan,mp.nama_product,mp.kode_product,dpt.nama_departemen,
-											jt.nama_transaksi,nama_customer AS cust_sold FROM trx_so_header rs 
+											jt.nama_transaksi,jt.jenis_order,nama_customer AS cust_sold FROM trx_so_header rs 
 											JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
 											JOIN mst_user mu ON mu.id_user = rs.id_user
 											JOIN satuan s ON s.id_satuan=dr.id_satuan
@@ -958,7 +958,7 @@ class App_model extends CI_Model {
 											WHERE tanggal_kirim BETWEEN '$tanggal_mulai' AND '$tanggal_sampai'
 											AND kode_shipping_point LIKE '%$kode_shipping_point%'
 											AND nama_status_kirim LIKE '%$nama_status_kirim%'
-											AND nama_departemen LIKE '%$nama_departemen%' ORDER BY id_request DESC");
+											AND jenis_order=1 AND nama_departemen LIKE '%$nama_departemen%' ORDER BY id_request DESC");
 		}else if($this->session->userdata("id_role") == 3 || $this->session->userdata("id_role") == 4){
 		    $dateFilter = date('Y-m-d');
 		    $datebesok = date('Y-m-d', strtotime($dateFilter. ' + 2 days'));
