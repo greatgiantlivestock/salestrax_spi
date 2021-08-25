@@ -536,14 +536,14 @@
 									<input id="id_customer_so" class="form-control " type="hidden" name="id_customer_dt" <?php echo $color; ?>/>
 								</div>
 							</div>
-							<div class="form-group">
+							<!-- <div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right">Dikirim dari</label>
 								<div class="col-sm-6">
 									<select id="shipping_point" class="select_customer2" style="width:100%;<?php echo $color_edit; ?>" name="id_shipping_point">
 										<?php echo $combo_shipping_point; ?>
 									</select>
 								</div>
-							</div>
+							</div> -->
 							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right"> Keterangan </label>
 								<div class="col-sm-6">
