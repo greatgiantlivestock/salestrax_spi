@@ -165,7 +165,7 @@
 										<form  class="form-horizontal"  action="<?php echo base_url(); ?>Shipping/save_cluster" method="post"/>	
 											<input type="hidden" name="tipe" value="<?php echo $tipe; ?>">
 											<div class="form-group">
-												<label > Region </label>
+												<label style="margin-left:20px"> Region </label>
 												<div class="col-sm-9">
 													<select class="select_customer1" name="region" required>
 														<?php echo $combo_region; ?>
