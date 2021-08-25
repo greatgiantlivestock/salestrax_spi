@@ -165,7 +165,7 @@
 										<form  class="form-horizontal"  action="<?php echo base_url(); ?>Shipping/save_cluster" method="post"/>	
 											<input type="hidden" name="tipe" value="<?php echo $tipe; ?>">
 											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-left"> Region </label>
+												<label class="col-sm-3 control-label "> Region </label>
 												<div class="col-sm-9">
 													<select class="select_customer1" name="region" required>
 														<?php echo $combo_region; ?>
@@ -173,7 +173,7 @@
 												</div>
 											</div>		
 											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-left"> Nama Cluster </label>
+												<label class="col-sm-3 control-label "> Nama Cluster </label>
 												<div class="col-sm-9">
 													<input type="text" style="text-transform:uppercase" name="cluster_description" />
 												</div>
