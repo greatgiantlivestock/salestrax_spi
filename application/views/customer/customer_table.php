@@ -45,10 +45,10 @@
 									<th style="background: #22313F;color:#fff;">Kode Customer</th>	
 									<!-- <th>Sales 1</th>	
 									<th>Sales 2</th>	 -->
-									<th style="background: #22313F;color:#fff;">Nama Customer</th>	
-									<th style="background: #22313F;color:#fff;">Cluster</th>	
+									<th style="background: #22313F;color:#fff;">Nama Customer</th>		
 									<th style="background: #22313F;color:#fff;">Region</th>	
 									<th style="background: #22313F;color:#fff;">Kota</th>	
+									<th style="background: #22313F;color:#fff;">Cluster</th>
 									<th style="background: #22313F;color:#fff;">Alamat</th>
 									<th style="background: #22313F;color:#fff;">Shipping Point</th>
 									<!-- <th style="background: #22313F;color:#fff;">Sales Person</th> -->
@@ -65,9 +65,9 @@
 										<tr >
 											<td><?php echo $data['kode_customer']; ?></td>
 											<td><?php echo $data['nama_customer']; ?></td>
-											<td><?php echo $data['nama_cluster']; ?></td>
 											<td><?php echo $data['region_desc']; ?></td>
 											<td><?php echo $data['city']; ?></td>
+											<td><?php echo $data['nama_cluster']; ?></td>
 											<td><?php echo $data['alamat']; ?></td>
 											<td>
 												<?php if($data['jml']==null){ 
