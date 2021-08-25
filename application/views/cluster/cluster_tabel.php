@@ -37,13 +37,6 @@
         $(document).ready(function() {
             $('#myTableCL').DataTable({
                 responsive: true,
-				columns: [
-					{ "width": "10%" },
-					{ "width": "10%" },
-					{ "width": "10%" },
-					{ "width": "100%" },
-					{ "width": "100%" }
-				],
 				bLengthChange: false,
 				iDisplayLength:20,
                 "order": [[ 0, "desc" ]]

@@ -42,8 +42,6 @@
 						<!--<table id="dataTables-example" width="100%" class="table table-striped table-bordered table-hover">-->
 							<thead>
 								<tr>
-									<!-- <th>Id Customer</th>	 -->
-									<th style="display:none;">id</th>
 									<th style="background: #22313F;color:#fff;">Kode Customer</th>	
 									<!-- <th>Sales 1</th>	
 									<th>Sales 2</th>	 -->
@@ -64,8 +62,6 @@
 								//	if(!empty($customer->result_array())) { 
 										foreach($customer->result_array() as $data) { ?>
 										<tr >
-											<!-- <td><?php echo $data['id_customer']; ?><i class="glyphicon glyphicon-chevron-down"></i></td> -->
-											<td style="display:none;"><?php echo $data['id_shiping_point_customer']; ?></td>
 											<td><?php echo $data['kode_customer']; ?></td>
 											<td><?php echo $data['nama_customer']; ?></td>
 											<td><?php echo $data['nama_cluster']; ?></td>
@@ -375,6 +371,11 @@
             $('#dataTables-example').DataTable({
                 responsive: true,
                 "order": [[ 0, "DESC" ]]
+			});
+        });
+        $(document).ready(function() {
+            $('#myTable').DataTable({
+                responsive: true
 			});
         });
 		function contoh(x){
