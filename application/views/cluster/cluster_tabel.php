@@ -165,7 +165,7 @@
 										<form  class="form-horizontal"  action="<?php echo base_url(); ?>Shipping/save_cluster" method="post"/>	
 											<input type="hidden" name="tipe" value="<?php echo $tipe; ?>">
 											<div class="form-group">
-												<label style="margin-left:20px"> Region </label>
+												<label style="margin-left:15px"> Region </label>
 												<div class="col-sm-9">
 													<select class="select_customer1" name="region" required>
 														<?php echo $combo_region; ?>
@@ -173,7 +173,7 @@
 												</div>
 											</div>		
 											<div class="form-group">
-												<label > Nama Cluster </label>
+												<label style="margin-left:15px"> Nama Cluster </label>
 												<div class="col-sm-9">
 													<input type="text" style="text-transform:uppercase" name="cluster_description" />
 												</div>
@@ -221,7 +221,7 @@
 										<form  class="form-horizontal"  action="<?php echo base_url(); ?>Shipping/hapus_cluster" method="post"/>	
 											<input id="cluster_idH" type="hidden" name="cluster_id">
 											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-right"> Nama Cluster </label>
+												<label class="style="margin-left:15px""> Nama Cluster </label>
 												<div class="col-sm-9">
 													<input id="cluster_descH" type="text" name="cluster_description" />
 												</div>
@@ -254,7 +254,7 @@
 										<form  class="form-horizontal"  action="<?php echo base_url(); ?>Shipping/edit_cluster" method="post"/>	
 											<input id="cluster_idE" type="hidden" name="cluster_id">
 											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-right"> Region </label>
+												<label class="style="margin-left:15px""> Region </label>
 												<div class="col-sm-9">
 													<select id="region_cluster" class="select_customer1" name="region" required>
 														<?php echo $combo_region; ?>
@@ -262,7 +262,7 @@
 												</div>
 											</div>
 											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-right"> Nama Cluster </label>
+												<label class="style="margin-left:15px""> Nama Cluster </label>
 												<div class="col-sm-9">
 													<input id="cluster_descE" type="text" style="text-transform:uppercase" name="cluster_description" />
 												</div>
