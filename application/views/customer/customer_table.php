@@ -47,6 +47,7 @@
 									<th>Sales 2</th>	 -->
 									<th style="background: #22313F;color:#fff;">Nama Customer</th>	
 									<th style="background: #22313F;color:#fff;">Cluster</th>	
+									<th style="background: #22313F;color:#fff;">Region</th>	
 									<th style="background: #22313F;color:#fff;">Kota</th>	
 									<th style="background: #22313F;color:#fff;">Alamat</th>
 									<th style="background: #22313F;color:#fff;">Shipping Point</th>
@@ -65,6 +66,7 @@
 											<td><?php echo $data['kode_customer']; ?></td>
 											<td><?php echo $data['nama_customer']; ?></td>
 											<td><?php echo $data['nama_cluster']; ?></td>
+											<td><?php echo $data['region_desc']; ?></td>
 											<td><?php echo $data['city']; ?></td>
 											<td><?php echo $data['alamat']; ?></td>
 											<td>
