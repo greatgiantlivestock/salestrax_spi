@@ -174,6 +174,7 @@
 													<td ><?php $id_sstx = (int)$data['id_request']+1000000000; echo $id_sstx ?></td>						
 													<td style="display:none;"><?php echo $data['cust_sold']; ?></td>
 													<td><?php echo $data['cust_sold']; ?></td>
+													<td><?php echo $data['nama_transaksi']; ?></td>
 													<td>
 														<?php 
 															if($data['nama_product']=="FG Milk Botol 1 Liter"){
