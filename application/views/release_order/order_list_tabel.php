@@ -78,6 +78,7 @@
 										<th style="background: #22313F;color:#fff;">No. Salestrax</th>							
 										<th style="display:none;background: #22313F;color:#fff;">Sold to Party</th>
 										<th style="background: #22313F;color:#fff;"> Ship to Party </th>
+										<th style="background: #22313F;color:#fff;"> Order Type </th>
 										<th style="background: #22313F;color:#fff;">Produk</th>
 										<th style="background: #22313F;color:#fff;">No. PO</th>	
 										<th style="background: #22313F;color:#fff;">Tanggal PO</th>	
@@ -102,6 +103,7 @@
 													<td ><?php $id_sstx = (int)$data['id_request']+1000000000; echo $id_sstx ?></td>						
 													<td style="display:none;"><?php echo $data['cust_sold']; ?></td>
 													<td><?php echo $data['cust_sold']; ?></td>
+													<td><?php echo $data['nama_transaksi']; ?></td>
 													<td>
 														<?php 
 															if($data['nama_product']=="FG Milk Botol 1 Liter"){

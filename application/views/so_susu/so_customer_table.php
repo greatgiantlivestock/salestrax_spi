@@ -302,7 +302,7 @@
 							<tr>
 								<td style="width:40%;" colspan="2">
 									No. PO
-									<input <?php echo $color; ?> style="text-transform:uppercase" placeholder="Ketik Nomor PO Jika Ada" class="form-control " name="no_po" value="<?php echo $no_po; ?>" >						
+									<input <?php echo $color; ?> style="text-transform:uppercase" placeholder="Ketik Nomor PO Jika Ada" class="form-control " required name="no_po" value="<?php echo $no_po; ?>" >						
 								</td>
 							</tr>	
 							<tr>

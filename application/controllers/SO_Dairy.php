@@ -214,7 +214,7 @@ class SO_Dairy extends CI_Controller {
 	// }
 	public function save() {
 		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "5" || $this->session->userdata('id_role') == "6") {
-			$required = array('tanggal_kirim','id_customer_ship','kode_trans','tanggal_po');
+			$required = array('tanggal_kirim','id_customer_ship','kode_trans','tanggal_po','no_po');
 			$error = false;
 			foreach($required as $field) {
 				if(empty($_POST[$field])) {
