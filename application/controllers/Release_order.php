@@ -445,7 +445,7 @@ class Release_order extends CI_Controller {
 						// $data12 = '000'.$qRelease->urutan;
 						$dataClus = $qRelease->nama_cluster;
 						$content = substr($data1,0,10).$data2.$data3.$data4.substr($data5,0,20).$data6a.$data7a.substr($data8,0,15).substr($data9c,-8).substr($data10,0,3).substr($data11,0,4).$data13.$data12."\n";
-						if($data11 != '    ' && $data6a != '19700101' && $data7a != '19700101' && $dataClus != ''){
+						if($data11 != '    ' && $data6a != '19700101' && $data7a != '19700101' ){
 							fwrite($fp,$content);
 							fclose($fp);
 							fwrite($fp1,$content);
