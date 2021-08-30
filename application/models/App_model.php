@@ -1613,14 +1613,15 @@ class App_model extends CI_Model {
 				$q_tarik_data = $this->db->query("SELECT rs.id_request,rs.tanggal_po,rs.tanggal_kirim,
 							rs.catatan,rs.no_po,rs.order_reason,dr.qty,rs.kode_trans,
 							dr.satuan,dr.id_shipping_point,dr.id_detail_request,mu.nama,mp.nama_product,mp.kode_product,mp.division,msp.kode_shipping_point,msp.description,
-							jt.nama_transaksi,mc.id_customer,mc.kode_customer,nama_customer AS cust_sold,mc.sales_office FROM trx_so_header rs 
+							jt.nama_transaksi,mc.id_customer,mc.kode_customer,nama_customer AS cust_sold,mc.sales_office,nama_cluster FROM trx_so_header rs 
 							JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
 							JOIN mst_user mu ON mu.id_user = rs.id_user
 							JOIN mst_shipping_point_customer mscp ON mscp.id_customer=rs.id_customer_ship
 							JOIN mst_shipping_point msp ON msp.id_shipping_point=mscp.id_shipping_point
 							JOIN mst_product mp ON mp.id_product=dr.id_product
 							JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-							JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0' AND id_detail_request='$id'");
+							JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold 
+							LEFT JOIN mst_customer_cluster mcc ON mcc.kode_customer=mc.kode_customer WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0' AND id_detail_request='$id'");
 			// }else{
 			// 	$departemen=$this->session->userdata('id_departemen');
 			// 	$q_tarik_data = $this->db->query("SELECT rs.id_request,rs.tanggal_po,rs.tanggal_kirim,

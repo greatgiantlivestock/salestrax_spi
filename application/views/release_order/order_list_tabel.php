@@ -94,7 +94,7 @@
 									$no = 1;
 									$jum_total = 0; 
 									foreach($q_tarik_data->result_array() as $data) { ?>
-										<?php if($data['id_shipping_point'] > 0){?>
+										<?php if($data['id_shipping_point'] > 0 && $data['cluster_description']!=''){?>
 											<tr style="background: #ADDAC3;">	
 													<td>
 														<input style="width:20px;height:20px;" class="check" type="checkbox" name="ck_id_detail[]" value="<?php echo $data['id_request'];?>">

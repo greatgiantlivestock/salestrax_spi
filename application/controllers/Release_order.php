@@ -443,8 +443,9 @@ class Release_order extends CI_Controller {
 							$data13 = $qRelease->order_reason;
 						}
 						// $data12 = '000'.$qRelease->urutan;
+						$dataClus = $qRelease->nama_cluster;
 						$content = substr($data1,0,10).$data2.$data3.$data4.substr($data5,0,20).$data6a.$data7a.substr($data8,0,15).substr($data9c,-8).substr($data10,0,3).substr($data11,0,4).$data13.$data12."\n";
-						if($data11 != '    ' && $data6a != '19700101' && $data7a != '19700101'){
+						if($data11 != '    ' && $data6a != '19700101' && $data7a != '19700101' && $dataClus != ''){
 							fwrite($fp,$content);
 							fclose($fp);
 							fwrite($fp1,$content);
@@ -459,7 +460,7 @@ class Release_order extends CI_Controller {
 							fclose($fp1);
 							unlink("../interface/To/SO_".$date.".txt");
 							unlink("../interface/To_backup/SO_".$date.".txt");
-							$this->session->set_flashdata("error_update","Sebagian Data Order Gagal Dirilis, Pastikan Shipping Point dan Sales Person Sudah Ditentukan");
+							$this->session->set_flashdata("error_update","Sebagian Data Order Gagal Dirilis, Pastikan Shipping Point dan Cluster Sudah Ditentukan");
 						}
 					}
 				}
