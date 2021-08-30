@@ -94,7 +94,7 @@
 									$no = 1;
 									$jum_total = 0; 
 									foreach($q_tarik_data->result_array() as $data) { ?>
-										<?php if($data['id_shipping_point'] > 0 && $data['cluster_description']!=''){?>
+										<?php if($data['id_shipping_point'] > 0 ){?>
 											<tr style="background: #ADDAC3;">	
 													<td>
 														<input style="width:20px;height:20px;" class="check" type="checkbox" name="ck_id_detail[]" value="<?php echo $data['id_request'];?>">
@@ -380,11 +380,11 @@
 													</td>
 													<td colspan="6">
 														<div class="input-group col-xs-12">
-															<input style="width:70%;" id="nm_cust2">					
+															<input style="width:70%;" id="nm_cust12">					
 														</div>
 													</td>
 												</tr>
-												<tr>
+												<!-- <tr>
 													<td colspan="6">
 														Material Group										
 													</td>
@@ -395,7 +395,7 @@
 															</select>					
 														</div>
 													</td>
-												</tr>
+												</tr> -->
 												<tr>
 													<td colspan="6">
 														Shipping Point										
@@ -420,6 +420,18 @@
 														</div>
 													</td>
 												</tr> -->
+												<tr>
+													<td colspan="6">
+														Cluster
+													</td>
+													<td colspan="6">
+														<div class="input-group col-xs-12">
+															<select id="pers_numb2" style="width:50%;" class="select_customer" name="pers_numb12">
+																<?php echo $combo_cluster; ?>
+															</select>						
+														</div>
+													</td>
+												</tr>
 												<tr>
 													<td colspan="6">
 														Delivery Date
