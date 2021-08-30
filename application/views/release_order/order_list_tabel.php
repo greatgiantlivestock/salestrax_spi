@@ -156,12 +156,12 @@
 															data-toggle="modal" 
 															data-target="#ModalEditDetail1"><i class="fa fa-plus"></i>
 														</a>
-														<a style="border-radius: 5px;" 
+														<!-- <a style="border-radius: 5px;" 
 															href="#" class="btn btn-xs btn-danger" 
 															onclick="contoh1(<?php echo $data['id_request']; ?>)"
 															data-tipe="<?php echo "edit"?>" data-toggle="modal" 
 															data-target="#ModalEditDetailProduct"><i class="fa fa-edit"></i>
-														</a>
+														</a> -->
 													</td>
 											</tr>
 										<?php }else{ ?>
@@ -231,12 +231,12 @@
 															data-toggle="modal" 
 															data-target="#ModalEditDetail2"><i class="fa fa-plus"></i>
 														</a>
-														<a style="border-radius: 5px;"
+														<!-- <a style="border-radius: 5px;"
 															href="#" class="btn btn-xs btn-danger" 
 															onclick="contoh1(<?php echo $data['id_request']; ?>)"
 															data-tipe="<?php echo "edit"?>" data-toggle="modal" 
 															data-target="#ModalEditDetailProduct"><i class="fa fa-edit"></i>
-														</a>
+														</a> -->
 													</td>
 											</tr>
 										<?php }?>

@@ -460,7 +460,7 @@ class Release_order extends CI_Controller {
 							fclose($fp1);
 							unlink("../interface/To/SO_".$date.".txt");
 							unlink("../interface/To_backup/SO_".$date.".txt");
-							$this->session->set_flashdata("error_update","Sebagian Data Order Gagal Dirilis, Pastikan Shipping Point dan Cluster Sudah Ditentukan");
+							$this->session->set_flashdata("error_update","Data Order Gagal Dirilis, Pastikan Shipping Point dan Cluster Sudah Ditentukan");
 						}
 					}
 				}
