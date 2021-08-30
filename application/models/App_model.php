@@ -1007,7 +1007,7 @@ class App_model extends CI_Model {
 							LEFT JOIN mst_customer_cluster mcc ON mcc.kode_customer=mc.kode_customer
 							LEFT JOIN mst_cluster cls ON cls.cluster_id=mcc.cluster_id
 							WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0' and jenis_order=1 
-							GROUP BY rs.id_customer_ship,rs.kode_trans) AS data1 LEFT JOIN mst_customer_cluster mcc ON data1.id_customer=mcc.id_customer");				
+							GROUP BY rs.id_customer_ship,rs.id_request) AS data1 LEFT JOIN mst_customer_cluster mcc ON data1.id_customer=mcc.id_customer");				
 				}else{
 				    if($username=='ichbal'){
 				        $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
@@ -1312,7 +1312,7 @@ class App_model extends CI_Model {
 					LEFT JOIN mst_customer_cluster mcc ON mcc.kode_customer=mc.kode_customer
 					LEFT JOIN mst_cluster cls ON cls.cluster_id=mcc.cluster_id
 					WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='1'
-					GROUP BY rs.id_customer_ship,rs.kode_trans) AS data1 LEFT JOIN mst_customer_cluster mcc ON data1.id_customer=mcc.id_customer LIMIT 1000");				
+					GROUP BY rs.id_customer_ship,rs.id_request) AS data1 LEFT JOIN mst_customer_cluster mcc ON data1.id_customer=mcc.id_customer LIMIT 1000");				
 				}else{
 				    if($username=='ichbal'){
 				        $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
