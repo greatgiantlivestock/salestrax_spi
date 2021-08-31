@@ -275,6 +275,7 @@
 										 <th style="background: #22313F;color:#fff;">Alamat</th>
 										<th style="background: #22313F;color:#fff;">No. PO</th>	
 										<th style="background: #22313F;color:#fff;">File PO</th>		
+										<th style="background: #22313F;color:#fff;">Tanggal PO</th>																	
 										<th style="background: #22313F;color:#fff;">Tanggal Order</th>																	
 										<th style="background: #22313F;color:#fff;">Jadwal Kirim (hari 1)</th>																	
 										<th style="background: #22313F;color:#fff;">Jadwal Kirim (hari 2)</th>																	
@@ -472,7 +473,7 @@
 																</a>
 															<?php }?>
 													</td>	
-													<td><?php if($data['tanggal_po']!="0000-00-00"){echo $data['tanggal_po'];} ?></td>							
+													<td><?php if($data['tanggal_po'] != "0000-00-00"){echo $data['tanggal_po'];} ?></td>							
 													<td>
 														<?php
 															echo $data['tanggal_request'];
@@ -773,7 +774,7 @@
 																</a>
 															<?php }?>
 													</td>								
-													<td><?php if($data['tanggal_po']!="0000-00-00"){echo $data['tanggal_po'];} ?></td>							
+													<td><?php if($data['tanggal_po'] != "0000-00-00"){echo $data['tanggal_po'];} ?></td>							
 													<td>
 														<?php
 															echo $data['tanggal_request'];

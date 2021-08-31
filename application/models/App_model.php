@@ -814,7 +814,7 @@ class App_model extends CI_Model {
 				// $departemen=$this->session->userdata('id_departemen');
 				$q_tarik_data = $this->db->query("SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
                                             SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
-                                            SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.tanggal_kirim,data2.catatan,data2.no_po,
+                                            SELECT data2.id_request,data2.tanggal_po,data2.no_request,data2.tanggal_request,data2.tanggal_kirim,data2.catatan,data2.no_po,
                                             data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.sts,
                                             data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.kode_product,
                                             data2.nama_transaksi,data2.cust_sold,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
