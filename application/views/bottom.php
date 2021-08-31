@@ -735,7 +735,6 @@
 				//      $(".modal-body #nm_cust1").val(nm_customer);
 				// });
 				$(document).on("click", "#openModalEditShipping1", function () {
-					console.log("test cluster_id")
 				     var id_request = $(this).data('id_request'); 
 					 var kode_customer = $(this).data('kode_customer');
 				     var tipe = $(this).data('tipe');
@@ -743,6 +742,7 @@
 				     var nm_customer = $(this).data('cust_ship');
 				     var tanggal_kirim = $(this).data('tanggal_kirim');
 				     var cluster_id = $(this).data('cluster_id');
+					 console.log("test cluster_id"+cluster_id)
 					 $(".modal-body #tipe").val(tipe);
 				     $(".modal-body #id_request_ol").val(id_request);
 				     $(".modal-body #id_shipping_point").val(id_shipping_point).trigger('change');
