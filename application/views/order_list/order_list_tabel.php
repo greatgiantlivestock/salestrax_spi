@@ -278,20 +278,20 @@
 										<th style="background: #22313F;color:#fff;">Tanggal Order</th>																	
 										<th style="background: #22313F;color:#fff;">Jadwal Kirim (hari 1)</th>																	
 										<th style="background: #22313F;color:#fff;">Jadwal Kirim (hari 2)</th>																	
-										<th style="background: #22313F;color:#fff;">Jadwal Kirim (hari 3)</th>																	
+										<!-- <th style="background: #22313F;color:#fff;">Jadwal Kirim (hari 3)</th>																	 -->
 										<th style="background: #22313F;color:#fff;">Tanggal Rencana Kirim</th>									
-										<th style="background: #22313F;color:#fff;">Tanggal Realisasi Kirim</th>								
+										<!-- <th style="background: #22313F;color:#fff;">Tanggal Realisasi Kirim</th>								 -->
 										<th style="background: #22313F;color:#fff;">Catatan Customer</th>
-										<th style="background: #22313F;color:#fff;">Ket</th>
+										<!-- <th style="background: #22313F;color:#fff;">Ket</th> -->
 										<th style="background: #22313F;color:#fff;">Preview</th>
 										<th style="background: #22313F;color:#fff;">Shipping Point</th>	
-										<th style="background: #22313F;color:#fff;">Shipment Status</th>
-										<th style="background: #22313F;color:#fff;">Sisa Stock H1</th>
+										<!-- <th style="background: #22313F;color:#fff;">Shipment Status</th> -->
+										<!-- <th style="background: #22313F;color:#fff;">Sisa Stock H1</th>
 										<th style="background: #22313F;color:#fff;">Detail H1</th>
 										<th style="background: #22313F;color:#fff;">Sisa Stock H2</th>
 										<th style="background: #22313F;color:#fff;">Detail H2</th>
 										<th style="background: #22313F;color:#fff;">Sisa Stock H3</th>
-										<th style="background: #22313F;color:#fff;">Detail H3</th>
+										<th style="background: #22313F;color:#fff;">Detail H3</th> -->
 										<?php if($this->session->userdata("id_role")==5){?>
 										<?php }else{?>
 											<!-- <th style="background: #22313F;color:#fff;">Action</th> -->
@@ -490,11 +490,11 @@
 															echo $data['hari_kirim2'];
 														?>
 													</td>
-													<td>
+													<!-- <td>
 														<?php
 															echo $data['hari_kirim3'];
 														?>
-													</td>
+													</td> -->
 													<td>
 														<?php
 															echo $data['tanggal_kirim'];
@@ -503,7 +503,7 @@
 															echo " ("; echo strtoupper($dday4);  echo ") "; 
 														?>
 													</td>
-													<td>
+													<!-- <td>
 														<?php 
 															if($data['tanggal_shipping']==null){
 																echo "";
@@ -514,9 +514,9 @@
 																echo " ("; echo strtoupper($dday5);  echo ") "; 
 															}
 														?>
-													</td>
+													</td> -->
 													<td><?php echo $data['catatan']; ?></td>
-													<td><?php echo $data['keterangan']; ?></td>
+													<!-- <td><?php echo $data['keterangan']; ?></td> -->
 													<td>
 														<!--
 														<img style="width:50px; heigh:50px" 
@@ -533,52 +533,7 @@
 															<?php }?>	
 													</td>
 													<td><?php echo $data['description']; ?></td>
-													<td><?php echo $data['nama_status_kirim']; ?></td>
-													<?php if($data['id_jenis_transaksi']==1){?>				
-														<td>
-															<?php if($data['nama_product']=="FG Milk Botol 1 Liter                   ") {
-															echo $data['h1']; 
-															}?>
-														</td>
-														<td>
-															<?php if($data['nama_product']=="FG Milk Botol 1 Liter                   ") {
-															echo $data['r1']; 
-															}?>
-														</td>
-														<td>
-															<?php if($data['nama_product']=="FG Milk Botol 2 Liter                   "){
-															echo $data['h2']; 
-															}?>
-														</td>
-														<td>
-															<?php if($data['nama_product']=="FG Milk Botol 2 Liter                   "){
-															echo $data['r2']; 
-															}?>
-														</td>
-														<td>
-															<?php if($data['nama_product']=="FG Milk Botol 3 Liter                   "){
-																echo $data['h3']; 
-															}?>
-														</td>
-														<td>
-															<?php if($data['nama_product']=="FG Milk Botol 3 Liter                   "){
-																echo $data['r3']; 
-															}?>
-														</td>
-													<?php }else {?>				
-														<td>	
-														</td>
-														<td>
-														</td>
-														<td>
-														</td>
-														<td>	
-														</td>
-														<td>
-														</td>
-														<td>
-														</td>
-													<?php }?>				
+													<!-- <td><?php echo $data['nama_status_kirim']; ?></td>			 -->
 														<?php if($this->session->userdata("id_role")==5){?>
 														<?php }else{?>
 															<!-- <td style="text-align:center;width:100px;">
