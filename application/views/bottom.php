@@ -735,6 +735,7 @@
 				//      $(".modal-body #nm_cust1").val(nm_customer);
 				// });
 				$(document).on("click", "#openModalEditShipping1", function () {
+					console.log("test cluster_id")
 				     var id_request = $(this).data('id_request'); 
 					 var kode_customer = $(this).data('kode_customer');
 				     var tipe = $(this).data('tipe');
