@@ -993,8 +993,8 @@ class App_model extends CI_Model {
 					// 	JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
 					// 	WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi <= 2
 					// 	ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person GROUP BY id_request");				
-					$q_tarik_data = $this->db->query("SELECT data1.*,nama_cluster,cluster_id FROM(SELECT rs.id_request,rs.tanggal_po,rs.tanggal_kirim,
-							rs.catatan,rs.no_po,rs.order_reason,dr.qty,rs.kode_trans,cluster_description,
+					$q_tarik_data = $this->db->query("SELECT rs.id_request,rs.tanggal_po,rs.tanggal_kirim,
+							rs.catatan,rs.no_po,rs.order_reason,dr.qty,rs.kode_trans,cluster_description,mcc.cluster_id,
 							dr.satuan,dr.id_shipping_point,mu.nama,mp.nama_product,mp.kode_product,mp.division,msp.kode_shipping_point,msp.description,
 							jt.nama_transaksi,jt.jenis_order,mc.id_customer,mc.kode_customer,nama_customer AS cust_sold,mc.sales_office FROM trx_so_header rs 
 							JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
@@ -1007,7 +1007,7 @@ class App_model extends CI_Model {
 							LEFT JOIN mst_customer_cluster mcc ON mcc.kode_customer=mc.kode_customer
 							LEFT JOIN mst_cluster cls ON cls.cluster_id=mcc.cluster_id
 							WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0' and jenis_order=1 
-							GROUP BY rs.id_customer_ship,rs.id_request) AS data1 LEFT JOIN mst_customer_cluster mcc ON data1.id_customer=mcc.id_customer");				
+							GROUP BY rs.id_customer_ship,rs.id_request");				
 				}else{
 				    if($username=='ichbal'){
 				        $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (

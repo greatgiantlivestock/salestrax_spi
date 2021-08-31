@@ -742,7 +742,7 @@
 				     var nm_customer = $(this).data('cust_ship');
 				     var tanggal_kirim = $(this).data('tanggal_kirim');
 				     var cluster_id = $(this).data('cluster_id');
-					 console.log("test cluster_id"+kode_customer)
+					 console.log("test cluster_id"+cluster_id)
 					 $(".modal-body #tipe").val(tipe);
 				     $(".modal-body #id_request_ol").val(id_request);
 				     $(".modal-body #id_shipping_point").val(id_shipping_point).trigger('change');
