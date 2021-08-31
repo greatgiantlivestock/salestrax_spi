@@ -821,7 +821,7 @@ class App_model extends CI_Model {
                                             data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
                                             SELECT data1.*, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
                                             SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
-                                            rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,sts,dr.keterangan,
+                                            rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,rs.tanggal_po,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,sts,dr.keterangan,
                                             dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.kode_product,
                                             jt.nama_transaksi,nama_customer AS cust_sold FROM trx_so_header rs 
                                             JOIN trx_so_detail dr ON rs.id_request = dr.id_request 

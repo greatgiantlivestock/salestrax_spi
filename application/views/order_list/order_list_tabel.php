@@ -471,7 +471,8 @@
 																	<i class="glyphicon glyphicon-download"></i>
 																</a>
 															<?php }?>
-													</td>								
+													</td>	
+													<td><?php if($data['tanggal_po']!="0000-00-00"){echo $data['tanggal_po'];} ?></td>							
 													<td>
 														<?php
 															echo $data['tanggal_request'];
@@ -772,6 +773,7 @@
 																</a>
 															<?php }?>
 													</td>								
+													<td><?php if($data['tanggal_po']!="0000-00-00"){echo $data['tanggal_po'];} ?></td>							
 													<td>
 														<?php
 															echo $data['tanggal_request'];
