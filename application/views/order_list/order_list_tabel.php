@@ -277,10 +277,10 @@
 										<th style="background: #22313F;color:#fff;">File PO</th>		
 										<th style="background: #22313F;color:#fff;">Tanggal PO</th>																	
 										<th style="background: #22313F;color:#fff;">Tanggal Order</th>																	
+										<th style="background: #22313F;color:#fff;">Tanggal Rencana Kirim</th>	
 										<th style="background: #22313F;color:#fff;">Jadwal Kirim (hari 1)</th>																	
 										<th style="background: #22313F;color:#fff;">Jadwal Kirim (hari 2)</th>																	
-										<!-- <th style="background: #22313F;color:#fff;">Jadwal Kirim (hari 3)</th>																	 -->
-										<th style="background: #22313F;color:#fff;">Tanggal Rencana Kirim</th>									
+										<!-- <th style="background: #22313F;color:#fff;">Jadwal Kirim (hari 3)</th>																	 -->								
 										<!-- <th style="background: #22313F;color:#fff;">Tanggal Realisasi Kirim</th>								 -->
 										<th style="background: #22313F;color:#fff;">Catatan Customer</th>
 										<!-- <th style="background: #22313F;color:#fff;">Ket</th> -->
@@ -484,6 +484,14 @@
 													</td>
 													<td>
 														<?php
+															echo $data['tanggal_kirim'];
+															$date_4 = strtotime($data['tanggal_kirim']); 
+															$dday4 = date("D", $date_4);
+															echo " ("; echo strtoupper($dday4);  echo ") "; 
+														?>
+													</td>
+													<td>
+														<?php
 															echo $data['hari_kirim'];
 														?>
 													</td>
@@ -497,14 +505,6 @@
 															echo $data['hari_kirim3'];
 														?>
 													</td> -->
-													<td>
-														<?php
-															echo $data['tanggal_kirim'];
-															$date_4 = strtotime($data['tanggal_kirim']); 
-															$dday4 = date("D", $date_4);
-															echo " ("; echo strtoupper($dday4);  echo ") "; 
-														?>
-													</td>
 													<!-- <td>
 														<?php 
 															if($data['tanggal_shipping']==null){
@@ -785,6 +785,14 @@
 													</td>
 													<td>
 														<?php
+															echo $data['tanggal_kirim'];
+															$date_4 = strtotime($data['tanggal_kirim']); 
+															$dday4 = date("D", $date_4);
+															echo " ("; echo strtoupper($dday4);  echo ") "; 
+														?>
+													</td>
+													<td>
+														<?php
 															echo $data['hari_kirim'];
 														?>
 													</td>
@@ -798,14 +806,6 @@
 															echo $data['hari_kirim3'];
 														?>
 													</td> -->
-													<td>
-														<?php
-															echo $data['tanggal_kirim'];
-															$date_4 = strtotime($data['tanggal_kirim']); 
-															$dday4 = date("D", $date_4);
-															echo " ("; echo strtoupper($dday4);  echo ") "; 
-														?>
-													</td>
 													<!-- <td>
 														<?php 
 															if($data['tanggal_shipping']==null){
