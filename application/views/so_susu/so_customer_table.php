@@ -314,7 +314,7 @@
 							<tr>
 								<td style="width:40%;" colspan="2">
 									Upload File PO (Gambar atau Pdf)
-									<input <?php echo $color; ?>  class="form-control" type="file" name="file_upload" value="<?php echo $title; ?>"  >
+									<input <?php echo $color; ?>  class="form-control" type="file" name="file_upload" required value="<?php echo $title; ?>"  >
 								</td>
 							</tr>							
 							<?php if($title!=null){?>
