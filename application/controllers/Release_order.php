@@ -215,6 +215,32 @@ class Release_order extends CI_Controller {
 						$this->load->view('release_order/order_list_tabel');
 						$this->load->view('bottom');
 					}else if($this->session->userdata('id_role') == '3' || $this->session->userdata('id_role') == '4') {
+						// $d['judul'] = "Release  Order";
+						// $d['tipe'] = "edit";
+						// $d['tanggal_mulai'] = $this->input->post("tanggal_mulai");		
+						// $d['tanggal_sampai'] = $this->input->post("tanggal_sampai");
+						// $d['nama_karyawan'] = $this->input->post("nama_karyawan");
+						// $d['kode_shipping_point'] = $this->input->post("kode_shipping_point");
+						// $d['nama_status_kirim'] = $this->input->post("nama_status_kirim");
+						// $d['combo_user'] = $this->App_model->get_combo_user_per_departemen($this->input->post("nama_karyawan"));
+						// $d['combo_shipping_point'] = $this->App_model->get_combo_shipping_point_name($this->input->post("kode_shipping_point"));
+						// $d['combo_shipping_point_id'] = $this->App_model->get_combo_shipping_point_id();
+						// $d['combo_status_kirim'] = $this->App_model->get_combo_status_kirim($this->input->post("nama_status_kirim"));
+						// $d['combo_sales_person'] = $this->App_model->get_combo_sales_person();
+						// $d['combo_matgr'] = $this->App_model->get_material_group();
+						// $d['q_tarik_data'] = $this->App_model->get_release_order_data(
+						// 						$this->input->post("tanggal_mulai"),
+						// 						$this->input->post("tanggal_sampai"),
+						// 						$this->input->post("kode_shipping_point"),
+						// 						$this->input->post("nama_status_kirim"),
+						// 						$this->input->post("nama_departemen"));
+						// $d['color'] = 'style="background:#ffffe1;"';
+						// $d['disable'] = '';
+						// $d['btn_nota'] = '<button style="border-radius: 25px;background:rgba(0,0,0,0.2);" class="btn btn-xs btn-primary"><i class="fa fa-search"> </i> Lihat Report</button>';
+						// $this->load->view('top',$d);
+						// $this->load->view('menu');
+						// $this->load->view('release_order/order_list_tabel');
+						// $this->load->view('bottom');
 						$d['judul'] = "Release  Order";
 						$d['tipe'] = "edit";
 						$d['tanggal_mulai'] = $this->input->post("tanggal_mulai");		
@@ -222,21 +248,23 @@ class Release_order extends CI_Controller {
 						$d['nama_karyawan'] = $this->input->post("nama_karyawan");
 						$d['kode_shipping_point'] = $this->input->post("kode_shipping_point");
 						$d['nama_status_kirim'] = $this->input->post("nama_status_kirim");
+						$d['karyawan'] = $this->input->post("nama_karyawan");
 						$d['combo_user'] = $this->App_model->get_combo_user_per_departemen($this->input->post("nama_karyawan"));
 						$d['combo_shipping_point'] = $this->App_model->get_combo_shipping_point_name($this->input->post("kode_shipping_point"));
 						$d['combo_shipping_point_id'] = $this->App_model->get_combo_shipping_point_id();
+						$d['combo_matgr'] = $this->App_model->get_material_group();
 						$d['combo_status_kirim'] = $this->App_model->get_combo_status_kirim($this->input->post("nama_status_kirim"));
 						$d['combo_sales_person'] = $this->App_model->get_combo_sales_person();
-						$d['combo_matgr'] = $this->App_model->get_material_group();
+						$d['combo_cluster'] = $this->App_model->get_combo_cluster_release();
 						$d['q_tarik_data'] = $this->App_model->get_release_order_data(
 												$this->input->post("tanggal_mulai"),
 												$this->input->post("tanggal_sampai"),
 												$this->input->post("kode_shipping_point"),
 												$this->input->post("nama_status_kirim"),
 												$this->input->post("nama_departemen"));
-						$d['color'] = 'style="background:#ffffe1;"';
-						$d['disable'] = '';
-						$d['btn_nota'] = '<button style="border-radius: 25px;background:rgba(0,0,0,0.2);" class="btn btn-xs btn-primary"><i class="fa fa-search"> </i> Lihat Report</button>';
+						$d['color'] = '';
+						$d['disable'] = 'disabled';
+						$d['btn_nota'] = '<button style="border-radius: 25px;background:rgba(0,0,0,0.2);" class="btn btn-xs btn-primary"><i class="fa fa-search"> </i> Tampilkan Data Release</button>';
 						$this->load->view('top',$d);
 						$this->load->view('menu');
 						$this->load->view('release_order/order_list_tabel');
