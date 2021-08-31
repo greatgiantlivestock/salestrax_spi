@@ -741,26 +741,32 @@
 				     var id_shipping_point = $(this).data('id_shipping_point');
 				     var nm_customer = $(this).data('cust_ship');
 				     var tanggal_kirim = $(this).data('tanggal_kirim');
+				     var cluster_id = $(this).data('cluster_id');
 					 $(".modal-body #tipe").val(tipe);
 				     $(".modal-body #id_request_ol").val(id_request);
 				     $(".modal-body #id_shipping_point").val(id_shipping_point).trigger('change');
 				     $(".modal-body #kode_customer1").val(kode_customer);
 				     $(".modal-body #nm_cust1").val(nm_customer);
 				     $(".modal-body #tgl3").val(tanggal_kirim);
+				     $(".modal-body #cluster_id").val(cluster_id).trigger('change');
 				});
 				$(document).on("click", "#openModalEditShipping12", function () {
 				     var id_request = $(this).data('id_request'); 
+				     var id_detail_request = $(this).data('id_detail_request'); 
 					 var kode_customer = $(this).data('kode_customer');
 				     var tipe = $(this).data('tipe');
 				     var id_shipping_point = $(this).data('id_shipping_point');
 				     var nm_customer = $(this).data('cust_ship');
 				     var tanggal_kirim = $(this).data('tanggal_kirim');
+				     var cluster_id = $(this).data('cluster_id');
 					 $(".modal-body #tipe2").val(tipe);
 				     $(".modal-body #id_request_ol2").val(id_request);
+				     $(".modal-body #id_detail_request2").val(id_detail_request);
 				     $(".modal-body #id_shipping_point2").val(id_shipping_point).trigger('change');
 				     $(".modal-body #kode_customer12").val(kode_customer);
 				     $(".modal-body #nm_cust12").val(nm_customer);
 				     $(".modal-body #tgl32").val(tanggal_kirim);
+				     $(".modal-body #cluster_id2").val(cluster_id);
 				});
 				// $(document).on("click", "#openModalEditShipping12", function () {
 				//      var id_status_kirim = $(this).data('id_status_kirim');

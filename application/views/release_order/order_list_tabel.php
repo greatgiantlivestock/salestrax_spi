@@ -150,6 +150,7 @@
 															data-id_request="<?php echo $data['id_request']?>" 
 															data-kode_customer="<?php echo $data['kode_customer']?>" 
 															data-tanggal_kirim="<?php echo $data['tanggal_kirim']?>" 
+															data-cluster_id="<?php echo $data['cluster_id']?>" 
 															data-id_shipping_point="<?php echo $data['id_shipping_point']?>" 
 															data-cust_ship="<?php echo $data['cust_sold']?>"
 															data-tipe="<?php echo "edit"?>" 
@@ -219,6 +220,17 @@
 														<a style="border-radius: 5px;" id="openModalEditShipping12"
 															href="#" class="btn btn-xs btn-primary" 
 															data-id_request="<?php echo $data['id_request']?>" 
+															data-kode_customer="<?php echo $data['kode_customer']?>" 
+															data-tanggal_kirim="<?php echo $data['tanggal_kirim']?>" 
+															data-id_shipping_point="<?php echo $data['id_shipping_point']?>" 
+															data-cust_ship="<?php echo $data['cust_sold']?>"
+															data-tipe="<?php echo "edit"?>" 
+															data-toggle="modal" 
+															data-target="#ModalEditDetail2"><i class="fa fa-plus"></i>
+														</a>
+														<!-- <a style="border-radius: 5px;" id="openModalEditShipping12"
+															href="#" class="btn btn-xs btn-primary" 
+															data-id_request="<?php echo $data['id_request']?>" 
 															data-id_customer="<?php echo $data['id_customer']?>" 
 															data-matgr="<?php echo $data['matgr']?>" 
 															data-kode_customer="<?php echo $data['kode_customer']?>" 
@@ -230,7 +242,7 @@
 															data-tipe="<?php echo "edit"?>" 
 															data-toggle="modal" 
 															data-target="#ModalEditDetail2"><i class="fa fa-plus"></i>
-														</a>
+														</a> -->
 														<!-- <a style="border-radius: 5px;"
 															href="#" class="btn btn-xs btn-danger" 
 															onclick="contoh1(<?php echo $data['id_request']; ?>)"
@@ -266,16 +278,8 @@
 								<div class="modal-body">
 										 <form  action="<?php echo base_url(); ?>Release_order/save" method="post"/>	
 											<input id="tipe" type="hidden" name="tipe">
-											<input id="id_shipping" type="hidden" name="id_shipping">
 											<input id="id_request_ol" type="hidden" name="id_request">
-											<input id="id_detail_request" type="hidden" name="id_detail_request">
-											<input id="tanggal_mulai1" type="hidden" name="tanggal_mulai">
-											<input id="tanggal_sampai1" type="hidden" name="tanggal_sampai">
-											<input id="kode_shipping_point1" type="hidden" name="kode_shipping_point">
-											<input id="nama_status_kirim1" type="hidden" name="nama_status_kirim">
-											<input id="cust_sold1" type="hidden" name="cust_sold">
 											<input id="kode_customer1" type="hidden" name="kode_customer">
-											<input id="matgr1" type="hidden" name="matgr">
 											<table class="tbl_input">
 												<tr>
 													<td colspan="6">
@@ -283,22 +287,10 @@
 													</td>
 													<td colspan="6">
 														<div class="input-group col-xs-12">
-															<input style="width:70%;" id="nm_cust1">				
+															<input style="width:70%;" readonly id="nm_cust1">				
 														</div>
 													</td>
 												</tr>
-												<!-- <tr>
-													<td colspan="6">
-														Material Group										
-													</td>
-													<td colspan="6">
-														<div class="input-group col-xs-12">
-															<select id="matgr11" disabled style="width:50%;" class='select_customer' required>
-																<?php echo $combo_matgr; ?>
-															</select>					
-														</div>
-													</td>
-												</tr> -->
 												<tr>
 													<td colspan="6">
 														Shipping Point										
@@ -317,7 +309,7 @@
 													</td>
 													<td colspan="6">
 														<div class="input-group col-xs-12">
-															<select id="pers_numb1" style="width:50%;" class="select_customer" name="pers_numb1">
+															<select id="cluster_id" style="width:50%;" class="select_customer" name="cluster_id">
 																<?php echo $combo_cluster; ?>
 															</select>						
 														</div>
