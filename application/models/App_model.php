@@ -999,11 +999,10 @@ class App_model extends CI_Model {
 							jt.nama_transaksi,jt.jenis_order,mc.id_customer,mc.kode_customer,nama_customer AS cust_sold,mc.sales_office FROM trx_so_header rs 
 							JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
 							JOIN mst_user mu ON mu.id_user = rs.id_user
-							JOIN mst_shipping_point_customer mscp ON mscp.id_customer=rs.id_customer_ship
-							JOIN mst_shipping_point msp ON msp.id_shipping_point=mscp.id_shipping_point
 							JOIN mst_product mp ON mp.id_product=dr.id_product
 							JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-							JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  
+							JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold
+							LEFT JOIN mst_shipping_point msp ON msp.id_shipping_point=dr.id_shipping_point  
 							LEFT JOIN mst_customer_cluster mcc ON mcc.kode_customer=mc.kode_customer
 							LEFT JOIN mst_cluster cls ON cls.cluster_id=mcc.cluster_id
 							WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0' and jenis_order=1 
