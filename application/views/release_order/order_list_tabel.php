@@ -222,6 +222,7 @@
 															data-id_request="<?php echo $data['id_request']?>" 
 															data-kode_customer="<?php echo $data['kode_customer']?>" 
 															data-tanggal_kirim="<?php echo $data['tanggal_kirim']?>" 
+															data-cluster_id="<?php echo $data['cluster_id']?>" 
 															data-id_shipping_point="<?php echo $data['id_shipping_point']?>" 
 															data-cust_ship="<?php echo $data['cust_sold']?>"
 															data-tipe="<?php echo "edit"?>" 
@@ -353,18 +354,10 @@
 										<h4 class="modal-title" id="myModalLabel">Update Data Customer Order</h4>
 								</div>
 								<div class="modal-body">
-										 <form  class="form-horizontal"  action="<?php echo base_url(); ?>Release_order/save" method="post"/>	
+										 <form  action="<?php echo base_url(); ?>Release_order/save" method="post"/>	
 											<input id="tipe2" type="hidden" name="tipe">
-											<input id="id_shipping2" type="hidden" name="id_shipping">
 											<input id="id_request_ol2" type="hidden" name="id_request">
-											<input id="id_detail_request2" type="hidden" name="id_detail_request">
-											<input id="tanggal_mulai12" type="hidden" name="tanggal_mulai">
-											<input id="tanggal_sampai12" type="hidden" name="tanggal_sampai">
-											<input id="kode_shipping_point12" type="hidden" name="kode_shipping_point">
-											<input id="nama_status_kirim12" type="hidden" name="nama_status_kirim">
-											<input id="cust_sold2" type="hidden" name="cust_sold">
-											<input id="kode_customer2" type="hidden" name="kode_customer">
-											<input id="matgr2" type="hidden" name="matgr">
+											<input id="kode_customer12" type="hidden" name="kode_customer">
 											<table class="tbl_input">
 												<tr>
 													<td colspan="6">
@@ -372,22 +365,10 @@
 													</td>
 													<td colspan="6">
 														<div class="input-group col-xs-12">
-															<input style="width:70%;" id="nm_cust12">					
+															<input style="width:70%;" readonly id="nm_cust12">				
 														</div>
 													</td>
 												</tr>
-												<!-- <tr>
-													<td colspan="6">
-														Material Group										
-													</td>
-													<td colspan="6">
-														<div class="input-group col-xs-12">
-															<select id="matgr21" disabled style="width:50%;" class='select_customer' required>
-																<?php echo $combo_matgr; ?>
-															</select>					
-														</div>
-													</td>
-												</tr> -->
 												<tr>
 													<td colspan="6">
 														Shipping Point										
@@ -400,25 +381,13 @@
 														</div>
 													</td>
 												</tr>
-												<!-- <tr>
-													<td colspan="6">
-														Sales Person
-													</td>
-													<td colspan="6">
-														<div class="input-group col-xs-12">
-															<select id="pers_numb12" style="width:50%;" class="select_customer" name="pers_numb1">
-																<?php echo $combo_sales_person; ?>
-															</select>						
-														</div>
-													</td>
-												</tr> -->
 												<tr>
 													<td colspan="6">
 														Cluster
 													</td>
 													<td colspan="6">
 														<div class="input-group col-xs-12">
-															<select id="pers_numb2" style="width:50%;" class="select_customer" name="pers_numb12">
+															<select id="cluster_id2" style="width:50%;" class="select_customer" name="cluster_id">
 																<?php echo $combo_cluster; ?>
 															</select>						
 														</div>
