@@ -182,6 +182,15 @@ class Release_order extends CI_Controller {
 					}else{
 						$this->db->update("mst_customer_cluster",$in3,$where3);
 					}
+					if($qCkShp->jml==0){
+						$qCustR = $this->db->query("SELECT id_customer FROM mst_customer WHERE kode_customer='$kode_customer'")->row();
+						$qShpR = $this->db->query("SELECT description FROM mst_shipping_point WHERE id_shipping_point='$in2['id_shipping_point']'")->row();
+						$in2S['id_shipping_point'] = $this->input->post("id_shipping_point");
+						$in2S['id_customer'] = $qCustR->id_customer;
+						$in2S['kode_customer'] = $kode_customer;
+						$in2S['description'] = $qShpR->description;
+						$this->db->insert("mst_shipping_point_customer",$in2S);	
+					}
 					$this->db->update("trx_so_header",$in,$where);
 					$this->db->update("trx_so_detail",$in2,$where);
 					$this->session->set_flashdata("success_update","Data Berhasil Dilengkapi..");
