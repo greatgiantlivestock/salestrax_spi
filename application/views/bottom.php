@@ -751,7 +751,7 @@
 				     $(".modal-body #tgl3").val(tanggal_kirim);
 				     $(".modal-body #cluster_id").val(cluster_id).trigger('change');
 				});
-				$(document).on("click", "#openModalEditShipping1", function () {
+				$(document).on("click", "#openModalEditShipping12", function () {
 				     var id_request = $(this).data('id_request'); 
 					 var kode_customer = $(this).data('kode_customer');
 				     var tipe = $(this).data('tipe');
