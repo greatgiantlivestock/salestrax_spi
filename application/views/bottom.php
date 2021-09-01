@@ -47,6 +47,9 @@
 		      $('#tgl3').datetimepicker({
 		        format: 'YYYY-MM-DD'
 		      })		        
+		      $('#tgl32').datetimepicker({
+		        format: 'YYYY-MM-DD'
+		      })		        
 		    });
   		</script>
   		<script type="text/javascript">
