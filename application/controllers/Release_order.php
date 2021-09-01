@@ -170,7 +170,8 @@ class Release_order extends CI_Controller {
 					$cluster_id = $this->input->post("cluster_id");
 					$qCls = $this->db->query("SELECT cluster_description as nama_cluster FROM mst_cluster WHERE cluster_id='$cluster_id'")->row();
 					$in['tanggal_kirim'] = $this->input->post("tanggal_shipping");
-					$in2['id_shipping_point'] = $this->input->post("id_shipping_point");
+					$id_shipping_point = $this->input->post("id_shipping_point");
+					$in2['id_shipping_point'] = $id_shipping_point;
 					$in3['cluster_id'] = $cluster_id;
 					$in3['kode_customer'] = $kode_customer;
 					$in3['nama_cluster'] = $qCls->nama_cluster;
@@ -184,7 +185,7 @@ class Release_order extends CI_Controller {
 					}
 					if($qCkShp->jml==0){
 						$qCustR = $this->db->query("SELECT id_customer FROM mst_customer WHERE kode_customer='$kode_customer'")->row();
-						$qShpR = $this->db->query("SELECT description FROM mst_shipping_point WHERE id_shipping_point='$in2['id_shipping_point']'")->row();
+						$qShpR = $this->db->query("SELECT description FROM mst_shipping_point WHERE id_shipping_point='$id_shipping_point'")->row();
 						$in2S['id_shipping_point'] = $this->input->post("id_shipping_point");
 						$in2S['id_customer'] = $qCustR->id_customer;
 						$in2S['kode_customer'] = $kode_customer;
