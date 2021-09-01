@@ -176,6 +176,7 @@ class Release_order extends CI_Controller {
 					$in3['kode_customer'] = $kode_customer;
 					$in3['nama_cluster'] = $qCls->nama_cluster;
 					$qCkCls = $this->db->query("SELECT count(*)as jml FROM mst_customer_cluster WHERE kode_customer='$kode_customer'")->row();
+					$qCkShp = $this->db->query("SELECT count(*)as jml FROM mst_shipping_point_customer WHERE kode_customer='$kode_customer'")->row();
 					$where['id_request'] = $this->input->post("id_request");
 					$where3['kode_customer'] = $this->input->post("kode_customer");
 					if($qCkCls->jml==0){
