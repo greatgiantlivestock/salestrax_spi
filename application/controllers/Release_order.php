@@ -177,7 +177,8 @@ class Release_order extends CI_Controller {
 					$in3['nama_cluster'] = $qCls->nama_cluster;
 					$qCkCls = $this->db->query("SELECT count(*)as jml FROM mst_customer_cluster WHERE kode_customer='$kode_customer'")->row();
 					$qCkShp = $this->db->query("SELECT count(*)as jml FROM mst_shipping_point_customer WHERE kode_customer='$kode_customer'")->row();
-					$where['id_request'] = $this->input->post("id_request");
+					$id_request = $this->input->post("id_request");
+					$where['id_request'] = $id_request;
 					$where3['kode_customer'] = $this->input->post("kode_customer");
 					if($qCkCls->jml==0){
 						$this->db->insert("mst_customer_cluster",$in3);	
@@ -227,27 +228,29 @@ class Release_order extends CI_Controller {
 						$this->load->view('bottom');
 					}else if($this->session->userdata('id_role') == '3' || $this->session->userdata('id_role') == '4') {
 						$d['judul'] = "Release  Order";
-						$d['tipe'] = "edit";
+						$d['tipe'] = "add";
 						$d['tanggal_mulai'] = $this->input->post("tanggal_mulai");		
 						$d['tanggal_sampai'] = $this->input->post("tanggal_sampai");
 						$d['nama_karyawan'] = $this->input->post("nama_karyawan");
 						$d['kode_shipping_point'] = $this->input->post("kode_shipping_point");
 						$d['nama_status_kirim'] = $this->input->post("nama_status_kirim");
+						$d['karyawan'] = $this->input->post("nama_karyawan");
 						$d['combo_user'] = $this->App_model->get_combo_user_per_departemen($this->input->post("nama_karyawan"));
 						$d['combo_shipping_point'] = $this->App_model->get_combo_shipping_point_name($this->input->post("kode_shipping_point"));
 						$d['combo_shipping_point_id'] = $this->App_model->get_combo_shipping_point_id();
+						$d['combo_matgr'] = $this->App_model->get_material_group();
 						$d['combo_status_kirim'] = $this->App_model->get_combo_status_kirim($this->input->post("nama_status_kirim"));
 						$d['combo_sales_person'] = $this->App_model->get_combo_sales_person();
-						$d['combo_matgr'] = $this->App_model->get_material_group();
+						$d['combo_cluster'] = $this->App_model->get_combo_cluster_release();
 						$d['q_tarik_data'] = $this->App_model->get_release_order_data(
 												$this->input->post("tanggal_mulai"),
 												$this->input->post("tanggal_sampai"),
 												$this->input->post("kode_shipping_point"),
 												$this->input->post("nama_status_kirim"),
 												$this->input->post("nama_departemen"));
-						$d['color'] = 'style="background:#ffffe1;"';
-						$d['disable'] = '';
-						$d['btn_nota'] = '<button style="border-radius: 25px;background:rgba(0,0,0,0.2);" class="btn btn-xs btn-primary"><i class="fa fa-search"> </i> Lihat Report</button>';
+						$d['color'] = '';
+						$d['disable'] = 'disabled';
+						$d['btn_nota'] = '<button style="border-radius: 25px;background:rgba(0,0,0,0.2);" class="btn btn-xs btn-primary"><i class="fa fa-search"> </i> Tampilkan Data Release</button>';
 						$this->load->view('top',$d);
 						$this->load->view('menu');
 						$this->load->view('release_order/order_list_tabel');
@@ -324,8 +327,8 @@ class Release_order extends CI_Controller {
 					$qdata1=$this->db->query("SELECT id_detail_request,nama_product,qty FROM trx_so_detail dr JOIN mst_product mp ON dr.id_product=mp.id_product WHERE id_request='$noorder' AND delete_id=0 order by urutan ASC");
 					foreach($qdata1->result_array() as $rows){
 						$data_id_detail = $rows['id_detail_request'];
-						$fp = fopen("../interface/To/SO_".$date.".txt","a") or die("Unable to open file!");
-						$fp1 = fopen("../interface/To_backup/SO_".$date.".txt","a") or die("Unable to open file!");
+						$fp = fopen("../interface/SPI/To/SO_".$date.".txt","a") or die("Unable to open file!");
+						$fp1 = fopen("../interface/SPI/To_backup/SO_".$date.".txt","a") or die("Unable to open file!");
 						$qRelease=$this->App_model->get_release_order_final($data_id_detail)->row(); 
 						$data1 = $nosstx;
 						$data2 = $qRelease->kode_trans;
@@ -373,8 +376,8 @@ class Release_order extends CI_Controller {
 						}else{
 							fclose($fp);
 							fclose($fp1);
-							unlink("../interface/To/SO_".$date.".txt");
-							unlink("../interface/To_backup/SO_".$date.".txt");
+							unlink("../interface/SPI/To/SO_".$date.".txt");
+							unlink("../interface/SPI/To_backup/SO_".$date.".txt");
 							$this->session->set_flashdata("error_update","Data Order Gagal Dirilis, Pastikan Shipping Point dan Cluster Sudah Ditentukan");
 						}
 					}

@@ -1,10 +1,10 @@
 <?php
-    if ($folder = opendir('../interface/From/')) {
+    if ($folder = opendir('../interface/SPI/From/')) {
         while (false !== ($file = readdir($folder))) {
             if ($file != "." && $file != "..") {
                 $trim = substr($file,0,2);
                 if($trim =="IV"){
-                    $fh = fopen('../interface/From/'.$file,'r');
+                    $fh = fopen('../interface/SPI/From/'.$file,'r');
                     $linecount=0;
 
                     $cn = mysqli_connect("localhost","gred3696_ms","moha11mmad","gred3696_do_gantung");
@@ -68,8 +68,8 @@
                     }
 
                     if(!$linecount==0){
-                        $sebelum = "../interface/From/".$file;
-                        $sesudah = "../interface/Backup/".$file;
+                        $sebelum = "../interface/SPI/From/".$file;
+                        $sesudah = "../interface/SPI/Backup/".$file;
                         echo copy($sebelum, $sesudah);
 
                         if (!copy($sebelum, $sesudah)) {

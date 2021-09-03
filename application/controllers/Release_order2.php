@@ -325,7 +325,7 @@ class Release_order extends CI_Controller {
 					$qdata1=$this->db->query("SELECT id_detail_request FROM trx_so_detail WHERE id_request='$data_id'");
 					foreach($qdata1->result_array() as $rows){
 						$data_id_detail = $rows['id_detail_request'];
-						$fp = fopen("../interface/To/PO_".$noorder."_".$date.".txt","a") or die("Unable to open file!");
+						$fp = fopen("../interface/SPI/To/PO_".$noorder."_".$date.".txt","a") or die("Unable to open file!");
 						$qRelease=$this->App_model->get_release_order_final($data_id_detail)->row(); 
 						$data1 = $qRelease->id_request."                              ";
 						$data2 = $qRelease->division;
@@ -359,7 +359,7 @@ class Release_order extends CI_Controller {
 							$this->session->set_flashdata("success_update","Release Sukses");
 						}else{
 							fclose($fp);
-							unlink("../interface/To/PO_".$noorder."_".$date.".txt");
+							unlink("../interface/SPI/To/PO_".$noorder."_".$date.".txt");
 							$this->session->set_flashdata("error_update","Sebagian Data Order Gagal Dirilis, Pastikan Shipping Point dan Sales Person Sudah Ditentukan");
 						}
 					}

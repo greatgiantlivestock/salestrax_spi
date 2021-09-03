@@ -1,11 +1,11 @@
 <?php
-    if ($folder = opendir('../interface/From/')) {
+    if ($folder = opendir('../interface/SPI/From/')) {
         while (false !== ($file = readdir($folder))) {
             if ($file != "." && $file != "..") {
                 $trim = substr($file,0,2);
                 if($trim =="MC"){
                     
-                    $fh = fopen('../interface/From/'.$file,'r');
+                    $fh = fopen('../interface/SPI/From/'.$file,'r');
                     $linecount=0;
                     $linecount1=0;
                     $linecountgagal=0;
@@ -86,8 +86,8 @@
                     if(!$linecount == 0 || !$linecount1 == 0){
                         echo "success";
                         
-                        $sebelum = "../interface/From/".$file;
-                        $sesudah = "../interface/Backup/".$file;
+                        $sebelum = "../interface/SPI/From/".$file;
+                        $sesudah = "../interface/SPI/Backup/".$file;
                         echo copy($sebelum, $sesudah);
 
                         if (!copy($sebelum, $sesudah)) {
