@@ -149,6 +149,7 @@ class Release_order extends CI_Controller {
 						$d['combo_status_kirim'] = $this->App_model->get_combo_status_kirim($this->input->post("nama_status_kirim"));
 						$d['combo_sales_person'] = $this->App_model->get_combo_sales_person();
 						$d['combo_matgr'] = $this->App_model->get_material_group();
+						$d['combo_cluster'] = $this->App_model->get_combo_cluster_release();
 						$d['q_tarik_data'] = $this->App_model->get_release_order_data(
 												$this->input->post("tanggal_mulai"),
 												$this->input->post("tanggal_sampai"),
@@ -213,6 +214,7 @@ class Release_order extends CI_Controller {
 						$d['combo_status_kirim'] = $this->App_model->get_combo_status_kirim($this->input->post("nama_status_kirim"));
 						$d['combo_sales_person'] = $this->App_model->get_combo_sales_person();
 						$d['combo_matgr'] = $this->App_model->get_material_group();
+						$d['combo_cluster'] = $this->App_model->get_combo_cluster_release();
 						$d['q_tarik_data'] = $this->App_model->get_release_order_data(
 												$this->input->post("tanggal_mulai"),
 												$this->input->post("tanggal_sampai"),
