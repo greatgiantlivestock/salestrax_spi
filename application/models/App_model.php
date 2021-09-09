@@ -812,18 +812,18 @@ class App_model extends CI_Model {
 				$id_user=$this->session->userdata("id_user");
 				// $q_user_shipment = $this->db->query("SELECT description FROM mst_user_shipping_point WHERE id_user='$id_user'")->row();
 				// $departemen=$this->session->userdata('id_departemen');
-				$q_tarik_data = $this->db->query("SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
+				$q_tarik_data = $this->db->query("SELECT data_order.*,sname FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
                                             SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
                                             SELECT data2.id_request,data2.tanggal_po,data2.no_request,data2.tanggal_request,data2.tanggal_kirim,data2.catatan,data2.no_po,
                                             data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.sts,
                                             data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.kode_product,
                                             data2.nama_transaksi,data2.cust_sold,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
-                                            data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
+                                            data2.hari_kirim2,data2.hari_kirim3,data2.kode_customer,data2.division,description,kode_shipping_point FROM(
                                             SELECT data1.*, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
                                             SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
                                             rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,rs.tanggal_po,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,sts,dr.keterangan,
                                             dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.kode_product,
-                                            jt.nama_transaksi,nama_customer AS cust_sold FROM trx_so_header rs 
+                                            jt.nama_transaksi,nama_customer AS cust_sold,mc.kode_customer,mp.division  FROM trx_so_header rs 
                                             JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
                                             JOIN mst_user mu ON mu.id_user = rs.id_user
                                             JOIN mst_product mp ON mp.id_product=dr.id_product
@@ -838,7 +838,7 @@ class App_model extends CI_Model {
                                             WHERE mst_user_shipping_point.id_user = '$id_user'
                                             AND data5.description LIKE '%$kode_shipping_point%'
                                             AND data5.nama_status_kirim LIKE '%$nama_status_kirim%'  
-                                            ORDER BY id_request DESC");
+                                            ORDER BY id_request DESC)AS data_order LEFT JOIN mst_sales_person msp ON msp.kunnr=data_order.kode_customer AND msp.spart=data_order.division GROUP BY id_detail_request");
 			}else{
 				$departemen=$this->session->userdata('id_departemen');
 				$q_tarik_data = $this->db->query("SELECT data4.*, nama_status_kirim FROM (
@@ -870,32 +870,31 @@ class App_model extends CI_Model {
 		}else if($this->session->userdata("id_role") == 5){
 			$departemen=$this->session->userdata('id_departemen');
 			$nama=$this->session->userdata('nama');
-			$q_tarik_data = $this->db->query("SELECT data4.*, nama_status_kirim FROM (
-											SELECT data3.*, id_shipping,id_status_kirim,tanggal_shipping FROM (
-											SELECT data2.*,description,kode_shipping_point FROM(
-											SELECT data1.*,sales_pers1,pers_numb1, nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(SELECT rs.*,
-											dr.id_detail_request,dr.id_product,dr.qty,sts,dr.id_satuan,dr.keterangan,
-											dr.id_jenis_transaksi,dr.satuan,dr.id_shipping_point,mu.nama,mu.username,
-											mu.no_hp,mu.id_wilayah,mu.id_karyawan,mu.id_departemen,mu.id_role, 
-											s.nama_satuan,mp.nama_product,mp.kode_product,dpt.nama_departemen,
-											jt.nama_transaksi,nama_customer AS cust_sold FROM trx_so_header rs 
-											JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
-											JOIN mst_user mu ON mu.id_user = rs.id_user
-											JOIN satuan s ON s.id_satuan=dr.id_satuan
-											JOIN mst_product mp ON mp.id_product=dr.id_product
-											JOIN mst_departemen dpt ON dpt.id_departemen=mu.id_departemen
-											JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-											JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold WHERE rs.delete_id=0 AND dr.delete_id=0 AND tanggal_kirim BETWEEN '$tanggal_mulai' and '$tanggal_sampai') AS data1
-											JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
-											JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)
-											AS data2 JOIN mst_shipping_point 
-											ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
-											JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
-											JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim
-											AND nama LIKE '%$nama%'
-											AND kode_shipping_point LIKE '%$kode_shipping_point%'
-											AND nama_status_kirim LIKE '%$nama_status_kirim%'
-											AND id_departemen='$departemen'  ORDER BY id_request DESC");
+			$q_tarik_data = $this->db->query("SELECT data_order.*,sname FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
+										SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
+										SELECT data2.id_request,data2.tanggal_po,data2.no_request,data2.tanggal_request,data2.tanggal_kirim,data2.catatan,data2.no_po,
+										data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.sts,
+										data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.kode_product,
+										data2.nama_transaksi,data2.cust_sold,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
+										data2.hari_kirim2,data2.hari_kirim3,data2.kode_customer,data2.division,description,kode_shipping_point FROM(
+										SELECT data1.*, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
+										SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
+										rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,rs.tanggal_po,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,sts,dr.keterangan,
+										dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.kode_product,
+										jt.nama_transaksi,nama_customer AS cust_sold,mc.kode_customer,mp.division  FROM trx_so_header rs 
+										JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+										JOIN mst_user mu ON mu.id_user = rs.id_user
+										JOIN mst_product mp ON mp.id_product=dr.id_product
+										JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+										JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND tanggal_kirim BETWEEN '$tanggal_mulai' AND '$tanggal_sampai') AS data1
+										JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
+										LEFT JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
+										JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
+										LEFT JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
+										JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
+										JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
+										WHERE data5.nama_status_kirim LIKE '%$nama_status_kirim%'  
+										ORDER BY id_request DESC)AS data_order LEFT JOIN mst_sales_person msp ON msp.kunnr=data_order.kode_customer AND msp.spart=data_order.division WHERE nama like '%$nama%' GROUP BY id_detail_request");
 		}else if($this->session->userdata("id_role") == 6){
 			$id_user=$this->session->userdata("id_user");
 			$q_user_shipment = $this->db->query("SELECT description FROM mst_user_shipping_point WHERE id_user='$id_user'")->row();
@@ -1008,252 +1007,267 @@ class App_model extends CI_Model {
 							WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0' and jenis_order=1 
 							GROUP BY rs.id_customer_ship,rs.id_request");				
 				}else{
-				    if($username=='ichbal'){
-				        $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
-    						SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
-    						SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
-    						data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
-    						data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
-    						data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
-    						data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
-    						SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
-    						SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
-    						rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
-    						dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
-    						jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
-    						JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
-    						JOIN mst_user mu ON mu.id_user = rs.id_user
-    						JOIN mst_product mp ON mp.id_product=dr.id_product
-    						JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-    						JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0') AS data1
-    						JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
-							JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
-    						JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
-    						JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
-    						JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
-    						JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
-    						WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
-    						ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
-    						WHERE nama <> 'PUSPITA SARI KUSTIANTI' AND nama <> 'IS PRAMONO'AND nama <> 'FENDA MARTIN SULISTYANINGTYAS' AND nama <> 'AMRULLOH' 
-    						AND nama <> 'CARIN PUSPA SARI' AND nama <> 'LENI SEPTIANA' AND nama <> 'PRAMONO BUDI CAHYADI' AND nama <> 'ROSYDA DILIANTI KANIA' AND nama <> 'EVI HAPIDAH'  AND nama <> 'KIKI BAEHAKI' AND nama <> 'DANIEL ORTEGA'
-    						AND nama <> 'DEWI NOVITASARI' AND nama <> 'SELA WAHYUNI' AND nama <> 'GITA KAMELIA' AND nama <> 'PUPUT SYAHFITRI' AND nama <> 'PURWONO' AND nama <> 'RANI FEBRIYANTI' GROUP BY id_request");
-				    }else if($username=='puspita'){
-				        $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
-    						SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
-    						SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
-    						data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
-    						data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
-    						data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
-    						data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
-    						SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
-    						SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
-    						rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
-    						dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
-    						jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
-    						JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
-    						JOIN mst_user mu ON mu.id_user = rs.id_user
-    						JOIN mst_product mp ON mp.id_product=dr.id_product
-    						JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-    						JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0') AS data1
-    						JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
-							JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
-    						JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
-    						JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
-    						JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
-    						JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
-    						WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
-    						ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
-    						WHERE nama = 'PUSPITA SARI KUSTIANTI' or nama = 'IS PRAMONO' GROUP BY id_request");
-				    }else if($username=='dewi.novitasari'){
-				        $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
-    						SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
-    						SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
-    						data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
-    						data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
-    						data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
-    						data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
-    						SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
-    						SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
-    						rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
-    						dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
-    						jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
-    						JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
-    						JOIN mst_user mu ON mu.id_user = rs.id_user
-    						JOIN mst_product mp ON mp.id_product=dr.id_product
-    						JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-    						JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0') AS data1
-    						JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
-							JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
-    						JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
-    						JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
-    						JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
-    						JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
-    						WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
-    						ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
-    						WHERE nama = 'PRAMONO BUDI CAHYADI' or nama = 'CARIN PUSPA SARI'  or nama = 'LENI SEPTIANA' or nama='DEWI NOVITASARI' or nama='PURWONO'  or nama='ANNO ANTHONI' GROUP BY id_request");
-				    }else if($username=='puput.syahfitri'){
-				        $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
-    						SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
-    						SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
-    						data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
-    						data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
-    						data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
-    						data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
-    						SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
-    						SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
-    						rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
-    						dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
-    						jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
-    						JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
-    						JOIN mst_user mu ON mu.id_user = rs.id_user
-    						JOIN mst_product mp ON mp.id_product=dr.id_product
-    						JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-    						JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0') AS data1
-    						JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
-							JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
-    						JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
-    						JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
-    						JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
-    						JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
-    						WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
-    						ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
-    						WHERE nama = 'PRAMONO BUDI CAHYADI' or nama = 'PURWONO' GROUP BY id_request");
-				    }else if($username=='rani'){
-				        $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
-    						SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
-    						SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
-    						data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
-    						data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
-    						data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
-    						data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
-    						SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
-    						SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
-    						rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
-    						dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
-    						jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
-    						JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
-    						JOIN mst_user mu ON mu.id_user = rs.id_user
-    						JOIN mst_product mp ON mp.id_product=dr.id_product
-    						JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-    						JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0') AS data1
-    						JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
-							JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
-    						JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
-    						JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
-    						JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
-    						JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
-    						WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
-    						ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
-    						WHERE nama = 'PRAMONO BUDI CAHYADI' or nama = 'PURWONO' GROUP BY id_request");
-				    }else if($username=='adminggl.bandung'){
-				        $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
-    						SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
-    						SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
-    						data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
-    						data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
-    						data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
-    						data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
-    						SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
-    						SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
-    						rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
-    						dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
-    						jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
-    						JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
-    						JOIN mst_user mu ON mu.id_user = rs.id_user
-    						JOIN mst_product mp ON mp.id_product=dr.id_product
-    						JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-    						JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0') AS data1
-    						JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
-							JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
-    						JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
-    						JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
-    						JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
-    						JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
-    						WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
-    						ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
-    						WHERE nama = 'SELA WAHYUNI' or nama = 'GITA KAMELIA' or nama = 'NEVI DWI RIZKIRAHAYU' or nama = 'KIKI BAEHAKI' or nama = 'ROSYDA DILIANTI KANIA'  GROUP BY id_request");
-				    }else if($username=='kiki.baehaki'){
-				        $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
-    						SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
-    						SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
-    						data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
-    						data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
-    						data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
-    						data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
-    						SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
-    						SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
-    						rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
-    						dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
-    						jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
-    						JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
-    						JOIN mst_user mu ON mu.id_user = rs.id_user
-    						JOIN mst_product mp ON mp.id_product=dr.id_product
-    						JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-    						JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0') AS data1
-    						JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
-							JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
-    						JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
-    						JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
-    						JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
-    						JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
-    						WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
-    						ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
-    						WHERE nama = 'SELA WAHYUNI' or nama = 'GITA KAMELIA' or nama = 'NEVI DWI RIZKIRAHAYU' or nama = 'KIKI BAEHAKI' or nama = 'ROSYDA DILIANTI KANIA'  GROUP BY id_request");
-				    }else if($username=='amrulloh'){
-				        $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
-    						SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
-    						SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
-    						data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
-    						data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
-    						data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
-    						data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
-    						SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
-    						SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
-    						rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
-    						dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
-    						jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
-    						JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
-    						JOIN mst_user mu ON mu.id_user = rs.id_user
-    						JOIN mst_product mp ON mp.id_product=dr.id_product
-    						JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-    						JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0') AS data1
-    						JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
-							JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
-    						JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
-    						JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
-    						JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
-    						JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
-    						WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
-    						ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
-    						WHERE nama = 'NEVI DWI RIZKIRAHAYU' or nama = 'AMRULLOH' or nama = 'GITA KAMELIA' or nama = 'KIKI BAEHAKI' or nama='SELA WAHYUNI' or nama='ROSYDA DILIANTI KANIA'  GROUP BY id_request ORDER BY id_request DESC LIMIT 1000");
-				    }else{
-    					$q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
-    						SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
-    						SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
-    						data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
-    						data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
-    						data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
-    						data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
-    						SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
-    						SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
-    						rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
-    						dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
-    						jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
-    						JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
-    						JOIN mst_user mu ON mu.id_user = rs.id_user
-    						JOIN mst_product mp ON mp.id_product=dr.id_product
-    						JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-    						JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0') AS data1
-    						JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
-							JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
-    						JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
-    						JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
-    						JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
-    						JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
-    						WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
-    						ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
-    						WHERE nama='$nama1'  GROUP BY id_request");
-				    }
+					$q_tarik_data = $this->db->query("SELECT data_order.* FROM(SELECT rs.id_request,rs.tanggal_po,rs.tanggal_kirim,
+							rs.catatan,rs.no_po,rs.order_reason,dr.qty,rs.kode_trans,cluster_description,mcc.cluster_id,
+							dr.satuan,dr.id_shipping_point,mu.nama,mp.nama_product,mp.kode_product,mp.division,msp.kode_shipping_point,msp.description,
+							jt.nama_transaksi,jt.jenis_order,mc.id_customer,mc.kode_customer,nama_customer AS cust_sold,mc.sales_office FROM trx_so_header rs 
+							JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+							JOIN mst_user mu ON mu.id_user = rs.id_user
+							JOIN mst_product mp ON mp.id_product=dr.id_product
+							JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+							JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold
+							LEFT JOIN mst_shipping_point msp ON msp.id_shipping_point=dr.id_shipping_point  
+							LEFT JOIN mst_customer_cluster mcc ON mcc.kode_customer=mc.kode_customer
+							LEFT JOIN mst_cluster cls ON cls.cluster_id=mcc.cluster_id
+							WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0' and jenis_order=1 
+							GROUP BY rs.id_customer_ship,rs.id_request)as data_order JOIN mst_user_shipping_point msp ON msp.description=data_order.description 
+							WHERE msp.id_user='$id_user'");	
+				    // if($username=='ichbal'){
+				    //     $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
+    				// 		SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
+    				// 		SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
+    				// 		data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
+    				// 		data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
+    				// 		data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
+    				// 		data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
+    				// 		SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
+    				// 		SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
+    				// 		rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
+    				// 		dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
+    				// 		jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
+    				// 		JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+    				// 		JOIN mst_user mu ON mu.id_user = rs.id_user
+    				// 		JOIN mst_product mp ON mp.id_product=dr.id_product
+    				// 		JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+    				// 		JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0') AS data1
+    				// 		JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
+					// 		JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
+    				// 		JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
+    				// 		JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
+    				// 		JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
+    				// 		JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
+    				// 		WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
+    				// 		ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
+    				// 		WHERE nama <> 'PUSPITA SARI KUSTIANTI' AND nama <> 'IS PRAMONO'AND nama <> 'FENDA MARTIN SULISTYANINGTYAS' AND nama <> 'AMRULLOH' 
+    				// 		AND nama <> 'CARIN PUSPA SARI' AND nama <> 'LENI SEPTIANA' AND nama <> 'PRAMONO BUDI CAHYADI' AND nama <> 'ROSYDA DILIANTI KANIA' AND nama <> 'EVI HAPIDAH'  AND nama <> 'KIKI BAEHAKI' AND nama <> 'DANIEL ORTEGA'
+    				// 		AND nama <> 'DEWI NOVITASARI' AND nama <> 'SELA WAHYUNI' AND nama <> 'GITA KAMELIA' AND nama <> 'PUPUT SYAHFITRI' AND nama <> 'PURWONO' AND nama <> 'RANI FEBRIYANTI' GROUP BY id_request");
+				    // }else if($username=='puspita'){
+				    //     $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
+    				// 		SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
+    				// 		SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
+    				// 		data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
+    				// 		data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
+    				// 		data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
+    				// 		data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
+    				// 		SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
+    				// 		SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
+    				// 		rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
+    				// 		dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
+    				// 		jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
+    				// 		JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+    				// 		JOIN mst_user mu ON mu.id_user = rs.id_user
+    				// 		JOIN mst_product mp ON mp.id_product=dr.id_product
+    				// 		JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+    				// 		JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0') AS data1
+    				// 		JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
+					// 		JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
+    				// 		JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
+    				// 		JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
+    				// 		JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
+    				// 		JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
+    				// 		WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
+    				// 		ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
+    				// 		WHERE nama = 'PUSPITA SARI KUSTIANTI' or nama = 'IS PRAMONO' GROUP BY id_request");
+				    // }else if($username=='dewi.novitasari'){
+				    //     $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
+    				// 		SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
+    				// 		SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
+    				// 		data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
+    				// 		data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
+    				// 		data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
+    				// 		data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
+    				// 		SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
+    				// 		SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
+    				// 		rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
+    				// 		dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
+    				// 		jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
+    				// 		JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+    				// 		JOIN mst_user mu ON mu.id_user = rs.id_user
+    				// 		JOIN mst_product mp ON mp.id_product=dr.id_product
+    				// 		JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+    				// 		JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0') AS data1
+    				// 		JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
+					// 		JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
+    				// 		JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
+    				// 		JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
+    				// 		JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
+    				// 		JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
+    				// 		WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
+    				// 		ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
+    				// 		WHERE nama = 'PRAMONO BUDI CAHYADI' or nama = 'CARIN PUSPA SARI'  or nama = 'LENI SEPTIANA' or nama='DEWI NOVITASARI' or nama='PURWONO'  or nama='ANNO ANTHONI' GROUP BY id_request");
+				    // }else if($username=='puput.syahfitri'){
+				    //     $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
+    				// 		SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
+    				// 		SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
+    				// 		data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
+    				// 		data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
+    				// 		data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
+    				// 		data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
+    				// 		SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
+    				// 		SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
+    				// 		rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
+    				// 		dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
+    				// 		jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
+    				// 		JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+    				// 		JOIN mst_user mu ON mu.id_user = rs.id_user
+    				// 		JOIN mst_product mp ON mp.id_product=dr.id_product
+    				// 		JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+    				// 		JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0') AS data1
+    				// 		JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
+					// 		JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
+    				// 		JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
+    				// 		JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
+    				// 		JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
+    				// 		JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
+    				// 		WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
+    				// 		ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
+    				// 		WHERE nama = 'PRAMONO BUDI CAHYADI' or nama = 'PURWONO' GROUP BY id_request");
+				    // }else if($username=='rani'){
+				    //     $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
+    				// 		SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
+    				// 		SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
+    				// 		data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
+    				// 		data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
+    				// 		data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
+    				// 		data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
+    				// 		SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
+    				// 		SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
+    				// 		rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
+    				// 		dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
+    				// 		jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
+    				// 		JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+    				// 		JOIN mst_user mu ON mu.id_user = rs.id_user
+    				// 		JOIN mst_product mp ON mp.id_product=dr.id_product
+    				// 		JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+    				// 		JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0') AS data1
+    				// 		JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
+					// 		JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
+    				// 		JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
+    				// 		JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
+    				// 		JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
+    				// 		JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
+    				// 		WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
+    				// 		ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
+    				// 		WHERE nama = 'PRAMONO BUDI CAHYADI' or nama = 'PURWONO' GROUP BY id_request");
+				    // }else if($username=='adminggl.bandung'){
+				    //     $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
+    				// 		SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
+    				// 		SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
+    				// 		data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
+    				// 		data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
+    				// 		data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
+    				// 		data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
+    				// 		SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
+    				// 		SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
+    				// 		rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
+    				// 		dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
+    				// 		jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
+    				// 		JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+    				// 		JOIN mst_user mu ON mu.id_user = rs.id_user
+    				// 		JOIN mst_product mp ON mp.id_product=dr.id_product
+    				// 		JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+    				// 		JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0') AS data1
+    				// 		JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
+					// 		JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
+    				// 		JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
+    				// 		JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
+    				// 		JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
+    				// 		JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
+    				// 		WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
+    				// 		ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
+    				// 		WHERE nama = 'SELA WAHYUNI' or nama = 'GITA KAMELIA' or nama = 'NEVI DWI RIZKIRAHAYU' or nama = 'KIKI BAEHAKI' or nama = 'ROSYDA DILIANTI KANIA'  GROUP BY id_request");
+				    // }else if($username=='kiki.baehaki'){
+				    //     $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
+    				// 		SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
+    				// 		SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
+    				// 		data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
+    				// 		data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
+    				// 		data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
+    				// 		data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
+    				// 		SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
+    				// 		SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
+    				// 		rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
+    				// 		dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
+    				// 		jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
+    				// 		JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+    				// 		JOIN mst_user mu ON mu.id_user = rs.id_user
+    				// 		JOIN mst_product mp ON mp.id_product=dr.id_product
+    				// 		JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+    				// 		JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0') AS data1
+    				// 		JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
+					// 		JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
+    				// 		JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
+    				// 		JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
+    				// 		JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
+    				// 		JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
+    				// 		WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
+    				// 		ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
+    				// 		WHERE nama = 'SELA WAHYUNI' or nama = 'GITA KAMELIA' or nama = 'NEVI DWI RIZKIRAHAYU' or nama = 'KIKI BAEHAKI' or nama = 'ROSYDA DILIANTI KANIA'  GROUP BY id_request");
+				    // }else if($username=='amrulloh'){
+				    //     $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
+    				// 		SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
+    				// 		SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
+    				// 		data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
+    				// 		data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
+    				// 		data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
+    				// 		data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
+    				// 		SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
+    				// 		SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
+    				// 		rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
+    				// 		dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
+    				// 		jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
+    				// 		JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+    				// 		JOIN mst_user mu ON mu.id_user = rs.id_user
+    				// 		JOIN mst_product mp ON mp.id_product=dr.id_product
+    				// 		JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+    				// 		JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0') AS data1
+    				// 		JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
+					// 		JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
+    				// 		JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
+    				// 		JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
+    				// 		JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
+    				// 		JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
+    				// 		WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
+    				// 		ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
+    				// 		WHERE nama = 'NEVI DWI RIZKIRAHAYU' or nama = 'AMRULLOH' or nama = 'GITA KAMELIA' or nama = 'KIKI BAEHAKI' or nama='SELA WAHYUNI' or nama='ROSYDA DILIANTI KANIA'  GROUP BY id_request ORDER BY id_request DESC LIMIT 1000");
+				    // }else{
+    				// 	$q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
+    				// 		SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
+    				// 		SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
+    				// 		data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
+    				// 		data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
+    				// 		data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
+    				// 		data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
+    				// 		SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
+    				// 		SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
+    				// 		rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
+    				// 		dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
+    				// 		jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
+    				// 		JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+    				// 		JOIN mst_user mu ON mu.id_user = rs.id_user
+    				// 		JOIN mst_product mp ON mp.id_product=dr.id_product
+    				// 		JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+    				// 		JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='0') AS data1
+    				// 		JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
+					// 		JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
+    				// 		JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
+    				// 		JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
+    				// 		JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
+    				// 		JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
+    				// 		WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
+    				// 		ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
+    				// 		WHERE nama='$nama1'  GROUP BY id_request");
+				    // }
 				}
 			}else{
 				$departemen=$this->session->userdata('id_departemen');
@@ -1313,203 +1327,218 @@ class App_model extends CI_Model {
 					WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='1'
 					GROUP BY rs.id_customer_ship,rs.id_request) AS data1 LEFT JOIN mst_customer_cluster mcc ON data1.id_customer=mcc.id_customer LIMIT 1000");				
 				}else{
-				    if($username=='ichbal'){
-				        $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
-    						SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
-    						SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
-    						data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
-    						data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
-    						data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
-    						data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
-    						SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
-    						SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
-    						rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
-    						dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
-    						jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
-    						JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
-    						JOIN mst_user mu ON mu.id_user = rs.id_user
-    						JOIN satuan s ON s.id_satuan=dr.id_satuan
-    						JOIN mst_product mp ON mp.id_product=dr.id_product
-    						JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-    						JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='1') AS data1
-    						JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
-							JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
-    						JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
-    						JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
-    						JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
-    						JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
-    						WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
-    						ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
-    						WHERE nama <> 'PUSPITA SARI KUSTIANTI' AND nama <> 'FENDA MARTIN SULISTYANINGTYAS' AND nama <> 'AMRULLOH' GROUP BY id_request ORDER BY id_request DESC LIMIT 1000");
-				    }else if($username=='dewi.novitasari'){
-				        $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
-    						SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
-    						SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
-    						data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
-    						data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
-    						data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
-    						data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
-    						SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
-    						SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
-    						rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
-    						dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
-    						jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
-    						JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
-    						JOIN mst_user mu ON mu.id_user = rs.id_user
-    						JOIN satuan s ON s.id_satuan=dr.id_satuan
-    						JOIN mst_product mp ON mp.id_product=dr.id_product
-    						JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-    						JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='1') AS data1
-    						JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
-							JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
-    						JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
-    						JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
-    						JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
-    						JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
-    						WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
-    						ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
-    						WHERE nama = 'PRAMONO BUDI CAHYADI' or nama = 'CARIN PUSPA SARI' or nama = 'LENI SEPTIANA' or nama='DEWI NOVITASARI' or nama = 'PURWONO' or nama='ANNO ANTHONI'  GROUP BY id_request ORDER BY id_request DESC LIMIT 1000");
-				    }else if($username=='adminggl.bandung'){
-				        $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
-    						SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
-    						SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
-    						data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
-    						data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
-    						data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
-    						data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
-    						SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
-    						SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
-    						rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
-    						dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
-    						jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
-    						JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
-    						JOIN mst_user mu ON mu.id_user = rs.id_user
-    						JOIN satuan s ON s.id_satuan=dr.id_satuan
-    						JOIN mst_product mp ON mp.id_product=dr.id_product
-    						JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-    						JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='1') AS data1
-    						JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
-							JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
-    						JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
-    						JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
-    						JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
-    						JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
-    						WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
-    						ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
-    						WHERE nama = 'SELA WAHYUNI' or nama = 'GITA KAMELIA' or nama = 'NEVI DWI RIZKIRAHAYU' or nama = 'KIKI BAEHAKI' or nama = 'ROSYDA DILIANTI KANIA' GROUP BY id_request ORDER BY id_request DESC LIMIT 1000");
-				    }else if($username=='puput.syahfitri'){
-				        $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
-    						SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
-    						SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
-    						data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
-    						data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
-    						data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
-    						data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
-    						SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
-    						SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
-    						rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
-    						dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
-    						jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
-    						JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
-    						JOIN mst_user mu ON mu.id_user = rs.id_user
-    						JOIN satuan s ON s.id_satuan=dr.id_satuan
-    						JOIN mst_product mp ON mp.id_product=dr.id_product
-    						JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-    						JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='1') AS data1
-    						JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
-							JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
-    						JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
-    						JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
-    						JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
-    						JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
-    						WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
-    						ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
-    						WHERE nama = 'PURWONO' or nama = 'PUPUT SYAHFITRI' GROUP BY id_request ORDER BY id_request DESC LIMIT 1000");
-				    }else if($username=='rani'){
-				        $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
-    						SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
-    						SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
-    						data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
-    						data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
-    						data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
-    						data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
-    						SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
-    						SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
-    						rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
-    						dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
-    						jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
-    						JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
-    						JOIN mst_user mu ON mu.id_user = rs.id_user
-    						JOIN satuan s ON s.id_satuan=dr.id_satuan
-    						JOIN mst_product mp ON mp.id_product=dr.id_product
-    						JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-    						JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='1') AS data1
-    						JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
-							JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
-    						JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
-    						JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
-    						JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
-    						JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
-    						WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
-    						ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
-    						WHERE nama = 'PURWONO' or nama = 'PUPUT SYAHFITRI' or nama = 'RANI FEBRIYANTI' GROUP BY id_request ORDER BY id_request DESC LIMIT 1000");
-				    }else if($username=='amrulloh'){
-				        $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
-    						SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
-    						SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
-    						data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
-    						data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
-    						data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
-    						data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
-    						SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
-    						SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
-    						rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
-    						dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
-    						jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
-    						JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
-    						JOIN mst_user mu ON mu.id_user = rs.id_user
-    						JOIN satuan s ON s.id_satuan=dr.id_satuan
-    						JOIN mst_product mp ON mp.id_product=dr.id_product
-    						JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-    						JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='1') AS data1
-    						JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
-							JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
-    						JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
-    						JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
-    						JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
-    						JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
-    						WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
-    						ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
-    						WHERE nama = 'NEVI DWI RIZKIRAHAYU' or nama = 'AMRULLOH' or nama = 'GITA KAMELIA' or nama = 'KIKI BAEHAKI' or nama='SELA WAHYUNI' or nama='ROSYDA DILIANTI KANIA'  GROUP BY id_request ORDER BY id_request DESC LIMIT 1000");
-				    }else{
-    					$q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
-    						SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
-    						SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
-    						data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
-    						data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
-    						data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
-    						data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
-    						SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
-    						SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
-    						rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
-    						dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
-    						jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
-    						JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
-    						JOIN mst_user mu ON mu.id_user = rs.id_user
-    						JOIN satuan s ON s.id_satuan=dr.id_satuan
-    						JOIN mst_product mp ON mp.id_product=dr.id_product
-    						JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-    						JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='1') AS data1
-    						JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
-							JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
-    						JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
-    						JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
-    						JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
-    						JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
-    						WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
-    						ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
-    						WHERE nama='$nama1' GROUP BY id_request ORDER BY id_request DESC LIMIT 1000");
-				    }
+					$q_tarik_data = $this->db->query("SELECT data_order.* FROM(SELECT rs.id_request,rs.tanggal_po,rs.tanggal_kirim,
+							rs.catatan,rs.no_po,rs.order_reason,dr.qty,rs.kode_trans,cluster_description,mcc.cluster_id,
+							dr.satuan,dr.id_shipping_point,mu.nama,mp.nama_product,mp.kode_product,mp.division,msp.kode_shipping_point,msp.description,
+							jt.nama_transaksi,jt.jenis_order,mc.id_customer,mc.kode_customer,nama_customer AS cust_sold,mc.sales_office FROM trx_so_header rs 
+							JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+							JOIN mst_user mu ON mu.id_user = rs.id_user
+							JOIN mst_product mp ON mp.id_product=dr.id_product
+							JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+							JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold
+							LEFT JOIN mst_shipping_point msp ON msp.id_shipping_point=dr.id_shipping_point  
+							LEFT JOIN mst_customer_cluster mcc ON mcc.kode_customer=mc.kode_customer
+							LEFT JOIN mst_cluster cls ON cls.cluster_id=mcc.cluster_id
+							WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='1' and jenis_order=1 
+							GROUP BY rs.id_customer_ship,rs.id_request)as data_order JOIN mst_user_shipping_point msp ON msp.description=data_order.description 
+							WHERE msp.id_user='$id_user'");	
+				    // if($username=='ichbal'){
+				    //     $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
+    				// 		SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
+    				// 		SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
+    				// 		data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
+    				// 		data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
+    				// 		data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
+    				// 		data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
+    				// 		SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
+    				// 		SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
+    				// 		rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
+    				// 		dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
+    				// 		jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
+    				// 		JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+    				// 		JOIN mst_user mu ON mu.id_user = rs.id_user
+    				// 		JOIN satuan s ON s.id_satuan=dr.id_satuan
+    				// 		JOIN mst_product mp ON mp.id_product=dr.id_product
+    				// 		JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+    				// 		JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='1') AS data1
+    				// 		JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
+					// 		JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
+    				// 		JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
+    				// 		JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
+    				// 		JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
+    				// 		JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
+    				// 		WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
+    				// 		ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
+    				// 		WHERE nama <> 'PUSPITA SARI KUSTIANTI' AND nama <> 'FENDA MARTIN SULISTYANINGTYAS' AND nama <> 'AMRULLOH' GROUP BY id_request ORDER BY id_request DESC LIMIT 1000");
+				    // }else if($username=='dewi.novitasari'){
+				    //     $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
+    				// 		SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
+    				// 		SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
+    				// 		data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
+    				// 		data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
+    				// 		data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
+    				// 		data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
+    				// 		SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
+    				// 		SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
+    				// 		rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
+    				// 		dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
+    				// 		jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
+    				// 		JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+    				// 		JOIN mst_user mu ON mu.id_user = rs.id_user
+    				// 		JOIN satuan s ON s.id_satuan=dr.id_satuan
+    				// 		JOIN mst_product mp ON mp.id_product=dr.id_product
+    				// 		JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+    				// 		JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='1') AS data1
+    				// 		JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
+					// 		JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
+    				// 		JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
+    				// 		JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
+    				// 		JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
+    				// 		JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
+    				// 		WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
+    				// 		ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
+    				// 		WHERE nama = 'PRAMONO BUDI CAHYADI' or nama = 'CARIN PUSPA SARI' or nama = 'LENI SEPTIANA' or nama='DEWI NOVITASARI' or nama = 'PURWONO' or nama='ANNO ANTHONI'  GROUP BY id_request ORDER BY id_request DESC LIMIT 1000");
+				    // }else if($username=='adminggl.bandung'){
+				    //     $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
+    				// 		SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
+    				// 		SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
+    				// 		data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
+    				// 		data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
+    				// 		data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
+    				// 		data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
+    				// 		SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
+    				// 		SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
+    				// 		rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
+    				// 		dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
+    				// 		jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
+    				// 		JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+    				// 		JOIN mst_user mu ON mu.id_user = rs.id_user
+    				// 		JOIN satuan s ON s.id_satuan=dr.id_satuan
+    				// 		JOIN mst_product mp ON mp.id_product=dr.id_product
+    				// 		JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+    				// 		JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='1') AS data1
+    				// 		JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
+					// 		JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
+    				// 		JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
+    				// 		JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
+    				// 		JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
+    				// 		JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
+    				// 		WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
+    				// 		ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
+    				// 		WHERE nama = 'SELA WAHYUNI' or nama = 'GITA KAMELIA' or nama = 'NEVI DWI RIZKIRAHAYU' or nama = 'KIKI BAEHAKI' or nama = 'ROSYDA DILIANTI KANIA' GROUP BY id_request ORDER BY id_request DESC LIMIT 1000");
+				    // }else if($username=='puput.syahfitri'){
+				    //     $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
+    				// 		SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
+    				// 		SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
+    				// 		data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
+    				// 		data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
+    				// 		data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
+    				// 		data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
+    				// 		SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
+    				// 		SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
+    				// 		rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
+    				// 		dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
+    				// 		jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
+    				// 		JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+    				// 		JOIN mst_user mu ON mu.id_user = rs.id_user
+    				// 		JOIN satuan s ON s.id_satuan=dr.id_satuan
+    				// 		JOIN mst_product mp ON mp.id_product=dr.id_product
+    				// 		JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+    				// 		JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='1') AS data1
+    				// 		JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
+					// 		JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
+    				// 		JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
+    				// 		JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
+    				// 		JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
+    				// 		JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
+    				// 		WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
+    				// 		ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
+    				// 		WHERE nama = 'PURWONO' or nama = 'PUPUT SYAHFITRI' GROUP BY id_request ORDER BY id_request DESC LIMIT 1000");
+				    // }else if($username=='rani'){
+				    //     $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
+    				// 		SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
+    				// 		SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
+    				// 		data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
+    				// 		data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
+    				// 		data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
+    				// 		data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
+    				// 		SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
+    				// 		SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
+    				// 		rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
+    				// 		dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
+    				// 		jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
+    				// 		JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+    				// 		JOIN mst_user mu ON mu.id_user = rs.id_user
+    				// 		JOIN satuan s ON s.id_satuan=dr.id_satuan
+    				// 		JOIN mst_product mp ON mp.id_product=dr.id_product
+    				// 		JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+    				// 		JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='1') AS data1
+    				// 		JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
+					// 		JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
+    				// 		JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
+    				// 		JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
+    				// 		JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
+    				// 		JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
+    				// 		WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
+    				// 		ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
+    				// 		WHERE nama = 'PURWONO' or nama = 'PUPUT SYAHFITRI' or nama = 'RANI FEBRIYANTI' GROUP BY id_request ORDER BY id_request DESC LIMIT 1000");
+				    // }else if($username=='amrulloh'){
+				    //     $q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
+    				// 		SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
+    				// 		SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
+    				// 		data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
+    				// 		data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
+    				// 		data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
+    				// 		data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
+    				// 		SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
+    				// 		SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
+    				// 		rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
+    				// 		dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
+    				// 		jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
+    				// 		JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+    				// 		JOIN mst_user mu ON mu.id_user = rs.id_user
+    				// 		JOIN satuan s ON s.id_satuan=dr.id_satuan
+    				// 		JOIN mst_product mp ON mp.id_product=dr.id_product
+    				// 		JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+    				// 		JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='1') AS data1
+    				// 		JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
+					// 		JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
+    				// 		JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
+    				// 		JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
+    				// 		JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
+    				// 		JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
+    				// 		WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
+    				// 		ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
+    				// 		WHERE nama = 'NEVI DWI RIZKIRAHAYU' or nama = 'AMRULLOH' or nama = 'GITA KAMELIA' or nama = 'KIKI BAEHAKI' or nama='SELA WAHYUNI' or nama='ROSYDA DILIANTI KANIA'  GROUP BY id_request ORDER BY id_request DESC LIMIT 1000");
+				    // }else{
+    				// 	$q_tarik_data = $this->db->query("SELECT data_final.*,sales_pers,pers_numb FROM(SELECT data5.* FROM (SELECT data4.*, nama_status_kirim FROM (
+    				// 		SELECT data3.*,id_status_kirim,tanggal_shipping FROM (
+    				// 		SELECT data2.id_request,data2.no_request,data2.tanggal_request,data2.id_customer_ship as id_customer,data2.tanggal_kirim,data2.catatan,data2.no_po,
+    				// 		data2.title,data2.h1,data2.h2,data2.h3,data2.r1,data2.r2,data2.r3,data2.id_detail_request,data2.id_jenis_transaksi,data2.qty,data2.id_sales_person,data2.release_id,data2.sts,
+    				// 		data2.keterangan,data2.satuan,data2.id_shipping_point,data2.nama,data2.nama_product,data2.matgr,data2.kode_product,
+    				// 		data2.nama_transaksi,data2.kode_cust_sold,data2.cust_sold,data2.kode_cust_ship,data2.cust_ship,data2.alamat,data2.city,data2.nama_cluster,data2.hari_kirim,
+    				// 		data2.hari_kirim2,data2.hari_kirim3,description,kode_shipping_point FROM(
+    				// 		SELECT data1.*,mst_customer.kode_customer AS kode_cust_ship,nama_customer AS cust_ship, alamat,city,nama_cluster,hari_kirim,hari_kirim2,hari_kirim3 FROM(
+    				// 		SELECT rs.id_request,rs.no_request,rs.id_user,rs.tanggal_request,rs.id_customer_ship,rs.tanggal_kirim,
+    				// 		rs.catatan,rs.no_po,rs.title,rs.h1,rs.h2,rs.h3,rs.r1,rs.r2,rs.r3,dr.id_detail_request,dr.id_jenis_transaksi,dr.qty,dr.id_sales_person,dr.release_id,sts,dr.keterangan,
+    				// 		dr.satuan,dr.id_shipping_point,mu.nama,mu.id_wilayah,mp.nama_product,mp.matgr,mp.kode_product,
+    				// 		jt.nama_transaksi,kode_customer AS kode_cust_sold,nama_customer AS cust_sold FROM trx_so_header rs 
+    				// 		JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+    				// 		JOIN mst_user mu ON mu.id_user = rs.id_user
+    				// 		JOIN satuan s ON s.id_satuan=dr.id_satuan
+    				// 		JOIN mst_product mp ON mp.id_product=dr.id_product
+    				// 		JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+    				// 		JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold  WHERE rs.delete_id=0 AND dr.delete_id=0  AND release_id='1') AS data1
+    				// 		JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
+					// 		JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)AS data2 
+    				// 		JOIN mst_shipping_point ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
+    				// 		JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
+    				// 		JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim) AS data5
+    				// 		JOIN mst_user_shipping_point ON data5.description = mst_user_shipping_point.description
+    				// 		WHERE mst_user_shipping_point.id_user = '$id_user' AND id_jenis_transaksi ='1'
+    				// 		ORDER BY id_request DESC) AS data_final JOIN sales_person ON sales_person.id_sales_person=data_final.id_sales_person 
+    				// 		WHERE nama='$nama1' GROUP BY id_request ORDER BY id_request DESC LIMIT 1000");
+				    // }
 				}
 			}else{
 				$departemen=$this->session->userdata('id_departemen');

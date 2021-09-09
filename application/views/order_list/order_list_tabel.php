@@ -263,6 +263,7 @@
 											<th style="background: #22313F;color:#fff;"><input type="checkbox" id="checkAll"/> All </th>
 										<?php }?>																
 										<th style="font-size:1;background: #22313F;color:#fff;"> Created by   </th>																	
+										<th style="font-size:1;background: #22313F;color:#fff;"> Sales Person   </th>																	
 										<th style="display:none;background: #22313F;color:#fff;">No. Order</th>							
 										<th style="display:none;background: #22313F;color:#fff;">Sold to Party</th>
 										<th style="background: #22313F;color:#fff;"> Ship to Party </th>
@@ -310,6 +311,7 @@
 													<td style="background: #69f2ff;"><?php echo $data['id_detail_request']; ?></td>
 													<td style="background: #69f2ff;"><?php echo "R"?></td>								
 													<td style="background: #69f2ff;"><?php echo $data['nama']; ?></td>									
+													<td style="background: #69f2ff;"><?php echo $data['sname']; ?></td>									
 													<td style="display:none;background: #69f2ff;"><?php echo $data['no_request']; ?></td>						
 													<td style="display:none;background: #69f2ff;"><?php echo $data['cust_sold']; ?></td>
 													<td style="background: #69f2ff;"><?php echo $data['cust_sold']; ?></td>
@@ -426,6 +428,7 @@
 												<tr>				
 													<td><?php echo $data['id_detail_request']; ?></td>								
 													<td ><?php echo $data['nama']; ?></td>									
+													<td ><?php echo $data['sname']; ?></td>									
 													<td style="display:none;"><?php echo $data['no_request']; ?></td>						
 													<td style="display:none;"><?php echo $data['cust_sold']; ?></td>
 													<td><?php echo $data['cust_sold']; ?></td>
@@ -563,6 +566,7 @@
 													<input type="checkbox" id="myCheck" onclick="contoh(this)" >
 												</td>								
 												<td ><?php echo $data['nama']; ?></td>									
+													<td ><?php echo $data['sname']; ?></td>									
 												<td style="display:none;"><?php echo $data['no_request']; ?></td>						
 												<td style="display:none;"><?php echo $data['cust_sold']; ?></td>
 												<td><?php echo $data['cust_sold']; ?></td>
@@ -727,6 +731,7 @@
 														<input type="checkbox" id="myCheck" onclick="contoh(this)" >
 													</td> -->								
 													<td ><?php echo $data['nama']; ?></td>									
+													<td ><?php echo $data['sname']; ?></td>									
 													<td style="display:none;"><?php echo $data['no_request']; ?></td>						
 													<td style="display:none;"><?php echo $data['cust_sold']; ?></td>
 													<td><?php echo $data['cust_sold']; ?></td>

@@ -31,12 +31,12 @@
 								<?php } ?>
 					</div>
 					<div class="col-md-12">
-					    <div class="input-group col-xs-3 pull-right" style="margin-bottom:5px;margin-top:5px;">
+					    <!-- <div class="input-group col-xs-3 pull-right" style="margin-bottom:5px;margin-top:5px;">
 							<input placeholder="Ketik nama customer.." id="myInput" onkeyup="myFunction()" style="width:100%;" class="form-control " type="text">	
 							<span class="input-group-addon">
 								<i class="fa fa-search"></i>
 							</span>					
-						</div> 
+						</div>  -->
         				<!--<table id="dataTables-example" width="100%"  class="table table-striped table-bordered table-hover">-->
         				<table width="100%" id="myTable" class="table table-striped table-bordered table-hover">
 						<!--<table id="dataTables-example" width="100%" class="table table-striped table-bordered table-hover">-->
@@ -378,7 +378,7 @@
         $(document).ready(function() {
             $('#myTable').DataTable({
                 responsive: true,
-				searching: false
+				searching: true
 			});
         });
 		function contoh(x){
