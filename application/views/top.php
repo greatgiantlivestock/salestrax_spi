@@ -593,7 +593,7 @@
 	</div>
 <?php }else if($this->session->userdata("id_role")==6){?>
 	<div class="topnav" id="myTopnav" style="background: linear-gradient(to right, #0B5345 0%, #1A5276 50%, #4A235A  100%);">
-		<a href="<?php echo base_url(); ?>dashboard">
+		<!-- <a href="<?php echo base_url(); ?>dashboard">
 			<i class="fa fa-home"></i>
 			<span class="menu-text"></span>
 		</a>
@@ -604,19 +604,19 @@
 		<a href="<?php echo base_url(); ?>SO_Dairy">
 			<i class="menu-icon  fa fa-pencil-square"></i>
 			<span class="menu-text"> PO </span>
-		</a>
+		</a> -->
 		<!-- <a href="<?php echo base_url(); ?>SO_Meat">
 			<i class="menu-icon  fa fa-pencil-square-o"></i>
 			<span class="menu-text"> PO Daging </span>
 		</a> -->
-		<a href="<?php echo base_url(); ?>order_list">
+		<a href="<?php echo base_url(); ?>Order_list">
 			<i class="menu-icon  fa fa-tags"></i>
 			<span class="menu-text"> Daftar Order </span>
 		</a>
-		<a href="<?php echo base_url(); ?>Shipment">
+		<!-- <a href="<?php echo base_url(); ?>Shipment">
 			<i class="menu-icon  fa fa-truck"></i>
 			<span class="menu-text"> Pengiriman </span>
-		</a>
+		</a> -->
 		<!-- <a href="<?php echo base_url(); ?>Stock_customer">
 			<i class="menu-icon  fa fa-cubes"></i>
 			<span class="menu-text"> Stok  </span>
