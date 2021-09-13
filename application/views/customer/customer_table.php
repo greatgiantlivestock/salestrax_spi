@@ -42,6 +42,7 @@
 						<!--<table id="dataTables-example" width="100%" class="table table-striped table-bordered table-hover">-->
 							<thead>
 								<tr>
+									<th style="background: #22313F;color:#fff;display:none;">date</th>	
 									<th style="background: #22313F;color:#fff;">Kode Customer</th>	
 									<!-- <th>Sales 1</th>	
 									<th>Sales 2</th>	 -->
@@ -63,6 +64,7 @@
 								//	if(!empty($customer->result_array())) { 
 										foreach($customer->result_array() as $data) { ?>
 										<tr >
+											<td style="display:none;"><?php echo $data['date_update']; ?></td>
 											<td><?php echo $data['kode_customer']; ?></td>
 											<td><?php echo $data['nama_customer']; ?></td>
 											<td><?php echo $data['region_desc']; ?></td>
@@ -151,18 +153,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="modal fade" id="ModalAddSalesPers" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    	<div class="modal-dialog" style="border-radius:25px">
-        <div style="border-radius:25px" class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Tambah Sales Person</h4>
-            </div>
-            <div class="modal-bodya">
-			</div>		   
-        </div>
-		</div>
-	</div>
+	
 	<div class="modal fade" id="ModalAddCustomer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     	<div class="modal-dialog">
         <div style="border-radius:25px" class="modal-content">
@@ -216,7 +207,7 @@
 							</div> -->
 							<div style="border-radius:25px;" class="clearfix form-actions">
 									<div class="col-md-offset-3 col-md-12">
-										<button type="submit" style="border-radius:25px" class="btn btn-ms btn-success">
+										<button type="submit" id="ChangeNext" style="border-radius:25px" class="btn btn-ms btn-success">
 											<i class="ace-icon fa fa-edit bigger-110"></i>Simpan
 										</button>
 										<button type="botton" class="btn btn-ms btn-standar" style="border-radius:25px; margin-left: 40px;" data-dismiss="modal"> 
@@ -378,7 +369,8 @@
         $(document).ready(function() {
             $('#myTable').DataTable({
                 responsive: true,
-				searching: true
+				searching: true,
+                "order": [[ 0, "DESC" ]]
 			});
         });
 		function contoh(x){
@@ -444,6 +436,26 @@
 				}       
 			}
 		}
+		$(document).on('click','#ChangeNext',function(event){
+			$("#ModalAddCustomer").modal('hide');
+                // if(confirm("Are you sure changing status?")){
+                    // event.preventDefault();
+                    // var statusid = $(this).attr('data-id');
+                    // $.ajax({
+                    //     url     : 'dbo.php',
+                    //     method  : 'POST',
+                    //     data    : {statusid : statusid},
+                    //     success : function(data)
+                    //     {
+					// 		$("#ModalAddCustomer").modal('hide');
+                    //         $('#exampleone').DataTable().ajax.reload();
+                    //     }
+                    // });
+                // }
+                // else{
+                //     return false;
+                // }
+            });
 		// $(document).on("click", "#openModalAddCustomer", function () {
 		// var id_customer = $(this).data('id_customer');
 		// var tipe = $(this).data('tipe');

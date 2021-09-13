@@ -177,6 +177,11 @@ class Customer extends CI_Controller {
 					$in3['description'] 	= $qshp->description;
 					// $in3['matdesc'] 	= $qmatgr->matdesc;
 					$this->db->insert("mst_shipping_point_customer",$in3);
+
+					$in4['date_update'] 	= date("Y-m-d h:i:s");
+					$where['id_customer'] = $this->input->post('id_customer');
+					$this->db->update("mst_customer",$in4,$where);
+
 					$this->session->set_flashdata("success","Shipping point berhasil dtambahkan");
 					redirect("Customer");
 				}
@@ -229,6 +234,10 @@ class Customer extends CI_Controller {
 				}else{
 					$where['kode_customer'] = $kode_customer;
 					$this->db->update("mst_customer_cluster",$in,$where);
+
+					$in4['date_update'] 	= date("Y-m-d h:i:s");
+					$this->db->update("mst_customer",$in4,$where);
+
 					$this->session->set_flashdata("success","Update Cluster Berhasil");
 					redirect("Customer");
 				}
