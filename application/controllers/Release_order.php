@@ -186,7 +186,7 @@ class Release_order extends CI_Controller {
 					}else{
 						$this->db->update("mst_customer_cluster",$in3,$where3);
 					}
-					if($qCkShp->jml==0){
+					if($qCkShp->jml=='0'){
 						$qCustR = $this->db->query("SELECT id_customer FROM mst_customer WHERE kode_customer='$kode_customer'")->row();
 						$qShpR = $this->db->query("SELECT description FROM mst_shipping_point WHERE id_shipping_point='$id_shipping_point'")->row();
 						$in2S['id_shipping_point'] = $this->input->post("id_shipping_point");
