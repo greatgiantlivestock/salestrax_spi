@@ -101,12 +101,13 @@
 	.topnav a {
 	float: left;
 	display: block;
-	color: #000067;
+	color: #007600;
 	text-align: center;
 	padding: 10px 3px;
 	text-decoration: none;
 	font-size: 15px;
 	}
+	
 	#header{
 	width:100%; /*supaya header memenuhi layar*/
 	z-index:1000; /*z-index dgn nilai besar berfungsi supaya header selalu tampil didepan*/
@@ -210,7 +211,8 @@
 			<i class="menu-icon fa fa-key"></i>
 			<span class="menu-text">Password</span>
 		</a>
-		<a href="#" style="background:green">
+		<a class="prof" href="#" >
+			<i class="menu-icon fa fa-user"></i>
 			<small> 
 				<?php
 					$id_user = $this->session->userdata('id_user');
@@ -265,7 +267,8 @@
 			<i class="menu-icon fa fa-key"></i>
 			<span class="menu-text">Password</span>
 		</a>
-		<a href="#" style="background:green">
+		<a class="prof" href="#" >
+<i class="menu-icon fa fa-user"></i>
 			<small>
 				<?php
 					$id_user = $this->session->userdata('id_user');
@@ -294,7 +297,8 @@
 			<i class="menu-icon fa fa-key"></i>
 			<span class="menu-text">Password</span>
 		</a>
-		<a href="#" style="background:green">
+		<a class="prof" href="#" >
+<i class="menu-icon fa fa-user"></i>
 			<small>
 				<?php
 					$id_user = $this->session->userdata('id_user');
@@ -411,7 +415,8 @@
 		<!--	<i class="menu-icon  fa fa-map-marker"></i>-->
 		<!--	<span class="menu-text"> Rekap Sales </span>-->
 		<!--</a> -->
-		<a onclick="document.getElementById('id01').style.display='block'" href="#" style="background:green">
+		<a class="prof" onclick="document.getElementById('id01').style.display='block'" href="#" >
+			<i class="menu-icon fa fa-user"></i>
 			<small>
 				<?php
 					$id_user = $this->session->userdata('id_user');
@@ -522,7 +527,8 @@
 			<i class="menu-icon  fa fa-map-marker"></i>
 			<span class="menu-text"> Rekap Sales </span>
 		</a> -->
-		<a onclick="document.getElementById('id02').style.display='block'" href="#" style="background:green">
+		<a class="prof" onclick="document.getElementById('id02').style.display='block'" href="#" >
+			<i class="menu-icon fa fa-user"></i>
 			<small>
 				<?php
 					$id_user = $this->session->userdata('id_user');
@@ -625,7 +631,8 @@
 			<i class="menu-icon fa fa-key"></i>
 			<span class="menu-text">Password</span>
 		</a>
-		<a href="#" style="background:green">
+		<a class="prof" href="#" >
+			<i class="menu-icon fa fa-user"></i>
 			<small> 
 				<?php
 					$id_user = $this->session->userdata('id_user');

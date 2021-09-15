@@ -24,7 +24,7 @@ date_default_timezone_set('Asia/Bangkok');
 |
 */
 // $config['base_url'] = 'http://110.232.85.37/sales_order/';
-$base_url = "https://".$_SERVER['HTTP_HOST'];
+$base_url = "http://".$_SERVER['HTTP_HOST'];
 $base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
 $config['base_url']	= $base_url;
 // $root=(isset($_SERVER['HTTPS']) ? "https://" : "http://").$_SERVER['HTTP_HOST'];
