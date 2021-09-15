@@ -627,11 +627,11 @@
 			<i class="menu-icon  fa fa-cubes"></i>
 			<span class="menu-text"> Stok  </span>
 		</a> -->
-		<a href="<?php echo base_url(); ?>password">
+		<!-- <a href="<?php echo base_url(); ?>password">
 			<i class="menu-icon fa fa-key"></i>
 			<span class="menu-text">Password</span>
-		</a>
-		<a class="prof" href="#" >
+		</a> -->
+		<a class="prof" onclick="document.getElementById('id03').style.display='block'" href="#" >
 			<i class="menu-icon fa fa-user"></i>
 			<small> 
 				<?php
@@ -642,10 +642,63 @@
 				?>
 			</small>
 		</a>
-		<a href="<?php echo base_url(); ?>Logout" onclick="return confirm('Yakin ingin keluar sistem ?');">
+		<!-- <a href="<?php echo base_url(); ?>Logout" onclick="return confirm('Yakin ingin keluar sistem ?');">
 			<span class="fa fa-sign-out">  </span>
-		</a>
+		</a> -->
 		<a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
+		<div id="id03" class="w3-modal">
+			<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:500px">
+			<div class="w3-center"><br>
+				<span onclick="document.getElementById('id03').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+				<img src="<?php echo base_url();?>img/avatar.png" alt="Avatar" style="width:30%" class="w3-circle w3-margin-top">
+			</div>
+				<div class="w3-container">
+					<table>
+						<tr>
+							<td>
+								<b style="margin-right:5px">Nama Karyawan </b> 
+							</td>
+							<td>
+								<b style="margin-right:5px">:</b> 
+							</td>
+							<td>
+								<?php echo $this->session->userdata("nama_karyawan");?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<b>Phone</b> 
+							</td>
+							<td>
+								<b>:</b> 
+							</td>
+							<td>
+								<?php echo $q_role->no_hp;?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<b>Login Sebagai</b> 
+							</td>
+							<td>
+								<b>:</b> 
+							</td>
+							<td>
+								<?php echo $q_role->nama_role;?>
+							</td>
+						</tr>
+					</table>
+				</div>
+			<div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+				<a style="width:100%" class="w3-button w3-blue" href="<?php echo base_url(); ?>Password">
+					Ubah Password
+				</a>
+				<a style="width:100%" class="w3-button w3-red" href="<?php echo base_url(); ?>Logout">
+					Logout
+				</a>
+			</div>
+			</div>
+		</div>
 	</div>
 <?php }else{   
 	redirect("Login"); 
