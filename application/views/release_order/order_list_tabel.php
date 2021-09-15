@@ -75,8 +75,7 @@
 								<thead>
 									<tr >
 										<th style="background: #22313F;color:#fff;"><input style="width:20px;height:20px;" type="checkbox" id="checkAll"/> All </th>															
-										<th style="background: #22313F;color:#fff;">No. Salestrax</th>							
-										<th style="display:none;background: #22313F;color:#fff;">Sold to Party</th>
+										<th style="background: #22313F;color:#fff;">No. Salestrax</th>				
 										<th style="background: #22313F;color:#fff;"> Ship to Party </th>
 										<th style="background: #22313F;color:#fff;"> Order Type </th>
 										<th style="background: #22313F;color:#fff;">Produk</th>
@@ -100,8 +99,7 @@
 														<input style="width:20px;height:20px;" class="check" type="checkbox" name="ck_id_detail[]" value="<?php echo $data['id_request'];?>">
 														<span class="lbl"></span>
 													</td>
-													<td ><?php $id_sstx = (int)$data['id_request']+1000000000; echo $id_sstx ?></td>						
-													<td style="display:none;"><?php echo $data['cust_sold']; ?></td>
+													<td ><?php $id_sstx = (int)$data['id_request']+1000000000; echo $id_sstx ?></td>
 													<td><?php echo $data['cust_sold']; ?></td>
 													<td><?php echo $data['nama_transaksi']; ?></td>
 													<td>

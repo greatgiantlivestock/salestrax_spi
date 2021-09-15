@@ -101,7 +101,7 @@
 	.topnav a {
 	float: left;
 	display: block;
-	color: #ffff;
+	color: #000067;
 	text-align: center;
 	padding: 10px 3px;
 	text-decoration: none;
@@ -149,7 +149,7 @@
 </head>
 <body class="no-skin">
 <?php if($this->session->userdata("id_role")==1){?>
-	<div class="topnav" id="myTopnav" style="background: linear-gradient(to right, #0B5345 0%, #1A5276 50%, #4A235A  100%);">
+	<div class="topnav" id="myTopnav" style="background: linear-gradient(to right, #ffa64d 0%, #ffea00 50%, #009d00  100%);">
 		<a href="<?php echo base_url(); ?>dashboard">
 			<i class="fa fa-home"></i>
 			<span class="menu-text"></span>
@@ -226,7 +226,7 @@
 		<a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
 	</div>
 <?php }else if($this->session->userdata("id_role")==2){ ?>
-	<div class="topnav" id="myTopnav" style="background: linear-gradient(to right, #0B5345 0%, #1A5276 50%, #4A235A  100%);">
+	<div class="topnav" id="myTopnav" style="background: linear-gradient(to right, #ffa64d 0%, #ffea00 50%, #009d00  100%);">
 		<a href="<?php echo base_url(); ?>dashboard">
 			<i class="fa fa-home"></i>
 			<span class="menu-text"></span>
@@ -281,7 +281,7 @@
 		<a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
 	</div>
 <?php }else if($this->session->userdata("id_role")==3){ ?>
-	<div class="topnav" id="myTopnav" style="background: linear-gradient(to right, #0B5345 0%, #1A5276 50%, #4A235A  100%);">
+	<div class="topnav" id="myTopnav" style="background: linear-gradient(to right, #ffa64d 0%, #ffea00 50%, #009d00  100%);">
 		<a href="<?php echo base_url(); ?>dashboard">
 			<i class="fa fa-home"></i>
 			<span class="menu-text"></span>
@@ -310,7 +310,7 @@
 		<a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
 	</div>
 <?php }else if($this->session->userdata("id_role")==4){?>
-	<div class="topnav" id="myTopnav" style="background: linear-gradient(to right, #0B5345 0%, #1A5276 50%, #4A235A  100%);">
+	<div class="topnav" id="myTopnav" style="background: linear-gradient(to right, #ffa64d 0%, #ffea00 50%, #009d00  100%);">
 		<a href="<?php echo base_url(); ?>dashboard">
 			<i class="fa fa-home"></i>
 			<span class="menu-text"></span>
@@ -481,7 +481,7 @@
 		</div>
 	</div>
 <?php }else if($this->session->userdata("id_role")==5){?>
-	<div class="topnav" id="myTopnav" style="background: linear-gradient(to right, #0B5345 0%, #1A5276 50%, #4A235A  100%);">
+	<div class="topnav" id="myTopnav" style="background: linear-gradient(to right, #ffa64d 0%, #ffea00 50%, #009d00  100%);">
 		<a href="<?php echo base_url(); ?>dashboard">
 			<i class="fa fa-home"></i>
 			<span class="menu-text"></span>
@@ -592,7 +592,7 @@
 		</div>
 	</div>
 <?php }else if($this->session->userdata("id_role")==6){?>
-	<div class="topnav" id="myTopnav" style="background: linear-gradient(to right, #0B5345 0%, #1A5276 50%, #4A235A  100%);">
+	<div class="topnav" id="myTopnav" style="background: linear-gradient(to right, #ffa64d 0%, #ffea00 50%, #009d00  100%);">
 		<!-- <a href="<?php echo base_url(); ?>dashboard">
 			<i class="fa fa-home"></i>
 			<span class="menu-text"></span>

@@ -26,16 +26,16 @@
 						<div style="margin-top:100px;" class="login-container">
 							<div class="center">
 								<h1>
-									<span style="color:#FFF;" id="id-text2"><span class="blue"><b>SPI </b></span><span class="red"><b>SalesTrax</b></span></span>
+									<span style="color:#FFF;" id="id-text2"><span class="blue"><b>SPI </b></span><span class="blue"><b>SalesTrax</b></span></span>
 								</h1>
 							</div>
 
 							<div class="space-6"></div>
 
 							<div class="position-relative">
-								<div id="login-box" style="border-radius: 25px;background:rgba(0,0,0,0.2);">
-									<div class="widget-body" style="border-radius: 25px;background:rgba(0,0,0,0.2);">
-										<div class="widget-main" style="border-radius: 25px;background:rgba(0,0,0,0.2);">
+								<div id="login-box" style="border-radius: 25px;background:rgba(0,0,0,0.35);">
+									<div class="widget-body" style="border-radius: 25px;background:rgba(0,0,0,0.35);">
+										<div class="widget-main" style="border-radius: 25px;background:rgba(0,0,0,0.35);">
 											<h4 class="header white lighter bigger">
 												<i class="ace-icon fa fa-coffee white"></i>
 													Silahkan Login
