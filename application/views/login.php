@@ -18,7 +18,7 @@
 		</style>
 	</head>
 
-	<body class="login-layout" style="background-image: url(<?php echo base_url();?>/bk3.JPG);background-size: cover;">
+	<body class="login-layout" style="background-image: url(<?php echo base_url();?>/spi_walpp.JPG);background-size: cover;">
 		<div class="main-container">
 			<div class="main-content">
 				<div class="row">
