@@ -805,7 +805,7 @@ class App_model extends CI_Model {
 											AND kode_shipping_point LIKE '%$kode_shipping_point%'
 											AND nama_status_kirim LIKE '%$nama_status_kirim%'
 											AND nama_departemen LIKE '%$nama_departemen%' ORDER BY id_request DESC");
-		}else if($this->session->userdata("id_role") == 3 || $this->session->userdata("id_role") == 4){
+		}else if($this->session->userdata("id_role") == 6 || $this->session->userdata("id_role") == 4){
 			$id_user=$this->session->userdata("id_user");
 			$q_user_shipment = $this->db->query("SELECT count(*) as jml FROM mst_user_shipping_point WHERE id_user='$id_user'")->row();
 			if($q_user_shipment->jml != 0){
