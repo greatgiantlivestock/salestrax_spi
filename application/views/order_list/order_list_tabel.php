@@ -154,40 +154,6 @@
 									</div>
 								</td>
 							</tr>
-							<!--
-								<?php if ($this->session->userdata("id_role")<=2){?>
-								<tr>
-									<td>
-										Departemen
-									</td>
-									<td>
-										<select style="width:80%;" <?php echo $color; ?> class="select_customer" name="nama_departemen">
-											<?php echo $combo_departemen; ?>
-										</select>
-									</td>
-								</tr>				
-								<?php }?>	
-								<tr>
-									<td>
-										Nama Sales
-									</td>
-								</tr>	
-								<tr>
-									<td>
-										<select style="width:80%;" <?php echo $color; ?> class="select_customer" name="nama_karyawan">
-											<?php echo $combo_user; ?>
-										</select>
-									</td>			
-								</tr>
-								<tr>
-									<td colspan="7">
-										Shipping Point
-									</td>
-									<td colspan="5">
-										Shipment Status
-									</td>
-								</tr>	
-							-->
 							<tr>
 								<td colspan="7">
 									<select style="width:90%;" <?php echo $color; ?> name="kode_shipping_point">
@@ -281,19 +247,9 @@
 										<th style="background: #22313F;color:#fff;">Tanggal Rencana Kirim</th>	
 										<th style="background: #22313F;color:#fff;">Jadwal Kirim (hari 1)</th>																	
 										<th style="background: #22313F;color:#fff;">Jadwal Kirim (hari 2)</th>																	
-										<!-- <th style="background: #22313F;color:#fff;">Jadwal Kirim (hari 3)</th>																	 -->								
-										<!-- <th style="background: #22313F;color:#fff;">Tanggal Realisasi Kirim</th>								 -->
 										<th style="background: #22313F;color:#fff;">Catatan Customer</th>
-										<!-- <th style="background: #22313F;color:#fff;">Ket</th> -->
 										<th style="background: #22313F;color:#fff;">Preview</th>
 										<th style="background: #22313F;color:#fff;">Shipping Point</th>	
-										<!-- <th style="background: #22313F;color:#fff;">Shipment Status</th> -->
-										<!-- <th style="background: #22313F;color:#fff;">Sisa Stock H1</th>
-										<th style="background: #22313F;color:#fff;">Detail H1</th>
-										<th style="background: #22313F;color:#fff;">Sisa Stock H2</th>
-										<th style="background: #22313F;color:#fff;">Detail H2</th>
-										<th style="background: #22313F;color:#fff;">Sisa Stock H3</th>
-										<th style="background: #22313F;color:#fff;">Detail H3</th> -->
 										<?php if($this->session->userdata("id_role")==5){?>
 										<?php }else{?>
 											<!-- <th style="background: #22313F;color:#fff;">Action</th> -->

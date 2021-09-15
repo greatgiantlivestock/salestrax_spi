@@ -840,32 +840,32 @@ class App_model extends CI_Model {
                                             AND data5.nama_status_kirim LIKE '%$nama_status_kirim%'  
                                             ORDER BY id_request DESC)AS data_order LEFT JOIN mst_sales_person msp ON msp.kunnr=data_order.kode_customer AND msp.spart=data_order.division GROUP BY id_detail_request");
 			}else{
-				$departemen=$this->session->userdata('id_departemen');
-				$q_tarik_data = $this->db->query("SELECT data4.*, nama_status_kirim FROM (
-											SELECT data3.*, id_shipping,id_status_kirim,tanggal_shipping FROM (
-											SELECT data2.*,description,kode_shipping_point FROM(
-											SELECT data1.*,sales_pers1,pers_numb1, nama_customer AS cust_ship FROM(SELECT rs.*,
-											dr.id_detail_request,dr.id_product,dr.qty,sts,dr.id_satuan,dr.keterangan,
-											dr.id_jenis_transaksi,dr.satuan,dr.id_shipping_point,mu.nama,mu.username,
-											mu.no_hp,mu.id_wilayah,mu.id_karyawan,mu.id_departemen,mu.id_role, 
-											s.nama_satuan,mp.nama_product,mp.kode_product,dpt.nama_departemen,
-											jt.nama_transaksi,nama_customer AS cust_sold FROM trx_so_header rs 
-											JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
-											JOIN mst_user mu ON mu.id_user = rs.id_user
-											JOIN satuan s ON s.id_satuan=dr.id_satuan
-											JOIN mst_product mp ON mp.id_product=dr.id_product
-											JOIN mst_departemen dpt ON dpt.id_departemen=mu.id_departemen
-											JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
-											JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold WHERE rs.delete_id=0 AND dr.delete_id=0  AND tanggal_kirim BETWEEN '$tanggal_mulai' and '$tanggal_sampai') AS data1
-											JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
-											JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)
-											AS data2 JOIN mst_shipping_point 
-											ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
-											JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
-											JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim
-											AND kode_shipping_point LIKE '%$kode_shipping_point%'
-											AND nama_status_kirim LIKE '%$nama_status_kirim%'
-											AND id_departemen='$departemen'  ORDER BY id_request DESC");	
+				// $departemen=$this->session->userdata('id_departemen');
+				// $q_tarik_data = $this->db->query("SELECT data4.*, nama_status_kirim FROM (
+				// 							SELECT data3.*, id_shipping,id_status_kirim,tanggal_shipping FROM (
+				// 							SELECT data2.*,description,kode_shipping_point FROM(
+				// 							SELECT data1.*,sales_pers1,pers_numb1, nama_customer AS cust_ship FROM(SELECT rs.*,
+				// 							dr.id_detail_request,dr.id_product,dr.qty,sts,dr.id_satuan,dr.keterangan,
+				// 							dr.id_jenis_transaksi,dr.satuan,dr.id_shipping_point,mu.nama,mu.username,
+				// 							mu.no_hp,mu.id_wilayah,mu.id_karyawan,mu.id_departemen,mu.id_role, 
+				// 							s.nama_satuan,mp.nama_product,mp.kode_product,dpt.nama_departemen,
+				// 							jt.nama_transaksi,nama_customer AS cust_sold FROM trx_so_header rs 
+				// 							JOIN trx_so_detail dr ON rs.id_request = dr.id_request 
+				// 							JOIN mst_user mu ON mu.id_user = rs.id_user
+				// 							JOIN satuan s ON s.id_satuan=dr.id_satuan
+				// 							JOIN mst_product mp ON mp.id_product=dr.id_product
+				// 							JOIN mst_departemen dpt ON dpt.id_departemen=mu.id_departemen
+				// 							JOIN jenis_transaksi jt ON jt.id_jenis_transaksi=dr.id_jenis_transaksi
+				// 							JOIN mst_customer mc ON mc.id_customer = rs.id_customer_sold WHERE rs.delete_id=0 AND dr.delete_id=0  AND tanggal_kirim BETWEEN '$tanggal_mulai' and '$tanggal_sampai') AS data1
+				// 							JOIN mst_customer ON mst_customer.id_customer=data1.id_customer_ship
+				// 							JOIN mst_customer_cluster mcc ON mcc.kode_customer=mst_customer.kode_customer)
+				// 							AS data2 JOIN mst_shipping_point 
+				// 							ON mst_shipping_point.id_shipping_point=data2.id_shipping_point) AS data3
+				// 							JOIN trx_shipping ON trx_shipping.id_detail_request = data3.id_detail_request) AS data4
+				// 							JOIN status_kirim ON status_kirim.id_status_kirim = data4.id_status_kirim
+				// 							AND kode_shipping_point LIKE '%$kode_shipping_point%'
+				// 							AND nama_status_kirim LIKE '%$nama_status_kirim%'
+				// 							AND id_departemen='$departemen'  ORDER BY id_request DESC");	
 			}
 		}else if($this->session->userdata("id_role") == 5){
 			$departemen=$this->session->userdata('id_departemen');
