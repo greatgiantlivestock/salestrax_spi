@@ -168,6 +168,8 @@ class App_model extends CI_Model {
 		$this->db->order_by('nama_customer', 'ASC');
 		$this->db->limit(10);
 		return $this->db->get('mst_customer')->result();
+		$q = $this->db->query("SELECT * FROM mst_customer JOIN mst_shipping_point_customer ON mst_customer.id_customer = mst_shipping_point_customer.id_customer WHERE nama_customer LIKE '%$title%' ORDER BY nama_customer LIMIT 10");
+		return $q->result();
 	}
 	public function get_master_harga($id) {
 		$q = $this->db->query("SELECT mst_harga.id_harga, mst_harga.harga, mst_product.nama_product, mst_customer.nama_customer FROM mst_harga LEFT JOIN mst_product ON mst_harga.id_product = mst_product.id_product LEFT JOIN mst_customer ON mst_customer.id_customer = mst_harga.id_customer WHERE mst_harga.id_gudang = '$id' ORDER BY id_harga DESC");
