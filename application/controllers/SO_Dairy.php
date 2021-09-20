@@ -732,46 +732,45 @@ class SO_Dairy extends CI_Controller {
 					$id_request = $this->input->post('id_request');
 					$qHeadCheck = $this->db->query("SELECT id_customer_ship,no_po,tanggal_kirim FROM trx_so_header WHERE id_request='$id_request'")->row();
 					$id_product = $this->input->post('id_product');
-					$qCheckB = $this->db->query("SELECT count(*) as jml FROM trx_so_header rs JOIN trx_so_detail dr ON rs.id_request=dr.id_request 
-												WHERE id_customer_ship='$qHeadCheck->id_customer_ship' AND tanggal_kirim='$qHeadCheck->tanggal_kirim'
-												AND id_product='$id_product' AND kode_trans='$kode_trans' AND dr.delete_id='0'")->row();
-					if($qCheckB->jml == '0'){
-						$whereUp['id_request'] = $this->input->post('id_request');
-						$inUp['tanggal_request'] = date('Y-m-d H:i:s');
-						$inUp['id_user_rev'] = $this->session->userdata("id_user");
-						$this->db->update("trx_so_header",$inUp,$whereUp);
-						$qsatuan=$this->db->query("SELECT mst_product.division,mst_product.satuan FROM mst_product WHERE id_product='$id_product'")->row();
-						$qjenis=$this->db->query("SELECT id_jenis_transaksi FROM jenis_transaksi WHERE kode_trans='$kode_trans'")->row();
-						$in['id_jenis_transaksi'] 	= $qjenis->id_jenis_transaksi;
-						$in['id_product'] 	= $this->input->post('id_product');
-						$in['qty'] 	= $this->input->post('qty');
-						$in['satuan'] 	= $qsatuan->satuan;
-						// $in['id_satuan'] 	= $qsatuan->id_satuan;
-						$in['keterangan'] = $this->input->post('keterangan');
-						$in['id_request'] 	= $this->input->post('id_request');
-						// $matgr = $qsatuan->division;
-						$qshipping_p=$this->db->query("SELECT mspc.id_shipping_point FROM trx_so_header rs JOIN mst_shipping_point_customer mspc ON mspc.id_customer=rs.id_customer_ship WHERE id_request='$id_request'")->row();
-						// $qspaut = $this->db->query("SELECT sp.id_sales_person FROM trx_so_header rs JOIN mst_customer mc ON rs.id_customer_ship=mc.id_customer JOIN mst_sales_person_division mspd ON mspd.kode_customer=mc.kode_customer JOIN sales_person sp ON sp.pers_numb=mspd.pers_numb WHERE rs.id_request='$id_request' AND mspd.matgr='$matgr'")->row();
-						// if($qspaut==''){
-						// 	$in['id_sales_person'] = 0;
-						// }else{
-						// 	$in['id_sales_person'] = $qspaut->id_sales_person;
-						// }
-						if($qshipping_p==''){
-							$in['id_shipping_point'] = 0;
+					// $qCheckB = $this->db->query("SELECT count(*) as jml FROM trx_so_header rs JOIN trx_so_detail dr ON rs.id_request=dr.id_request 
+					// 							WHERE id_customer_ship='$qHeadCheck->id_customer_ship' AND tanggal_kirim='$qHeadCheck->tanggal_kirim'
+					// 							AND id_product='$id_product' AND kode_trans='$kode_trans' AND dr.delete_id='0'")->row();
+					// if($qCheckB->jml == '0'){
+						if($kode_trans=="ZSOR"){
+							$qQOP = $this->db->query("SELECT qty_order FROM mst_product WHERE id_product='$id_product'")->row();
+							$qtyOrder = (int)$qQOP->qty_order;
+							$selisih = (int)$qtyVal % (int)$qtyOrder;
+							if($selisih == 0){
+								$whereUp['id_request'] = $this->input->post('id_request');
+								$inUp['tanggal_request'] = date('Y-m-d H:i:s');
+								$inUp['id_user_rev'] = $this->session->userdata("id_user");
+								$this->db->update("trx_so_header",$inUp,$whereUp);
+								$qsatuan=$this->db->query("SELECT mst_product.division,mst_product.satuan FROM mst_product WHERE id_product='$id_product'")->row();
+								$qjenis=$this->db->query("SELECT id_jenis_transaksi FROM jenis_transaksi WHERE kode_trans='$kode_trans'")->row();
+								$in['id_jenis_transaksi'] 	= $qjenis->id_jenis_transaksi;
+								$in['id_product'] 	= $this->input->post('id_product');
+								$in['qty'] 	= $this->input->post('qty');
+								$in['satuan'] 	= $qsatuan->satuan;
+								$in['keterangan'] = $this->input->post('keterangan');
+								$in['id_request'] 	= $this->input->post('id_request');
+								$qshipping_p=$this->db->query("SELECT mspc.id_shipping_point FROM trx_so_header rs JOIN mst_shipping_point_customer mspc ON mspc.id_customer=rs.id_customer_ship WHERE id_request='$id_request'")->row();
+								if($qshipping_p==''){
+									$in['id_shipping_point'] = 0;
+								}else{
+									$in['id_shipping_point'] = $qshipping_p->id_shipping_point;
+								}
+								$this->db->insert("trx_so_detail",$in);					
+								$last_id = $this->db->insert_id();
+								$qdetReq=$this->db->query("SELECT id_request FROM trx_so_detail WHERE id_detail_request='$last_id'")->row();
+								$inShipping['id_request'] = $qdetReq->id_request;
+								$inShipping['id_detail_request'] = $last_id;
+								$inShipping['id_status_kirim'] = 1;
+								$this->db->insert("trx_shipping",$inShipping);
+								$this->session->set_flashdata("success","Input Detail PO Berhasil");
+							}else{
+								$this->session->set_flashdata("error","Qty Order tidak valid, masukan qty order dengan kelipatan ".$qtyOrder);
+							}
 						}else{
-							$in['id_shipping_point'] = $qshipping_p->id_shipping_point;
-						}
-						$this->db->insert("trx_so_detail",$in);					
-						$last_id = $this->db->insert_id();
-						$qdetReq=$this->db->query("SELECT id_request FROM trx_so_detail WHERE id_detail_request='$last_id'")->row();
-						$inShipping['id_request'] = $qdetReq->id_request;
-						$inShipping['id_detail_request'] = $last_id;
-						$inShipping['id_status_kirim'] = 1;
-						$this->db->insert("trx_shipping",$inShipping);
-						$this->session->set_flashdata("success","Input Detail PO Berhasil");
-					}else{
-						if($this->session->userdata("username")=='admin.admin'||$this->session->userdata("username")=='fenda'||$this->session->userdata("username")=='puspita'||$this->session->userdata("username")=='ichbal'||$this->session->userdata("username")=='purwono'||$this->session->userdata("username")=='amrulloh'||$this->session->userdata("username")=='devita.ayu'||$this->session->userdata("username")=='safitri.safitri'){
 							$whereUp['id_request'] = $this->input->post('id_request');
 							$inUp['tanggal_request'] = date('Y-m-d H:i:s');
 							$inUp['id_user_rev'] = $this->session->userdata("id_user");
@@ -782,17 +781,9 @@ class SO_Dairy extends CI_Controller {
 							$in['id_product'] 	= $this->input->post('id_product');
 							$in['qty'] 	= $this->input->post('qty');
 							$in['satuan'] 	= $qsatuan->satuan;
-							// $in['id_satuan'] 	= $qsatuan->id_satuan;
 							$in['keterangan'] = $this->input->post('keterangan');
 							$in['id_request'] 	= $this->input->post('id_request');
-							// $matgr = $qsatuan->division;
 							$qshipping_p=$this->db->query("SELECT mspc.id_shipping_point FROM trx_so_header rs JOIN mst_shipping_point_customer mspc ON mspc.id_customer=rs.id_customer_ship WHERE id_request='$id_request'")->row();
-							// $qspaut = $this->db->query("SELECT sp.id_sales_person FROM trx_so_header rs JOIN mst_customer mc ON rs.id_customer_ship=mc.id_customer JOIN mst_sales_person_division mspd ON mspd.kode_customer=mc.kode_customer JOIN sales_person sp ON sp.pers_numb=mspd.pers_numb WHERE rs.id_request='$id_request' AND mspd.matgr='$matgr'")->row();
-							// if($qspaut==''){
-							// 	$in['id_sales_person'] = 0;
-							// }else{
-							// 	$in['id_sales_person'] = $qspaut->id_sales_person;
-							// }
 							if($qshipping_p==''){
 								$in['id_shipping_point'] = 0;
 							}else{
@@ -805,11 +796,48 @@ class SO_Dairy extends CI_Controller {
 							$inShipping['id_detail_request'] = $last_id;
 							$inShipping['id_status_kirim'] = 1;
 							$this->db->insert("trx_shipping",$inShipping);
-							$this->session->set_flashdata("success","Input Detail PO Berhasil");			
-						}else{
-							$this->session->set_flashdata("error","Data product dan jenis transaksi yang anda inputkan sudah ada di customer dan tanggal pengiriman yang sama");
+							$this->session->set_flashdata("success","Input Detail PO Berhasil");
 						}
-					}
+					// }else{
+					// 	if($this->session->userdata("username")=='admin.admin'||$this->session->userdata("username")=='fenda'||$this->session->userdata("username")=='puspita'||$this->session->userdata("username")=='ichbal'||$this->session->userdata("username")=='purwono'||$this->session->userdata("username")=='amrulloh'||$this->session->userdata("username")=='devita.ayu'||$this->session->userdata("username")=='safitri.safitri'){
+					// 		$whereUp['id_request'] = $this->input->post('id_request');
+					// 		$inUp['tanggal_request'] = date('Y-m-d H:i:s');
+					// 		$inUp['id_user_rev'] = $this->session->userdata("id_user");
+					// 		$this->db->update("trx_so_header",$inUp,$whereUp);
+					// 		$qsatuan=$this->db->query("SELECT mst_product.division,mst_product.satuan FROM mst_product WHERE id_product='$id_product'")->row();
+					// 		$qjenis=$this->db->query("SELECT id_jenis_transaksi FROM jenis_transaksi WHERE kode_trans='$kode_trans'")->row();
+					// 		$in['id_jenis_transaksi'] 	= $qjenis->id_jenis_transaksi;
+					// 		$in['id_product'] 	= $this->input->post('id_product');
+					// 		$in['qty'] 	= $this->input->post('qty');
+					// 		$in['satuan'] 	= $qsatuan->satuan;
+					// 		// $in['id_satuan'] 	= $qsatuan->id_satuan;
+					// 		$in['keterangan'] = $this->input->post('keterangan');
+					// 		$in['id_request'] 	= $this->input->post('id_request');
+					// 		// $matgr = $qsatuan->division;
+					// 		$qshipping_p=$this->db->query("SELECT mspc.id_shipping_point FROM trx_so_header rs JOIN mst_shipping_point_customer mspc ON mspc.id_customer=rs.id_customer_ship WHERE id_request='$id_request'")->row();
+					// 		// $qspaut = $this->db->query("SELECT sp.id_sales_person FROM trx_so_header rs JOIN mst_customer mc ON rs.id_customer_ship=mc.id_customer JOIN mst_sales_person_division mspd ON mspd.kode_customer=mc.kode_customer JOIN sales_person sp ON sp.pers_numb=mspd.pers_numb WHERE rs.id_request='$id_request' AND mspd.matgr='$matgr'")->row();
+					// 		// if($qspaut==''){
+					// 		// 	$in['id_sales_person'] = 0;
+					// 		// }else{
+					// 		// 	$in['id_sales_person'] = $qspaut->id_sales_person;
+					// 		// }
+					// 		if($qshipping_p==''){
+					// 			$in['id_shipping_point'] = 0;
+					// 		}else{
+					// 			$in['id_shipping_point'] = $qshipping_p->id_shipping_point;
+					// 		}
+					// 		$this->db->insert("trx_so_detail",$in);					
+					// 		$last_id = $this->db->insert_id();
+					// 		$qdetReq=$this->db->query("SELECT id_request FROM trx_so_detail WHERE id_detail_request='$last_id'")->row();
+					// 		$inShipping['id_request'] = $qdetReq->id_request;
+					// 		$inShipping['id_detail_request'] = $last_id;
+					// 		$inShipping['id_status_kirim'] = 1;
+					// 		$this->db->insert("trx_shipping",$inShipping);
+					// 		$this->session->set_flashdata("success","Input Detail PO Berhasil");			
+					// 	}else{
+					// 		$this->session->set_flashdata("error","Data product dan jenis transaksi yang anda inputkan sudah ada di customer dan tanggal pengiriman yang sama");
+					// 	}
+					// }
 					redirect("SO_Dairy/index/".$id_request);
 				}else{
 					$this->session->set_flashdata("error","Input Qty harus berupa angka. Jika Qty terdapat koma maka ganti koma dengan titik (misal 2,5 menjadi 2.5)");

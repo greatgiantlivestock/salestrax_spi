@@ -17,6 +17,8 @@
                             $satuan = substr($line,55,3);
                             $division = substr($line,58,2);
                             $division_desc = substr($line,60,20);
+                            $sales_unit = substr($line,80,3);
+                            $qty_order = substr($line,83,89);
                             $id_satuan = 0;
                             $id_plant = 0;
                             
@@ -25,14 +27,14 @@
                             $row = mysqli_fetch_assoc($countjml);
                             $jml = $row['jml'];
                             if($jml == 0){
-                                $sql = "INSERT INTO mst_product(kode_product,nama_product,id_satuan,id_plant_group,satuan,division,division_desc)
-                                        values ('$kode','$nama','$id_satuan','$id_plant','$satuan','$division','$division_desc')";
+                                $sql = "INSERT INTO mst_product(kode_product,nama_product,id_satuan,id_plant_group,satuan,division,division_desc,sales_unit,qty_order)
+                                        values ('$kode','$nama','$id_satuan','$id_plant','$satuan','$division','$division_desc','$sales_unit','$qty_order')";
                                 $result1 = mysqli_query($cn,$sql);
                                 if ($result1) {
                                     $linecount1++;
                                 } 
                             }else if ($jml > 0){
-                                $sql1 = "UPDATE mst_product SET nama_product='$nama',id_satuan='$id_satuan',id_plant_group='$id_plant',satuan='$satuan',division='$division',division_desc='$division_desc' WHERE kode_product='$kode'";
+                                $sql1 = "UPDATE mst_product SET nama_product='$nama',id_satuan='$id_satuan',id_plant_group='$id_plant',satuan='$satuan',division='$division',division_desc='$division_desc',sales_unit='$sales_unit',qty_order='$qty_order' WHERE kode_product='$kode'";
                                 $result = mysqli_query($cn,$sql1);
                                 if ($result) {
                                     $linecount++;

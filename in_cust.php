@@ -31,6 +31,7 @@
                             $salesoffice1 = str_replace("'", " ", $salesoffice);
                             $salesofficedesc = substr($line,172,20);
                             $salesofficedesc1 = str_replace("'", " ", $salesofficedesc);
+                            $deliv_code = substr($line,192,4);
                             
                             $id_status_customer = 2;
                             
@@ -52,29 +53,67 @@
                             $cekjml = "SELECT count(*) as jml FROM mst_customer WHERE kode_customer='$kode'";
                             $countjml = mysqli_query($cn,$cekjml);
                             $row = mysqli_fetch_assoc($countjml);
-                            $jml = $row['jml']; 
-                            echo $jml;
+                            $jml = $row['jml'];
 
-                            if($jml == 0){
-                                $sql1 = "INSERT INTO mst_customer(kode_customer,nama_customer,city,region,alamat,region_desc,sales_office,sales_office_desc)
-                                    values ('$kode','$nama1','$city1','$region1','$alamat1','$regiondesc1','$salesoffice1','$salesofficedesc1')";
+                            $cekjmlShp = "SELECT count(*) as jml FROM mst_shipping_point_customer WHERE kode_customer='$kode'";
+                            $countjmlShp = mysqli_query($cn,$cekjmlShp);
+                            $rowShp = mysqli_fetch_assoc($countjmlShp);
+                            $jmlShp = $rowShp['jml'];
+
+                            if($jml == '0'){
+                                $sql1 = "INSERT INTO mst_customer(kode_customer,nama_customer,city,region,alamat,region_desc,sales_office,sales_office_desc,delivery_code)
+                                    values ('$kode','$nama1','$city1','$region1','$alamat1','$regiondesc1','$salesoffice1','$salesofficedesc1','$deliv_code')";
                                 $result2 = mysqli_query($cn,$sql1);
                                 if ($result2) {
                                     $linecount1++;
                                 }
+                                if($jmlShp == 0){
+                                    $getCst = "SELECT id_customer FROM mst_customer WHERE kode_customer='$kode'";
+                                    $Cust = mysqli_query($cn,$getCst);
+                                    $rowCust = mysqli_fetch_assoc($Cust);
+                                    $id_customer = $rowCust['id_customer'];
+
+                                    $getShp = "SELECT id_shipping_point,description FROM mst_shipping_point msp JOIN delivery_plan dp 
+                                            ON msp.kode_shipping_point=dp.kode_shipping_point WHERE dp.delivery_code='$deliv_code'";
+                                    $Shp = mysqli_query($cn,$getShp);
+                                    $rowShp = mysqli_fetch_assoc($Shp);
+                                    $id_shipping_point = $rowShp['id_shipping_point'];
+                                    $description = $rowShp['description'];
+
+                                    $sqlmspc = "INSERT INTO mst_shipping_point_customer(id_customer,kode_customer,id_shipping_point,description)
+                                    values ('$id_customer','$kode','$id_shipping_point','$description')";
+                                    $rsmspc = mysqli_query($cn,$sqlmspc);
+                                }
                             }else if($jml > 0){
                                 $sql = "UPDATE mst_customer SET 
-                                    kode_customer='$kode_customer',
-                                    nama_customer='$nama_customer1',
+                                    kode_customer='$kode',
+                                    nama_customer='$nama1',
                                     city='$city1',
                                     region='$region1',
                                     alamat='$alamat1',
-                                    region_desc='$region_desc1',
-                                    sales_office='$sales_office1',
-                                    sales_office_desc='$sales_office_desc1' WHERE kode_customer='$kode_customer'";
+                                    region_desc='$regiondesc1',
+                                    sales_office='$salesoffice1',
+                                    sales_office_desc='$salesofficedesc1' WHERE kode_customer='$kode'";
                                 $result = mysqli_query($cn,$sql);
                                 if ($result) {
                                     $linecount++;
+                                }
+                                if($jmlShp == 0){
+                                    $getCst = "SELECT id_customer FROM mst_customer WHERE kode_customer='$kode'";
+                                    $Cust = mysqli_query($cn,$getCst);
+                                    $rowCust = mysqli_fetch_assoc($Cust);
+                                    $id_customer = $rowCust['id_customer'];
+
+                                    $getShp = "SELECT id_shipping_point,description FROM mst_shipping_point msp JOIN delivery_plan dp 
+                                            ON msp.kode_shipping_point=dp.kode_shipping_point WHERE dp.delivery_code='$deliv_code'";
+                                    $Shp = mysqli_query($cn,$getShp);
+                                    $rowShp = mysqli_fetch_assoc($Shp);
+                                    $id_shipping_point = $rowShp['id_shipping_point'];
+                                    $description = $rowShp['description'];
+
+                                    $sqlmspc = "INSERT INTO mst_shipping_point_customer(id_customer,kode_customer,id_shipping_point,description)
+                                    values ('$id_customer','$kode','$id_shipping_point','$description')";
+                                    $rsmspc = mysqli_query($cn,$sqlmspc);
                                 }
                             }else {
                                 echo "ada yang gagal";
