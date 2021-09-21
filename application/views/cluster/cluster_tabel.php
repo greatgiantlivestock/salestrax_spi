@@ -295,6 +295,7 @@
 			</div>	
 		</div>
 		<div class="col-xs-5">
+		<?php if($this->session->userdata('id_role') == "4"){?>
 				<a style="border-radius:10px; margin-top: 10px; margin-bottom: 10px;" 
 					href="#" class="btn btn-xs btn-primary" href="#"  
 					href="#" data-toggle="modal" 
@@ -347,6 +348,7 @@
 			<?php 	$no++; } ?>
 			</tbody>
 		</table>	
+		<?php } ?>
 		<div class="modal fade" id="ModalInputshp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 					<div class="modal-dialog">
 						<div class="modal-content">

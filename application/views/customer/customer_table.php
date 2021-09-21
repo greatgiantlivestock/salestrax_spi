@@ -51,7 +51,9 @@
 									<th style="background: #22313F;color:#fff;">Kota</th>	
 									<th style="background: #22313F;color:#fff;">Cluster</th>
 									<th style="background: #22313F;color:#fff;">Alamat</th>
+									<?php if($this->session->userdata('id_role') == "4"){?>
 									<th style="background: #22313F;color:#fff;">Shipping Point</th>
+									<?php }?>
 									<!-- <th style="background: #22313F;color:#fff;">Sales Person</th> -->
 									<!-- <th style="background: #22313F;color:#fff;">Status</th> -->
 									<th style="background: #22313F;color:#fff;">Actions</th>
@@ -71,6 +73,8 @@
 											<td><?php echo $data['city']; ?></td>
 											<td><?php echo $data['nama_cluster']; ?></td>
 											<td><?php echo $data['alamat']; ?></td>
+											
+											<?php if($this->session->userdata('id_role') == "4"){?>
 											<td>
 												<?php if($data['jml']==null){ 
 													echo "Belum ada";?>
@@ -85,6 +89,7 @@
 												</a>
 												<?php }?>
 											</td>
+											<?php } ?>
 											<!-- <td>
 												<?php if($data['jml1']==null){ 
 													echo "Belum ada";?>
@@ -102,6 +107,8 @@
 											<!-- <td><?php echo $data['nama_status']; ?></td> -->
 											<!-- <td width="170"> -->
 											<td >
+												
+												<?php if($this->session->userdata('id_role') == "4"){?>
 												<a style="border-radius:25px" id="openModalAddCustomer" 
 													href="#" class="label label-primary"   
 													data-id_customer="<?php echo $data['id_customer']; ?>" 
@@ -118,6 +125,7 @@
 													data-toggle="modal" 
 													data-target="#ModalAddCustomer"><i class="fa fa-plus"> </i> Shipping Point
 												</a>
+												<?php } ?>
 												<!-- <a style="border-radius:25px" id="openModalAddCluster"
 													href="#" class="label label-warning"   
 													data-id_customer="<?php echo $data['id_customer']; ?>" 

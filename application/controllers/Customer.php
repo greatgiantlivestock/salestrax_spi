@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Customer extends CI_Controller {
 	public function index($id="") {
-		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4") {
+		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "6") {
 			$d['judul'] = "Master Customer";			
 			if($id != "") { 
 				$d['id_customer'] = $id;
@@ -101,7 +101,7 @@ class Customer extends CI_Controller {
 		$this->load->view('bottom1');
 	}
 	public function hapus_shippig_point($id="") {
-		if($this->session->userdata('id_role') == "4") {
+		if($this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "6") {
 			$this->db->delete("mst_shipping_point_customer",array('id_shipping_point_customer' => $id));				
 			$this->session->set_flashdata("success","Hapus Data Shipping Point Berhasil");
 			redirect("Customer");			
@@ -110,7 +110,7 @@ class Customer extends CI_Controller {
 		}
 	}
 	public function hapus_sales_person($id="") {
-		if($this->session->userdata('id_role') == "4") {
+		if($this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "6") {
 			$this->db->delete("mst_sales_person_division",array('id_sales_division' => $id));				
 			$this->session->set_flashdata("success","Hapus Data Sales Person Berhasil");
 			redirect("Customer");			
@@ -119,7 +119,7 @@ class Customer extends CI_Controller {
 		}
 	}
 	public function save() {
-		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4") {
+		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "6") {
 			$required = array('kode_customer','id_shipping_point');
 			$error = false;
 			foreach($required as $field) {
@@ -206,7 +206,7 @@ class Customer extends CI_Controller {
 		}
 	}
 	public function edit() {
-		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4") {
+		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "6") {
 			$required = array('kode_customer','cluster_id');
 			$error = false;
 			foreach($required as $field) {
@@ -247,7 +247,7 @@ class Customer extends CI_Controller {
 		}
 	}
 	public function save_sales() {
-		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4") {
+		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "6") {
 			$required = array('kode_customer','pers_numb','matgr');
 			$error = false;
 			foreach($required as $field) {

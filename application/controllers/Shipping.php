@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Shipping extends CI_Controller {
 	public function index() {
-		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4") {
+		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "6") {
 			$d['master_cluster'] = $this->App_model->get_cluster();
 			$d['master_shipping_point'] = $this->App_model->get_master_shipping_point();
 			$d['judul'] = 'Master Product';		
@@ -42,7 +42,7 @@ class Shipping extends CI_Controller {
 		$this->load->view('cluster/add_customer.php',$d);
 	}
 	public function save_cluster() {
-		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4") {
+		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "6") {
 			$required = array('cluster_description','region');
 			$error = false;
 			foreach($required as $field) {
@@ -68,7 +68,7 @@ class Shipping extends CI_Controller {
 		}
 	}
 	public function tambah_customer() {
-		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4") {
+		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "6") {
 			$required = array('cluster_description','cluster_id','kode_customer');
 			$error = false;
 			foreach($required as $field) {
@@ -99,7 +99,7 @@ class Shipping extends CI_Controller {
 		}
 	}
 	public function save_shp() {
-		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4") {
+		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "6") {
 			$required = array('kode_shipping_point','description','alias');
 			$error = false;
 			foreach($required as $field) {
@@ -123,7 +123,7 @@ class Shipping extends CI_Controller {
 		}
 	}
 	public function editShp() {
-		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4") {
+		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "6") {
 			$required = array('id_shipping_point','kode_shipping_point','description','alias');
 			$error = false;
 			foreach($required as $field) {
@@ -148,7 +148,7 @@ class Shipping extends CI_Controller {
 		}
 	}
 	public function edit_cluster() {
-		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4") {
+		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "6") {
 			$required = array('cluster_id','cluster_description','region');
 			$error = false;
 			foreach($required as $field) {
@@ -175,7 +175,7 @@ class Shipping extends CI_Controller {
 		}
 	}
 	public function hapusShp() {
-		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4") {
+		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "6") {
 			$required = array('id_shipping_point');
 			$error = false;
 			foreach($required as $field) {
@@ -197,7 +197,7 @@ class Shipping extends CI_Controller {
 		}
 	}
 	public function hapus_cluster() {
-		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4") {
+		if($this->session->userdata('id_role') == "1" || $this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "6") {
 			$required = array('cluster_id');
 			$error = false;
 			foreach($required as $field) {
@@ -219,7 +219,7 @@ class Shipping extends CI_Controller {
 		}
 	}
 	public function hapus_customer($id="") {
-		if($this->session->userdata('id_role') == "4") {
+		if($this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "6") {
 			$this->db->delete("mst_customer_cluster",array('kode_customer' => $id));				
 			$this->session->set_flashdata("success","Hapus Data Customer Cluster Berhasil");
 			redirect("Shipping");			

@@ -615,6 +615,14 @@
 			<i class="menu-icon  fa fa-pencil-square-o"></i>
 			<span class="menu-text"> PO Daging </span>
 		</a> -->
+		<a href="<?php echo base_url(); ?>Customer">
+			<i class="menu-icon  fa fa-users"></i>
+			<span class="menu-text"> Customer </span>
+		</a>
+		<a href="<?php echo base_url(); ?>Shipping">
+			<i class="menu-icon  fa fa-cubes"></i>
+			<span class="menu-text"> Cluster </span>
+		</a>
 		<a href="<?php echo base_url(); ?>Order_list">
 			<i class="menu-icon  fa fa-tags"></i>
 			<span class="menu-text"> Daftar Order </span>
