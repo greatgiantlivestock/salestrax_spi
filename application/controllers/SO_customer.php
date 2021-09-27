@@ -336,7 +336,7 @@ class SO_customer extends CI_Controller {
 							}
 						}
 					}else{
-						if($qVNo->countN <= 0){
+						// if($qVNo->countN <= 0){
 							if($tanggal_kirim < $tanggal_request){
 								$this->session->set_flashdata("error","Anda tidak diperbolehkan menginput orderan untuk tanggal yang telah lalu..!");
 								redirect("SO_customer");
@@ -434,10 +434,10 @@ class SO_customer extends CI_Controller {
 									}	
 								}
 							}
-						}else{
-							$this->session->set_flashdata("error","Gagal menyimpan, orderan dengan nomor PO ".$Npo." sudah pernah diinput dengan tanggal kirim yang sama");
-							redirect("SO_customer");
-						}
+						// }else{
+						// 	$this->session->set_flashdata("error","Gagal menyimpan, orderan dengan nomor PO ".$Npo." sudah pernah diinput dengan tanggal kirim yang sama");
+						// 	redirect("SO_customer");
+						// }
 					}
 				}
 				// }else { 
