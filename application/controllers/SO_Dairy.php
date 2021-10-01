@@ -730,7 +730,11 @@ class SO_Dairy extends CI_Controller {
 				}else if(preg_match('/^[0-9]+(\\.[0-9]+)?$/', $qtyVal)){
 					$kode_trans = $this->session->userdata("kode_trans");
 					$id_request = $this->input->post('id_request');
-					$qHeadCheck = $this->db->query("SELECT id_customer_ship,no_po,tanggal_kirim FROM trx_so_header WHERE id_request='$id_request'")->row();
+					if($kode_trans == ''){
+						$qKodeTrans = $this->db->query("SELECT kode_trans FROM trx_so_header WHERE id_request='$id_request'")->row();
+						$kode_trans = $qKodeTrans->kode_trans;
+					}
+					// $qHeadCheck = $this->db->query("SELECT id_customer_ship,no_po,tanggal_kirim FROM trx_so_header WHERE id_request='$id_request'")->row();
 					$id_product = $this->input->post('id_product');
 					// $qCheckB = $this->db->query("SELECT count(*) as jml FROM trx_so_header rs JOIN trx_so_detail dr ON rs.id_request=dr.id_request 
 					// 							WHERE id_customer_ship='$qHeadCheck->id_customer_ship' AND tanggal_kirim='$qHeadCheck->tanggal_kirim'
@@ -848,39 +852,71 @@ class SO_Dairy extends CI_Controller {
 					$this->session->set_flashdata("error","Data detail order belum lengkap.");
 					redirect("SO_Dairy/index/".$this->input->post('id_request'));	
 				} else if(preg_match('/^[0-9]+(\\.[0-9]+)?$/', $qtyVal)){
-				    $qskrng = $this->db->query("SELECT qty FROM trx_so_detail WHERE id_detail_request='$id_detail_request'")->row();
-					$inskrng['qty_old'] = $qskrng->qty;
-					$this->db->update("trx_so_detail",$inskrng,$where);
-					$whereUp['id_request'] = $this->input->post('id_request');
-					$inUp['tanggal_request'] = date('Y-m-d H:i:s');
-					$inUp['id_user_rev'] = $this->session->userdata("id_user");
-					$this->db->update("trx_so_header",$inUp,$whereUp);
-
-					$id_product = $this->input->post('id_product');
+					$kode_trans = $this->session->userdata("kode_trans");
 					$id_request = $this->input->post('id_request');
-					$qsatuan=$this->db->query("SELECT mst_product.matgr,satuan.id_satuan, satuan.nama_satuan FROM satuan 
-										JOIN mst_product on satuan.id_satuan=mst_product.id_satuan WHERE id_product='$id_product'")->row();
-					$in1['id_jenis_transaksi'] 	= 1;
-					$in1['id_product'] 	= strtoupper($this->input->post('id_product'));
-					$in1['qty'] 	= $this->input->post('qty');
-					$in1['satuan'] 	= $qsatuan->nama_satuan;
-					$in1['id_satuan'] 	= $qsatuan->id_satuan;
-					$in1['keterangan'] = $this->input->post('keterangan');
-					$matgr = $qsatuan->matgr;
-					$qshipping_p=$this->db->query("SELECT mspc.id_shipping_point FROM trx_so_header rs JOIN mst_shipping_point_customer mspc ON mspc.id_customer=rs.id_customer_ship WHERE id_request='$id_request' AND mspc.matgr='$matgr'")->row();
-					$qspaut = $this->db->query("SELECT sp.id_sales_person FROM trx_so_header rs JOIN mst_customer mc ON rs.id_customer_ship=mc.id_customer JOIN mst_sales_person_division mspd ON mspd.kode_customer=mc.kode_customer JOIN sales_person sp ON sp.pers_numb=mspd.pers_numb WHERE rs.id_request='$id_request' AND mspd.matgr='$matgr'")->row();
-						if($qspaut==''){
-							$in1['id_sales_person'] = 0;
+					if($kode_trans == ''){
+						$qKodeTrans = $this->db->query("SELECT kode_trans FROM trx_so_header WHERE id_request='$id_request'")->row();
+						$kode_trans = $qKodeTrans->kode_trans;
+					}
+					
+					if($kode_trans=="ZSOR"){
+						$qQOP = $this->db->query("SELECT qty_order FROM mst_product WHERE id_product='$id_product'")->row();
+						$qtyOrder = (int)$qQOP->qty_order;
+						$selisih = (int)$qtyVal % (int)$qtyOrder;
+						if($selisih == 0){
+							$qskrng = $this->db->query("SELECT qty FROM trx_so_detail WHERE id_detail_request='$id_detail_request'")->row();
+							$inskrng['qty_old'] = $qskrng->qty;
+							$this->db->update("trx_so_detail",$inskrng,$where);
+							$whereUp['id_request'] = $this->input->post('id_request');
+							$inUp['tanggal_request'] = date('Y-m-d H:i:s');
+							$inUp['id_user_rev'] = $this->session->userdata("id_user");
+							$this->db->update("trx_so_header",$inUp,$whereUp);
+
+							$id_product = $this->input->post('id_product');
+							$id_request = $this->input->post('id_request');
+							$qsatuan=$this->db->query("SELECT satuan FROM mst_product WHERE id_product='$id_product'")->row();
+							$in1['id_jenis_transaksi'] 	= 1;
+							$in1['id_product'] 	= strtoupper($this->input->post('id_product'));
+							$in1['qty'] 	= $this->input->post('qty');
+							$in1['satuan'] 	= $qsatuan->satuan;
+							$in1['keterangan'] = $this->input->post('keterangan');
+								$qshipping_p=$this->db->query("SELECT mspc.id_shipping_point FROM trx_so_header rs JOIN mst_shipping_point_customer mspc ON mspc.id_customer=rs.id_customer_ship WHERE id_request='$id_request'")->row();
+									if($qshipping_p==''){
+										$in1['id_shipping_point'] = 0;
+									}else{
+										$in1['id_shipping_point'] = $qshipping_p->id_shipping_point;
+									}
+							$this->db->update("trx_so_detail",$in1,$where);
+							$this->session->set_flashdata("success","Edit Detail Berhasil");
 						}else{
-							$in1['id_sales_person'] = $qspaut->id_sales_person;
+							$this->session->set_flashdata("error","Qty Order tidak valid, masukan qty order dengan kelipatan ".$qtyOrder);
 						}
-						if($qshipping_p==''){
-							$in1['id_shipping_point'] = 0;
-						}else{
-							$in1['id_shipping_point'] = $qshipping_p->id_shipping_point;
-						}
-					$this->db->update("trx_so_detail",$in1,$where);
-					$this->session->set_flashdata("success","Edit Detail Berhasil");
+					}else{
+						$qskrng = $this->db->query("SELECT qty FROM trx_so_detail WHERE id_detail_request='$id_detail_request'")->row();
+						$inskrng['qty_old'] = $qskrng->qty;
+						$this->db->update("trx_so_detail",$inskrng,$where);
+						$whereUp['id_request'] = $this->input->post('id_request');
+						$inUp['tanggal_request'] = date('Y-m-d H:i:s');
+						$inUp['id_user_rev'] = $this->session->userdata("id_user");
+						$this->db->update("trx_so_header",$inUp,$whereUp);
+
+						$id_product = $this->input->post('id_product');
+						$id_request = $this->input->post('id_request');
+						$qsatuan=$this->db->query("SELECT satuan FROM mst_product WHERE id_product='$id_product'")->row();
+						$in1['id_jenis_transaksi'] 	= 1;
+						$in1['id_product'] 	= strtoupper($this->input->post('id_product'));
+						$in1['qty'] 	= $this->input->post('qty');
+						$in1['satuan'] 	= $qsatuan->satuan;
+						$in1['keterangan'] = $this->input->post('keterangan');
+							$qshipping_p=$this->db->query("SELECT mspc.id_shipping_point FROM trx_so_header rs JOIN mst_shipping_point_customer mspc ON mspc.id_customer=rs.id_customer_ship WHERE id_request='$id_request'")->row();
+								if($qshipping_p==''){
+									$in1['id_shipping_point'] = 0;
+								}else{
+									$in1['id_shipping_point'] = $qshipping_p->id_shipping_point;
+								}
+						$this->db->update("trx_so_detail",$in1,$where);
+						$this->session->set_flashdata("success","Edit Detail Berhasil");
+					}
 					redirect("SO_Dairy/index/".$this->input->post('id_request'));	
 				}else{
 					$this->session->set_flashdata("error","Input Qty harus berupa angka. Jika Qty terdapat koma maka ganti koma dengan titik (misal 2,5 menjadi 2.5)");
