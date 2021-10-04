@@ -454,65 +454,70 @@ class SO_Dairy extends CI_Controller {
 					}
 				}
 			} else if($tipe = 'edit') {
-				if($error) {
-					$this->session->set_flashdata("error","Mohon mengisi data dengan lengkap");
-					redirect("SO_Dairy/index/".$this->input->post('id_request'));	
-				} else {
-					$tanggal_request=date("Y-m-d");
-					$tanggal_kirim=$this->input->post('tanggal_kirim');
-					if($tanggal_kirim < $tanggal_request){
-						$this->session->set_flashdata("error","Anda tidak diperbolehkan merubah tanggal order menjadi tanggal yang telah lalu..!");
-						redirect("SO_Dairy");
-					}else{
-						$id_customer_ship = $this->input->post("id_customer_ship");
-						$id_customer_sold = $this->input->post("id_customer_ship");
-						$qship = $this->db->query("SELECT id_customer FROM mst_customer WHERE nama_customer='$id_customer_ship'")->row();
-						$qsold = $this->db->query("SELECT id_customer FROM mst_customer WHERE nama_customer='$id_customer_sold'")->row();
-						if($qship == '' || $qsold ==''){
-							$this->session->set_flashdata("error","Nama customer tidak sesuai.. silahkan input kembali..");
-							redirect("SO_Dairy/index/".$this->input->post('id_request'));
-						}else{
-							if($this->upload->do_upload("file_upload")) {
-								$data_upload = $this->upload->data();
-								$in1['status_request'] 	= 1;
-								$in1['tanggal_kirim'] 	= $this->input->post('tanggal_kirim');
-								$in1['catatan'] 	= strtoupper($this->input->post('catatan'));
-								$in1['h1'] 	= $this->input->post('h1');
-								$in1['h2'] 	= $this->input->post('h2');
-								$in1['h3'] 	= $this->input->post('h3');
-								$in1['r1'] 	= $this->input->post('r1');
-								$in1['r2'] 	= $this->input->post('r2');
-								$in1['r3'] 	= $this->input->post('r3');
-								$in1['no_po'] 	= strtoupper($this->input->post('no_po'));
-								$in['id_customer_ship'] 	= $qship->id_customer;
-								$in['id_customer_sold'] 	= $qsold->id_customer;
-								$in1['title'] 	= $data_upload['file_name'];		
-								$this->db->update("trx_so_header",$in1,$where);
-								$this->session->set_flashdata("success","Edit Sales Order Berhasil");
-								redirect("SO_Dairy/index/".$this->input->post('id_request'));	
-							} else if(!$this->upload->do_upload("file_upload")) {
-								$in1['status_request'] 	= 1;
-								$in1['tanggal_kirim'] 	= $this->input->post('tanggal_kirim');
-								$in1['catatan'] 	= strtoupper($this->input->post('catatan'));
-								$in1['h1'] 	= $this->input->post('h1');
-								$in1['h2'] 	= $this->input->post('h2');
-								$in1['h3'] 	= $this->input->post('h3');
-								$in1['r1'] 	= $this->input->post('r1');
-								$in1['r2'] 	= $this->input->post('r2');
-								$in1['r3'] 	= $this->input->post('r3');
-								$in1['no_po'] 	= strtoupper($this->input->post('no_po'));
-								$in['id_customer_ship'] 	= $qship->id_customer;
-								$in['id_customer_sold'] 	= $qsold->id_customer;		
-								$this->db->update("trx_so_header",$in1,$where);
-								$this->session->set_flashdata("success","Edit Sales Order Berhasil");
-								redirect("SO_Dairy/index/".$this->input->post('id_request'));	
-							}else{
-								$this->session->set_flashdata("error",$this->upload->display_errors());
-								redirect("SO_Dairy");
-							}
-						}
-					}
-				}		
+				echo "tanggal_kirim : ".$this->input->post("tanggal_kirim");
+				echo "id_customer : ".$this->input->post("id_customer_ship");
+				echo "kode_trans : ".$this->input->post("kode_trans");
+				echo "tanggal_po : ".$this->input->post("tanggal_po");
+				echo "no_po : ".$this->input->post("no_po");
+				// if($error) {
+				// 	$this->session->set_flashdata("error","Mohon mengisi data dengan lengkap");
+				// 	redirect("SO_Dairy/index/".$this->input->post('id_request'));	
+				// } else {
+				// 	$tanggal_request=date("Y-m-d");
+				// 	$tanggal_kirim=$this->input->post('tanggal_kirim');
+				// 	if($tanggal_kirim < $tanggal_request){
+				// 		$this->session->set_flashdata("error","Anda tidak diperbolehkan merubah tanggal order menjadi tanggal yang telah lalu..!");
+				// 		redirect("SO_Dairy");
+				// 	}else{
+				// 		$id_customer_ship = $this->input->post("id_customer_ship");
+				// 		$id_customer_sold = $this->input->post("id_customer_ship");
+				// 		$qship = $this->db->query("SELECT id_customer FROM mst_customer WHERE nama_customer='$id_customer_ship'")->row();
+				// 		$qsold = $this->db->query("SELECT id_customer FROM mst_customer WHERE nama_customer='$id_customer_sold'")->row();
+				// 		if($qship == '' || $qsold ==''){
+				// 			$this->session->set_flashdata("error","Nama customer tidak sesuai.. silahkan input kembali..");
+				// 			redirect("SO_Dairy/index/".$this->input->post('id_request'));
+				// 		}else{
+				// 			if($this->upload->do_upload("file_upload")) {
+				// 				$data_upload = $this->upload->data();
+				// 				$in1['status_request'] 	= 1;
+				// 				$in1['tanggal_kirim'] 	= $this->input->post('tanggal_kirim');
+				// 				$in1['catatan'] 	= strtoupper($this->input->post('catatan'));
+				// 				$in1['h1'] 	= $this->input->post('h1');
+				// 				$in1['h2'] 	= $this->input->post('h2');
+				// 				$in1['h3'] 	= $this->input->post('h3');
+				// 				$in1['r1'] 	= $this->input->post('r1');
+				// 				$in1['r2'] 	= $this->input->post('r2');
+				// 				$in1['r3'] 	= $this->input->post('r3');
+				// 				$in1['no_po'] 	= strtoupper($this->input->post('no_po'));
+				// 				$in['id_customer_ship'] 	= $qship->id_customer;
+				// 				$in['id_customer_sold'] 	= $qsold->id_customer;
+				// 				$in1['title'] 	= $data_upload['file_name'];		
+				// 				$this->db->update("trx_so_header",$in1,$where);
+				// 				$this->session->set_flashdata("success","Edit Sales Order Berhasil");
+				// 				redirect("SO_Dairy/index/".$this->input->post('id_request'));	
+				// 			} else if(!$this->upload->do_upload("file_upload")) {
+				// 				$in1['status_request'] 	= 1;
+				// 				$in1['tanggal_kirim'] 	= $this->input->post('tanggal_kirim');
+				// 				$in1['catatan'] 	= strtoupper($this->input->post('catatan'));
+				// 				$in1['h1'] 	= $this->input->post('h1');
+				// 				$in1['h2'] 	= $this->input->post('h2');
+				// 				$in1['h3'] 	= $this->input->post('h3');
+				// 				$in1['r1'] 	= $this->input->post('r1');
+				// 				$in1['r2'] 	= $this->input->post('r2');
+				// 				$in1['r3'] 	= $this->input->post('r3');
+				// 				$in1['no_po'] 	= strtoupper($this->input->post('no_po'));
+				// 				$in['id_customer_ship'] 	= $qship->id_customer;
+				// 				$in['id_customer_sold'] 	= $qsold->id_customer;		
+				// 				$this->db->update("trx_so_header",$in1,$where);
+				// 				$this->session->set_flashdata("success","Edit Sales Order Berhasil");
+				// 				redirect("SO_Dairy/index/".$this->input->post('id_request'));	
+				// 			}else{
+				// 				$this->session->set_flashdata("error",$this->upload->display_errors());
+				// 				redirect("SO_Dairy");
+				// 			}
+				// 		}
+				// 	}
+				// }		
 			} else {
 				redirect("SO_Dairy");
 			}
@@ -858,8 +863,8 @@ class SO_Dairy extends CI_Controller {
 						$qKodeTrans = $this->db->query("SELECT kode_trans FROM trx_so_header WHERE id_request='$id_request'")->row();
 						$kode_trans = $qKodeTrans->kode_trans;
 					}
-					
 					if($kode_trans=="ZSOR"){
+						$id_product = $this->input->post('id_product');
 						$qQOP = $this->db->query("SELECT qty_order FROM mst_product WHERE id_product='$id_product'")->row();
 						$qtyOrder = (int)$qQOP->qty_order;
 						$selisih = (int)$qtyVal % (int)$qtyOrder;
@@ -872,7 +877,6 @@ class SO_Dairy extends CI_Controller {
 							$inUp['id_user_rev'] = $this->session->userdata("id_user");
 							$this->db->update("trx_so_header",$inUp,$whereUp);
 
-							$id_product = $this->input->post('id_product');
 							$id_request = $this->input->post('id_request');
 							$qsatuan=$this->db->query("SELECT satuan FROM mst_product WHERE id_product='$id_product'")->row();
 							$in1['id_jenis_transaksi'] 	= 1;
