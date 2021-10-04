@@ -12,7 +12,7 @@
                     $countSales=0;
                     $countSalesupd=0;
 
-                    $cn = mysqli_connect("localhost","gred3696_ms","moha11mmad","gred3696_salestraxSPI_dev");
+                    $cn = mysqli_connect("localhost","gred3696_ms","moha11mmad","gred3696_salestraxSPI");
                     $sqlTrc = "TRUNCATE mst_sales_person";
                     $execTrc = mysqli_query($cn,$sqlTrc);
 
