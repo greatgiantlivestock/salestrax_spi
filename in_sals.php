@@ -17,7 +17,7 @@
                     $execTrc = mysqli_query($cn,$sqlTrc);
 
                     while ($line = fgets($fh)) {
-                        if(strlen($line)>40){
+                        if(strlen($line)>20){
                             $kunnr = substr($line,0,10);
                             $spart = substr($line,10,2);
                             $pernr = substr($line,12,8);
