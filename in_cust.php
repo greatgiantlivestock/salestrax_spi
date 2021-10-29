@@ -21,17 +21,25 @@
                             $nama1 = str_replace("'", " ", $nama);
                             $alamat = substr($line,45,60);
                             $alamat1 = str_replace("'", " ", $alamat);
-                            $city = substr($line,105,40);
+                            $alamat_2 = substr($line,105,40);
+                            $alamat2 = str_replace("'", " ", $alamat_2);
+                            $alamat_3 = substr($line,145,40);
+                            $alamat3 = str_replace("'", " ", $alamat_3);
+                            $alamat_4 = substr($line,185,40);
+                            $alamat4 = str_replace("'", " ", $alamat_4);
+                            $city = substr($line,225,40);
                             $city1 = str_replace("'", " ", $city);
-                            $region = substr($line,145,3);
+                            $region = substr($line,265,3);
                             $region1 = str_replace("'", " ", $region);
-                            $regiondesc = substr($line,148,20);
+                            $regiondesc = substr($line,268,20);
                             $regiondesc1 = str_replace("'", " ", $regiondesc);
-                            $salesoffice = substr($line,168,4);
+                            $salesoffice = substr($line,288,4);
                             $salesoffice1 = str_replace("'", " ", $salesoffice);
-                            $salesofficedesc = substr($line,172,20);
+                            $salesofficedesc = substr($line,392,20);
                             $salesofficedesc1 = str_replace("'", " ", $salesofficedesc);
-                            $deliv_code = substr($line,192,4);
+                            $deliv_code = substr($line,312,4);
+                            
+                            $alamat_all = trim($alamat1)." ".trim($alamat2)." ".trim($alamat3)." ".trim($alamat4);
                             
                             $id_status_customer = 2;
                             
@@ -62,7 +70,7 @@
 
                             if($jml == '0'){
                                 $sql1 = "INSERT INTO mst_customer(kode_customer,nama_customer,city,region,alamat,region_desc,sales_office,sales_office_desc,delivery_code)
-                                    values ('$kode','$nama1','$city1','$region1','$alamat1','$regiondesc1','$salesoffice1','$salesofficedesc1','$deliv_code')";
+                                    values ('$kode','$nama1','$city1','$region1','$alamat_all','$regiondesc1','$salesoffice1','$salesofficedesc1','$deliv_code')";
                                 $result2 = mysqli_query($cn,$sql1);
                                 if ($result2) {
                                     $linecount1++;
@@ -90,7 +98,7 @@
                                     nama_customer='$nama1',
                                     city='$city1',
                                     region='$region1',
-                                    alamat='$alamat1',
+                                    alamat='$alamat_all',
                                     region_desc='$regiondesc1',
                                     sales_office='$salesoffice1',
                                     sales_office_desc='$salesofficedesc1' WHERE kode_customer='$kode'";
